@@ -1,28 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nile University Clinic Management System</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="top">
         <div class="navbar">
-            <a>
-                <img src="image.png" alt="Nile University Logo">
-            </a>
-            <a>
-                <label>Appointments</label>
-                <select>
-                    <option>View Appointments</option>
-                    <option>Book Appointments</option>
-                </select>
-            </a>
-            <a>
-                <p>Prescriptions</p>
-            </a>
-            <a>
-                <p>Medical History</p>
-            </a>
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Nile University Logo" class="logo">
+                </a>
+                <div class="links">
+                    <ul class="nav-links">
+                        <li>
+                            <a>
+                                <p>Home</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <p>Appointments</p>
+                            </a>
+                            <!-- <div class="dropdown">
+                                <span class="dropdown-text">Appointments</span>
+                                <div class="dropdown-menu">
+                                    <div>View Appointments</div>
+                                    <div>Book an Appointment</div>
+                                </div>
+                            </div> -->
+                        </li>
+
+                        <li>
+                            <a>
+                                <p>Prescriptions</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a>
+                                <p>Medical History</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="logout">Logout</button>
+            </nav>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
