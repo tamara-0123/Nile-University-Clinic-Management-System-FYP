@@ -81,7 +81,7 @@
             <div class="right">
                 <i class="fa-regular fa-id-badge"></i>
             </div>
-            
+
         </div>
         <div class="quick-book">
             <button class="book">+ Book Appointment</button>
@@ -92,29 +92,300 @@
     <div class='cards'>
         <div class='card next'>
             <p class="card-title">Next Appointment</p>
-            <p class="card-content">Date &  Time: 29/11/25 09:00AM</p>
+            <p class="card-content">Date & Time: 29/11/25 09:00AM</p>
             <p class="card-content">Doctor: Dr. Umar</p>
-            <a><p class="card-link">View details</p></a>
+            <a>
+                <p class="card-link">View details</p>
+            </a>
         </div>
         <div class='card'>
             <p class="card-title">Total Appointments</p>
             <p class="card-number">7</p>
-            <a><p class="card-link">View all appointments</p></a>
+            <a>
+                <p class="card-link">View all appointments</p>
+            </a>
         </div>
         <div class='card'>
             <p class="card-title">Active Prescriptions</p>
             <p class="card-number">2</p>
-            <a><p class="card-link">View all prescriptions</p></a>
+            <a>
+                <p class="card-link">View all prescriptions</p>
+            </a>
         </div>
         <div class='card'>
             <p class="card-title">Notifications</p>
             <p class="card-number">2 <span class="card-content">unread</span></p>
-            <a><p class="card-link">View notifications</p></a>
+            <a>
+                <p class="card-link">View notifications</p>
+            </a>
         </div>
     </div>
 
     <!--More Details section-->
+    <div class="more-details">
+        <div class="med-history">
+            <div class="more-header">
+                <h2>Recent Medical History</h2>
+                <i class="fa-solid fa-file-medical"></i>
+            </div>
 
+
+            <div class="visit">
+                <p>Date: Oct 12, 2025</p>
+                <p>Reason: Fever & Fatigue</p>
+                <p>Diagnosis: Mild viral infection</p>
+                <a href="#">View full record</a>
+            </div>
+
+            <div class="visit">
+                <p>Date: Aug 30, 2025</p>
+                <p>Reason: Headache</p>
+                <p>Diagnosis: Stress-related tension</p>
+                <a href="#">View full record</a>
+            </div>
+
+            <div class="visit">
+                <p>Date: Jul 10, 2025</p>
+                <p>Reason: Routine check-up</p>
+                <p>Diagnosis: No issues detected</p>
+                <a href="#">View full record</a>
+            </div>
+        </div>
+
+        <div class="prescriptions">
+            <div class="more-header">
+                <h2>Recent Prescriptions</h2>
+                <i class="fa-solid fa-prescription-bottle-medical"></i>
+            </div>
+            <div class="prescription pres-active">
+                <div>
+                    <p>Drug: Amoxicillin 500mg</p>
+                    <p>Dosage: 1 capsule × 3/day</p>
+                    <p>Doctor: Dr. A. Yusuf</p>
+                </div>
+                <div class="active">
+                    <div class="red-flash">
+                    </div>
+                    <p>ACTIVE</p>
+                </div>
+            </div>
+
+
+            <div class="prescription">
+                <p>Drug: Ibuprofen 200mg</p>
+                <p>Dosage: 1 tablet × 2/day</p>
+                <p>Doctor: Dr. M. Okeke</p>
+            </div>
+
+            <a href="#">View prescription history</a>
+        </div>
+    </div>
+
+    <div class="notifications">
+
+        <div class="more-header">
+            <h2>Notifications</h2>
+            <i class="fa-solid fa-bell"></i>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">REMINDER — You have an appointment TOMORROW at 10 AM</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">1h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Appointment updated — New time: 3 PM</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">3h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Your most recent prescription is ready for pickup</p>
+            <div class="notif-active">
+                <!-- <div class="green-flash">
+                </div> -->
+                <p class="notif-date">9/11/25</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Clinic announcement — Drug Test Hours: 9am-4pm daily </p>
+            <div class="notif-active">
+                <!-- <div class="green-flash">
+                </div> -->
+                <p class="notif-date">7/11/25</p>
+            </div>
+        </div>
+
+        <a href="#">View all notifications</a>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>Appointment Delay</option>
+                    <option>Prescription Issue</option>
+                    <option>Nurse/Doctor Conduct</option>
+                    <option>Billing Concern</option>
+                    <option>Technical Issue (Portal)</option>
+                    <option>Cleanliness</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What are the clinic working hours?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        The clinic operates from 8 AM to 6 PM, Monday to Friday.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I book an appointment?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        You can book through the Student Portal or visit the front desk.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I reschedule appointments?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, appointments can be rescheduled up to 24 hours in advance.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Do I need my student ID to visit the clinic?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, you must present your student ID for verification.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Are laboratory tests available?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, the clinic has an in-house lab for basic tests.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I get my prescription refilled?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Request refills through the clinic pharmacy or online portal.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Are emergency services available?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        The clinic handles minor emergencies; severe cases are referred.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I get a medical report for school purposes?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, visit the reception to request a medical report.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is mental health support provided?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, mental health counselling is available upon request.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How long are medical records kept?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Medical records are maintained throughout your study duration.
+                    </div>
+                </div>
+
+                <a href="#" class="card-link">View clinic rules</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2025 Nile Uinversity of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script>
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+    </script>
 </body>
 
 </html>
