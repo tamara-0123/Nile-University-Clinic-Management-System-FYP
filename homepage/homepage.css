@@ -418,7 +418,6 @@ body {
     transform: rotate(180deg);
 }
 
-/* Hidden answer */
 .faq-answer {
     max-height: 0;
     overflow: hidden;
@@ -427,11 +426,11 @@ body {
 }
 
 .faq-answer.open {
-    max-height: 200px; /* enough for multi-line text */
+    max-height: 200px; 
     margin-top: 5px;
 }
 
-/* Bottom link */
+
 .rules-link {
     display: block;
     margin-top: 15px;
@@ -440,7 +439,7 @@ body {
     font-weight: bold;
 }
 
-/* Responsive */
+/* Responsive --not complete*/
 @media (max-width: 800px) {
     .container {
         grid-template-columns: 1fr;
