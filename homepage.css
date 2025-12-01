@@ -1,0 +1,286 @@
+/* Global Settings */
+
+html {
+    scroll-behavior: smooth;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f7f9fc;
+    color: #1A1A1A;
+    line-height: 1.5;
+}
+
+/* Color System */
+:root {
+    --primary: #003399;
+    --primary-light: #e8f0ff;
+    --gray: #6c6c6c;
+    --border: #e0e0e0;
+    --danger: #d32f2f;
+    --warning: #ffc107;
+}
+
+/* Navbar */
+.nav {
+    background: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Active Navigation Link */
+.nav-links li a.active {
+    color: #1A56DB;  /* Nile University blue */
+    font-weight: 600;
+    border-bottom: 3px solid #1A56DB;
+    padding-bottom: 4px;
+}
+
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    height: 45px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 0.95rem;
+    color: #1A1A1A;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+/* Buttons */
+.btn-primary,
+.btn-outline,
+.btn-danger {
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-outline {
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.full {
+    width: 100%;
+}
+
+/* Hero */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 2rem;
+    margin: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.hero-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.welcome {
+    font-size: 1.8rem;
+}
+
+.sub-info {
+    color: var(--gray);
+}
+
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1rem;
+    padding: 0 2rem;
+}
+
+.card {
+    background: white;
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.card-number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.4rem 0;
+}
+
+.card-link {
+    font-size: 0.85rem;
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Section Blocks */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+}
+
+.section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.icon-primary {
+    color: var(--primary);
+    font-size: 1.6rem;
+}
+
+.icon-warning {
+    color: var(--warning);
+}
+
+/* Items */
+.item {
+    padding: 1rem;
+    background: var(--primary-light);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.status {
+    font-size: 0.8rem;
+    color: var(--gray);
+}
+
+.status.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Notifications */
+.notif {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    background: var(--primary-light);
+    margin-bottom: 0.8rem;
+    border-radius: 6px;
+}
+
+/* Forms */
+label {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+}
+
+select, textarea {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+/* FAQ */
+details {
+    margin-bottom: 1rem;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+
+/* Subtle Card Hover Animation */
+.card {
+    background-color: #ffffffd7;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    height: 120px;
+    padding: 10px;
+    
+    /* Animation properties */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+/* Hover effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Fade-in section animation */
+.section {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.6s ease-out;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* copyright */
+.copyright p{
+    text-align: center;
+    color: #878686;
+    padding: 5px;
+}
