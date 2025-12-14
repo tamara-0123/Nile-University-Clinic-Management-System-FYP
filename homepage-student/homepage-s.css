@@ -465,3 +465,222 @@ body {
     color: #878686;
     padding: 5px;
 }
+
+/* ===========================
+   MOBILE SIDE NAVBAR
+=========================== */
+.mobile-header {
+    display: none;
+}
+
+/* Overlay */
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 998;
+}
+
+/* Side menu */
+.mobile-nav {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100vh;
+    background: white;
+    z-index: 999;
+    padding: 20px;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Open state */
+.mobile-nav.open {
+    left: 0;
+}
+
+.mobile-overlay.show {
+    display: block;
+}
+
+/* Close button */
+.close-btn {
+    align-self: flex-end;
+    font-size: 26px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Links */
+.mobile-links {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.mobile-links li {
+    margin-bottom: 15px;
+}
+
+.mobile-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Actions */
+.mobile-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Header */
+.mobile-header {
+    display: none;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 15px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Hamburger */
+.menu-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Logo */
+.mobile-logo {
+    height: 30px;
+}
+
+/* ===========================
+   MOBILE ONLY
+=========================== */
+@media (max-width: 768px) {
+
+    /* Hide desktop navbar */
+    .navbar {
+        display: none;
+    }
+
+    /* Show mobile header */
+    .mobile-header {
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+}
+
+/* ===========================
+   HERO MOBILE FIX
+=========================== */
+@media (max-width: 600px) {
+
+    .hero {
+        margin: 10px;
+        padding: 10px;
+        gap: 8px;
+        border-radius: 16px;
+        flex-direction: column;
+        text-align: center;
+        height: auto;
+    }
+
+    .user-name {
+        width: 100%;
+        font-size: 20px;
+    }
+
+    .id-num-box,
+    .user-class {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .right i {
+        font-size: 36px;
+    }
+
+    .quick-book {
+        width: 100%;
+    }
+
+    .book {
+        height: 50px;
+        font-size: 14px;
+        border-radius: 14px;
+    }
+}
+
+/* ===========================
+   TABLETS
+=========================== */
+@media (max-width: 1024px) {
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .more-details {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===========================
+   MOBILE CARDS & NOTIFICATIONS
+=========================== */
+@media (max-width: 800px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        height: auto;
+    }
+
+    .notification {
+        flex-direction: column;
+        height: auto;
+        gap: 5px;
+    }
+}
+
+/* ===========================
+   VERY SMALL DEVICES
+=========================== */
+@media (max-width: 400px) {
+
+    .user-name {
+        font-size: 18px;
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-number {
+        font-size: 26px;
+    }
+
+    .card-content,
+    .notification p {
+        font-size: 11px;
+    }
+}

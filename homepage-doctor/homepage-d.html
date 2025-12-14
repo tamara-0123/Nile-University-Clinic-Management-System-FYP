@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-d.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!--NavBar-->
+    <!-- <div class="top">
+        <div class="mobile-header">
+            <button class="menu-btn" onclick="openMenu()">☰</button>
+            <img src="image.png" class="mobile-logo" alt="Logo">
+        </div>
+        <div class="mobile-overlay" onclick="closeMenu()"></div>
+
+        <nav class="mobile-nav">
+            <button class="close-btn" onclick="closeMenu()">×</button>
+
+            <ul class="mobile-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Appointments</a></li>
+                <li><a href="#">Consultations</a></li>
+                <li><a href="#">Prescriptions</a></li>
+            </ul>
+
+            <div class="mobile-actions">
+                <button class="profile">Profile</button>
+                <button class="logout">Logout</button>
+            </div>
+        </nav> -->
+
+        <div class="navbar">
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Nile University Logo" class="logo">
+                </a>
+                <div class="links">
+                    <ul class="nav-links">
+                        <li>
+                            <a href="#">
+                                <p>Home</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <p>Appointments</p>
+                            </a>
+                            <!-- <div class="dropdown">
+                                <span class="dropdown-text">Appointments</span>
+                                <div class="dropdown-menu">
+                                    <div>View Appointments</div>
+                                    <div>Book an Appointment</div>
+                                </div>
+                            </div> -->
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <p>Consultations</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <p>Prescriptions</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-buttons">
+                    <button class="profile">Profile</button>
+                    <button class="logout">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section-->
+    <div class="hero">
+        <div class="user-name">
+            <p class="welcome">Welcome <br> <span class="user">Yusuf Mohammed</span></p>
+        </div>
+        <div class="user-class">
+            <div class="left">
+                <p class="header">USER</p>
+                <p class="content">Doctor</p>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+        </div>
+        <div class="id-num-box">
+            <div class="left">
+                <p class="header">STAFF ID</p>
+                <p class="content">20221733</p>
+            </div>
+            <div class="right">
+                <i class="fa-regular fa-id-badge"></i>
+            </div>
+
+        </div>
+        <div class="quick-book">
+            <button class="book">+ Start Consultation</button>
+        </div>
+    </div>
+
+    <!--Dashboard Cards-->
+    <div class='cards'>
+        <div class='card next'>
+            <p class="card-title">Next Appointment</p>
+            <div class="card-nurse">
+                <p class="card-content">Date & Time: 29/11/25 09:00AM</p>
+                <p class="card-content">Patient: Cynthia George</p>
+            </div>
+            <a>
+                <p class="card-link">View details</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Appointments Today</p>
+            <p class="card-number">13</p>
+            <a>
+                <p class="card-link">View schedule</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Referred Patients</p>
+            <p class="card-number">3</p>
+            <a>
+                <p class="card-link">View referrals</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Notifications</p>
+            <p class="card-number">4 <span class="card-content">unread</span></p>
+            <a>
+                <p class="card-link">View notifications</p>
+            </a>
+        </div>
+    </div>
+
+    <!--More Details section-->
+    <div class="more-details">
+        <div class="rec-patients">
+            <div class="more-header">
+                <h2>Recent Consultations</h2>
+                <i class="fa-solid fa-book-medical"></i>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 12, 2025</p>
+                <p>Patient: Cynthia George</p>
+                <p>Diagnosis: Viral infection </p>
+                <a href="#">View consultations</a>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 15, 2025</p>
+                <p>Patient: Fatima Musa</p>
+                <p>Diagnosis: Malaria</p>
+                <a href="#">View consultations</a>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 19, 2025</p>
+                <p>Patient: Samuel Okoye</p>
+                <p>Diagnosis: Gastritis</p>
+                <a href="#">View consultations</a>
+            </div>
+
+        </div>
+
+        <div class="rec-vitals">
+            <div class="more-header">
+                <h2>Recent Referrals</h2>
+                <i class="fa-solid fa-hospital-user"></i>
+            </div>
+            <div class="vital">
+                <div>
+                    <p>Patient: Fatima Musa</p>
+                    <p>BP: 120/80</p>
+                    <p>Temp: 36.8°C</p>
+                    <p>Pulse: 78 bpm</p>
+                    <a href="#">View medical record</a>
+                </div>
+            </div>
+
+
+            <div class="vital">
+                <div>
+                    <p>Patient: Ade Bayo</p>
+                    <p>BP: 130/85</p>
+                    <p>Temp: 37.5°C</p>
+                    <p>Pulse: 71 bpm</p>
+                    <a href="#">View medical record</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications">
+
+        <div class="more-header">
+            <h2>Notifications</h2>
+            <i class="fa-solid fa-bell"></i>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">REMINDER — Appointment starts in 30 minutes</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">1h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Referral — Nurse Aisha Bello referred patient Cynthia George</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">3h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Clinic announcement — Drug Test Hours: 9am-4pm daily </p>
+            <div class="notif-active">
+                <!-- <div class="green-flash">
+                </div> -->
+                <p class="notif-date">7/11/25</p>
+            </div>
+        </div>
+
+        <a href="#">View all notifications</a>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>Consultation Workflow</option>
+                    <option>Prescription Module Issue</option>
+                    <option>Patient Record Access</option>
+                    <option>System Performance</option>
+                    <option>Scheduling Conflict</option>
+                    <option>Lab Test Request Issue</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I access my daily appointments?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Your dashboard displays all scheduled appointments for the day in order.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view full patient medical records?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, doctors can view patient history, vitals, and previous consultations.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I prescribe medication?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Use the prescription form during consultation and save it to the patient record.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I edit a prescription after saving?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, prescriptions can be edited with updated versions saved in the system.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I mark an appointment as completed?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Click “Mark as Complete” after finishing a patient consultation.
+                    </div>
+                </div>
+
+                <a href="#" class="card-link">View doctor guidelines</a>
+            </div>
+        </div>
+
+    </div>
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2025 Nile Uinversity of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script>
+
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+
+        function openMenu() {
+            document.querySelector('.mobile-nav').classList.add('open');
+            document.querySelector('.mobile-overlay').classList.add('show');
+        }
+
+        function closeMenu() {
+            document.querySelector('.mobile-nav').classList.remove('open');
+            document.querySelector('.mobile-overlay').classList.remove('show');
+        }
+
+
+
+    </script>
+</body>
+
+</html>

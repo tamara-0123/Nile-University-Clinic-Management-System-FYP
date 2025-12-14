@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-p.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!--NavBar-->
+    <div class="top">
+        <div class="navbar">
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Nile University Logo" class="logo">
+                </a>
+                <div class="links">
+                    <ul class="nav-links">
+                        <li>
+                            <a href="#">
+                                <p>Home</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <p>Staff Management</p>
+                            </a>
+                            <!-- <div class="dropdown">
+                                <span class="dropdown-text">Appointments</span>
+                                <div class="dropdown-menu">
+                                    <div>View Appointments</div>
+                                    <div>Book an Appointment</div>
+                                </div>
+                            </div> -->
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <p>Reports</p>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <p>Schedule</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-buttons">
+                    <button class="profile">Profile</button>
+                    <button class="logout">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section-->
+    <div class="hero">
+        <div class="user-name">
+            <p class="welcome">Welcome <br> <span class="user">Enoch Chukwudi</span></p>
+        </div>
+        <div class="user-class">
+            <div class="left">
+                <p class="header">USER</p>
+                <p class="content">Admin</p>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+        </div>
+        <div class="id-num-box">
+            <div class="left">
+                <p class="header">STAFF ID</p>
+                <p class="content">20215673</p>
+            </div>
+            <div class="right">
+                <i class="fa-regular fa-id-badge"></i>
+            </div>
+
+        </div>
+        <div class="quick-book">
+            <button class="book">+ Generate Clinic Report</button>
+        </div>
+    </div>
+
+    <!--Dashboard Cards-->
+    <div class='cards'>
+        <div class='card next'>
+            <p class="card-title">Today's Activity</p>
+            <p class="card-number">48 <span class="card-content">visits</span></p>
+            <a>
+                <p class="card-link">View details</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Total Appointments</p>
+            <p class="card-number">132 <span class="card-content">(This Month)</span></p>
+            <a>
+                <p class="card-link">View reports</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Staff On Duty</p>
+            <p class="card-number">7</p>
+            <a>
+                <p class="card-link">Manage staff</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Notifications</p>
+            <p class="card-number">4 <span class="card-content">unread</span></p>
+            <a>
+                <p class="card-link">View notifications</p>
+            </a>
+        </div>
+    </div>
+
+    <!--More Details section-->
+    <div class="more-details">
+        <div class="rec-patients">
+            <div class="more-header">
+                <h2>Daily Clinic Activity</h2>
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 12, 2025</p>
+                <p>Patients Seen: 19</p>
+                <p>Doctors On Duty: 2</p>
+                <a href="#">View report</a>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 13, 2025</p>
+                <p>Patients Seen: 31</p>
+                <p>Doctors On Duty: 3</p>
+                <a href="#">View report</a>
+            </div>
+
+            <div class="patient">
+                <p>Date: Oct 14, 2025</p>
+                <p>Patients Seen: 29</p>
+                <p>Doctors On Duty: 3</p>
+                <a href="#">View report</a>
+            </div>
+            <a href="#">View all reports</a>
+        </div>
+
+        <div class="rec-vitals">
+            <div class="more-header">
+                <h2>Recent System Actions</h2>
+                <i class="fa-solid fa-laptop-medical"></i>
+            </div>
+            <div class="vital">
+                <div>
+                    <p>Nurse Aisha Bello added to the system</p>
+                </div>
+            </div>
+            <div class="vital">
+                <div>
+                    <p>Doctor schedule updated</p>
+                </div>
+            </div>
+            <div class="vital">
+                <div>
+                    <p>Monthly report generated</p>
+                </div>
+            </div>
+            <div class="vital">
+                <div>
+                    <p>Patient assigned to Dr. Yusuf Mohammed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications">
+
+        <div class="more-header">
+            <h2>Notifications</h2>
+            <i class="fa-solid fa-bell"></i>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">REPORT READY — Monthly clinic summary generated</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">1h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">STAFF UPDATE — New nurse account created</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">3h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">SHIFT CHANGE — Doctor schedule updated</p>
+            <div class="notif-active">
+                <div class="green-flash">
+                </div>
+                <p class="notif-date">3h</p>
+            </div>
+        </div>
+
+        <div class="notification">
+            <p class="notif-content">Clinic announcement — Drug Test Hours: 9am-4pm daily </p>
+            <div class="notif-active">
+                <!-- <div class="green-flash">
+                </div> -->
+                <p class="notif-date">7/11/25</p>
+            </div>
+        </div>
+
+        <a href="#">View all notifications</a>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>System Performance</option>
+                    <option>Staff Management Issue</option>
+                    <option>Reporting Module</option>
+                    <option>Scheduling & Shifts</option>
+                    <option>Data Access Concern</option>
+                    <option>Security or Compliance</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I manage staff accounts?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Admins can add, edit, or deactivate nurse and doctor accounts from the dashboard.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view clinic activity reports?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, daily and monthly reports are available in the reporting module.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Do I have access to all patient records?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        The principal doctor has read-only access to all medical records.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I assign doctors to patients?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Patient-doctor assignment can be managed from the admin scheduling panel.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I manage clinic schedules?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, admins can manage duty rosters and clinic operating schedules.
+                    </div>
+                </div>
+
+                <a href="#" class="card-link">View admin policies</a>
+            </div>
+        </div>
+
+    </div>
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2025 Nile Uinversity of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script>
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+
+
+    </script>
+</body>
+
+</html>

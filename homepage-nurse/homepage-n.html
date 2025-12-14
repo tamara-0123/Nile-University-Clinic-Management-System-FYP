@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile University Clinic Management System</title>
-    <link rel="stylesheet" href="homepage.css">
+    <link rel="stylesheet" href="homepage-n.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -40,13 +40,13 @@
 
                         <li>
                             <a href="#">
-                                <p>Prescriptions</p>
+                                <p>Vitals</p>
                             </a>
                         </li>
 
                         <li>
                             <a href="#">
-                                <p>Medical History</p>
+                                <p>Referrals</p>
                             </a>
                         </li>
                     </ul>
@@ -62,20 +62,20 @@
     <!-- Hero Section-->
     <div class="hero">
         <div class="user-name">
-            <p class="welcome">Welcome <br> <span class="user">Cynthia George</span></p>
+            <p class="welcome">Welcome <br> <span class="user">Aisha Bello</span></p>
         </div>
         <div class="user-class">
             <div class="left">
                 <p class="header">USER</p>
-                <p class="content">Student</p>
+                <p class="content">Nurse</p>
             </div>
             <div class="right">
-                <i class="fa-solid fa-school"></i>
+                <i class="fa-solid fa-user-nurse"></i>
             </div>
         </div>
         <div class="id-num-box">
             <div class="left">
-                <p class="header">STUDENT ID</p>
+                <p class="header">STAFF ID</p>
                 <p class="content">20220000</p>
             </div>
             <div class="right">
@@ -84,37 +84,40 @@
 
         </div>
         <div class="quick-book">
-            <button class="book">+ Book Appointment</button>
+            <button class="book">+ Record Patient Vitals</button>
         </div>
     </div>
 
     <!--Dashboard Cards-->
     <div class='cards'>
         <div class='card next'>
-            <p class="card-title">Next Appointment</p>
-            <p class="card-content">Date & Time: 29/11/25 09:00AM</p>
-            <p class="card-content">Doctor: Dr. Umar</p>
+            <p class="card-title">Next Patient</p>
+            <div class="card-nurse">
+                <p class="card-content">Date & Time: 29/11/25 09:00AM</p>
+                <p class="card-content">Patient: Cynthia George</p>
+                <p class="card-content">Doctor Assigned: Dr. Umar</p>
+            </div>
             <a>
                 <p class="card-link">View details</p>
             </a>
         </div>
         <div class='card'>
-            <p class="card-title">Total Appointments</p>
-            <p class="card-number">7</p>
+            <p class="card-title">Patients Today</p>
+            <p class="card-number">12</p>
             <a>
-                <p class="card-link">View all appointments</p>
+                <p class="card-link">View patient list</p>
             </a>
         </div>
         <div class='card'>
-            <p class="card-title">Active Prescriptions</p>
-            <p class="card-number">2</p>
+            <p class="card-title">Pending Referrals</p>
+            <p class="card-number">3</p>
             <a>
-                <p class="card-link">View all prescriptions</p>
+                <p class="card-link">View referrals</p>
             </a>
         </div>
         <div class='card'>
             <p class="card-title">Notifications</p>
-            <p class="card-number">2 <span class="card-content">unread</span></p>
+            <p class="card-number">4 <span class="card-content">unread</span></p>
             <a>
                 <p class="card-link">View notifications</p>
             </a>
@@ -123,61 +126,60 @@
 
     <!--More Details section-->
     <div class="more-details">
-        <div class="med-history">
+        <div class="rec-patients">
             <div class="more-header">
-                <h2>Recent Medical History</h2>
-                <i class="fa-solid fa-file-medical"></i>
+                <h2>Recent Patients</h2>
+                <i class="fa-solid fa-bed"></i>
             </div>
 
 
-            <div class="visit">
-                <p>Date: Oct 12, 2025</p>
-                <p>Reason: Fever & Fatigue</p>
-                <p>Diagnosis: Mild viral infection</p>
-                <a href="#">View full record</a>
+            <div class="patient">
+                <p>Name: Cynthia George</p>
+                <p>Status: Waiting</p>
+                <p>Vitals: Pending</p>
+                <a href="#">Record vitals</a>
             </div>
 
-            <div class="visit">
-                <p>Date: Aug 30, 2025</p>
-                <p>Reason: Headache</p>
-                <p>Diagnosis: Stress-related tension</p>
-                <a href="#">View full record</a>
+            <div class="patient">
+                <p>Name: Samuel Okoye</p>
+                <p>Status: Referred</p>
+                <p>Vitals: Completed</p>
+                <a href="#">View record</a>
             </div>
 
-            <div class="visit">
-                <p>Date: Jul 10, 2025</p>
-                <p>Reason: Routine check-up</p>
-                <p>Diagnosis: No issues detected</p>
-                <a href="#">View full record</a>
+            <div class="patient">
+                <p>Name: Ruqqaiya Rita</p>
+                <p>Status: Referred</p>
+                <p>Vitals: Completed</p>
+                <a href="#">View record</a>
             </div>
         </div>
 
-        <div class="prescriptions">
+        <div class="rec-vitals">
             <div class="more-header">
-                <h2>Recent Prescriptions</h2>
-                <i class="fa-solid fa-prescription-bottle-medical"></i>
+                <h2>Recent Vitals</h2>
+                <i class="fa-solid fa-heart-pulse"></i>
             </div>
-            <div class="prescription pres-active">
+            <div class="vital">
                 <div>
-                    <p>Drug: Amoxicillin 500mg</p>
-                    <p>Dosage: 1 capsule × 3/day</p>
-                    <p>Doctor: Dr. A. Yusuf</p>
-                </div>
-                <div class="active">
-                    <div class="red-flash">
-                    </div>
-                    <p>ACTIVE</p>
+                    <p>Patient: Fatima Musa</p>
+                    <p>BP: 120/80</p>
+                    <p>Temp: 36.8°C</p>
+                    <p>Pulse: 78 bpm</p>
+                    <a href="#">View full record</a>
                 </div>
             </div>
 
 
-            <div class="prescription">
-                <p>Drug: Ibuprofen 200mg</p>
-                <p>Dosage: 1 tablet × 2/day</p>
-                <p>Doctor: Dr. M. Okeke</p>
+            <div class="vital">
+                <div>
+                    <p>Patient: Ade Bayo</p>
+                    <p>BP: 130/85</p>
+                    <p>Temp: 37.5°C</p>
+                    <p>Pulse: 71 bpm</p>
+                    <a href="#">View full record</a>
+                </div>
             </div>
-
-            <a href="#">View prescription history</a>
         </div>
     </div>
 
@@ -189,7 +191,7 @@
         </div>
 
         <div class="notification">
-            <p class="notif-content">REMINDER — You have an appointment TOMORROW at 10 AM</p>
+            <p class="notif-content">REMINDER — Patient is waiting for vitals recording</p>
             <div class="notif-active">
                 <div class="green-flash">
                 </div>
@@ -198,20 +200,11 @@
         </div>
 
         <div class="notification">
-            <p class="notif-content">Appointment updated — New time: 3 PM</p>
+            <p class="notif-content">Referral successful — Patient sent to Dr. Yusuf</p>
             <div class="notif-active">
                 <div class="green-flash">
                 </div>
                 <p class="notif-date">3h</p>
-            </div>
-        </div>
-
-        <div class="notification">
-            <p class="notif-content">Your most recent prescription is ready for pickup</p>
-            <div class="notif-active">
-                <!-- <div class="green-flash">
-                </div> -->
-                <p class="notif-date">9/11/25</p>
             </div>
         </div>
 
@@ -239,12 +232,12 @@
             <form>
                 <label for="reason">Reason for Feedback</label>
                 <select id="reason">
-                    <option>Appointment Delay</option>
-                    <option>Prescription Issue</option>
-                    <option>Nurse/Doctor Conduct</option>
-                    <option>Billing Concern</option>
-                    <option>Technical Issue (Portal)</option>
-                    <option>Cleanliness</option>
+                    <option>Patient Queue Delay</option>
+                    <option>Vitals Recording Issue</option>
+                    <option>Doctor Availability</option>
+                    <option>System Performance</option>
+                    <option>Equipment Issue</option>
+                    <option>Workflow Challenge</option>
                     <option>Other</option>
                 </select>
 
@@ -254,7 +247,6 @@
                 <button type="submit">Submit Feedback</button>
             </form>
         </div>
-
 
         <!--FAQ Section -->
         <div class="faq-section">
@@ -267,110 +259,59 @@
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        What are the clinic working hours?
+                        How do I record patient vitals?
                         <span class="arrow">&#9662;</span>
                     </button>
                     <div class="faq-answer">
-                        The clinic operates from 8 AM to 6 PM, Monday to Friday.
+                        Select a patient from the queue and enter vitals such as BP, temperature, and pulse.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        How do I book an appointment?
+                        Can I edit vitals after saving?
                         <span class="arrow">&#9662;</span>
                     </button>
                     <div class="faq-answer">
-                        You can book through the Student Portal or visit the front desk.
+                        Yes, vitals can be edited before the patient is referred to a doctor.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        Can I reschedule appointments?
+                        How do I check in a patient?
                         <span class="arrow">&#9662;</span>
                     </button>
                     <div class="faq-answer">
-                        Yes, appointments can be rescheduled up to 24 hours in advance.
+                        Update the patient status to “Checked-in” once they arrive at the clinic.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        Do I need my student ID to visit the clinic?
+                        How do I refer a patient to a doctor?
                         <span class="arrow">&#9662;</span>
                     </button>
                     <div class="faq-answer">
-                        Yes, you must present your student ID for verification.
+                        After recording vitals, assign the patient to an available doctor in the system.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        Are laboratory tests available?
+                        Can I view patient medical history?
                         <span class="arrow">&#9662;</span>
                     </button>
                     <div class="faq-answer">
-                        Yes, the clinic has an in-house lab for basic tests.
+                        Yes, nurses have read-only access to basic patient history for triage purposes.
                     </div>
                 </div>
 
-                <div class="faq-item">
-                    <button class="faq-question">
-                        How do I get my prescription refilled?
-                        <span class="arrow">&#9662;</span>
-                    </button>
-                    <div class="faq-answer">
-                        Request refills through the clinic pharmacy or online portal.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Are emergency services available?
-                        <span class="arrow">&#9662;</span>
-                    </button>
-                    <div class="faq-answer">
-                        The clinic handles minor emergencies; severe cases are referred.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Can I get a medical report for school purposes?
-                        <span class="arrow">&#9662;</span>
-                    </button>
-                    <div class="faq-answer">
-                        Yes, visit the reception to request a medical report.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        Is mental health support provided?
-                        <span class="arrow">&#9662;</span>
-                    </button>
-                    <div class="faq-answer">
-                        Yes, mental health counselling is available upon request.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        How long are medical records kept?
-                        <span class="arrow">&#9662;</span>
-                    </button>
-                    <div class="faq-answer">
-                        Medical records are maintained throughout your study duration.
-                    </div>
-                </div>
-
-                <a href="#" class="card-link">View clinic rules</a>
+                <a href="#" class="card-link">View nursing guidelines</a>
             </div>
         </div>
 
     </div>
-
     <!--Copyright-->
     <div class="copyright">
         <p>Nile University Clinic Management System &copy; 2025 Nile Uinversity of Nigeria - All Rights Reserved</p>
@@ -385,7 +326,7 @@
                 btn.querySelector('.arrow').classList.toggle('rotated');
             });
         });
-        
+
 
 
     </script>
