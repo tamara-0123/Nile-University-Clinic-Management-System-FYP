@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Profile | Nile University Clinic</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="doctor-profile.css">
+
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="nav-inner">
+    <strong>Nile University Clinic</strong>
+    <div class="nav-links">
+    <!--
+      <a href="#">Home</a>
+      <a href="#">Appointments</a>
+      <a href="#">Prescriptions</a>
+    -->
+      <a href="#" class="active">Profile</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="avatar">DU</div>
+    <div>
+      <h2>Dr. Umar Abdullahi</h2>
+      <p>Medical Officer • Nile University Clinic</p>
+      <p>Status: <strong>Active</strong></p>
+    </div>
+  </div>
+
+  <!-- Personal Information -->
+  <div class="section">
+    <h3>Personal Information</h3>
+    <div class="grid">
+      <div>
+        <label>Full Name</label>
+        <input type="text" value="Dr. Umar Abdullahi" disabled>
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" value="umar.abdullahi@nileuniversity.edu.ng" disabled>
+      </div>
+      <div>
+        <label>Phone Number</label>
+        <input type="text" value="+234 801 234 5678" disabled>
+      </div>
+      <div>
+        <label>Gender</label>
+        <select id="gender" disabled>
+            <option value="Male" selected>Male</option>
+            <option value="Female">Female</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Professional Information -->
+  <div class="section">
+    <h3>Professional Information</h3>
+    <div class="grid">
+      <div>
+        <label>Staff ID</label>
+        <input type="text" value="DOC-NU-014" disabled>
+      </div>
+      <div>
+        <label>Department</label>
+        <input type="text" value="General Medicine" disabled>
+      </div>
+      <div>
+        <label>Specialization</label>
+        <input type="text" value="Internal Medicine" disabled>
+      </div>
+      <div>
+        <label>Years of Experience</label>
+        <input type="text" value="8 Years" disabled>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn-outline" onclick="enableEdit()">Edit Profile</button>
+    <button class="btn-primary" onclick="saveProfile()">Save Changes</button>
+  </div>
+
+</div>
+
+<script>
+  function enableEdit(){
+    document.querySelectorAll("input").forEach(i=>i.disabled=false);
+    alert("Edit mode enabled");
+  }
+
+  function saveProfile(){
+    document.querySelectorAll("input").forEach(i=>i.disabled=true);
+    alert("Profile changes saved (mock)");
+  }
+</script>
+
+</body>
+</html>
