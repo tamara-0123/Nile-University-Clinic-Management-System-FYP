@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+:root{--bg:#f5f5f5;--card:#ffffff;--accent:#0606ba;--muted:#6b6b6b;--radius:10px;font-family:'Poppins',sans-serif}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:#222;font-family:var(--font-family, 'Poppins', sans-serif)}
+.container{max-width:1100px;margin:0 auto;padding:1rem}
+
+/* Nav */
+.top{ }
+.navbar{padding:20px 40px}
+.nav{height:60px;display:flex;flex-direction:row;background-color:white;padding:20px;border-radius:50px;align-items:center;justify-content:space-between;gap:40px;border:1px solid #d5d5d5}
+.logo{height:40px;width:150px}
+.nav-links{display:flex;gap:1.5rem;list-style:none;margin:0;padding:0}
+.nav-links a{text-decoration:none;color:black}
+.nav-links a:hover{color:var(--accent)}
+.links{display:flex;flex-direction:row;justify-content:center}
+.nav-buttons{display:flex;gap:.5rem}
+.logout{color:white;background-color:red;border:none;height:40px;width:80px;border-radius:50px;font-family:'Poppins',sans-serif}
+.profile{color:black;background-color:white;border:2px solid #e3e2e2;height:40px;width:80px;border-radius:50px;font-family:'Poppins',sans-serif}
+
+.fp-header{margin:10px 20px;padding:18px;border-radius:10px;background:white;border:1px solid #d5d5d5}
+.fp-header .container{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fp-header h1{margin:0;font-size:1.1rem;color:var(--accent);font-weight:700}
+.fp-header .container{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fp-header h1{margin:0;font-size:1.1rem;color:var(--accent)}
+.actions{display:flex;align-items:center;gap:.5rem}
+.actions input[type=search],.actions select,.actions input[type=date]{padding:.45rem .6rem;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.btn{background:var(--accent);color:#fff;padding:.5rem .7rem;border-radius:6px;border:0;cursor:pointer}
+.btn.alt{background:#eee;color:#333}
+.table-wrap{margin-top:1rem}
+.patients-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden}
+.patients-table th,.patients-table td{padding:.6rem;border-bottom:1px solid rgba(0,0,0,0.06);text-align:left}
+.patients-table thead{background:linear-gradient(90deg,#fafafa,#fff)}
+.patients-table tbody tr:hover{background:rgba(0,0,0,0.02)}
+.action-btn{background:transparent;border:0;color:var(--accent);cursor:pointer;padding:.25rem}
+.action-btn.delete{color:#d9534f}
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,0.35);visibility:hidden;opacity:0;transition:opacity .15s ease,visibility .15s}
+.modal[aria-hidden="false"]{visibility:visible;opacity:1}
+.modal-content{background:var(--card);padding:1rem;border-radius:10px;min-width:320px;max-width:520px}
+.modal-content label{display:block;margin:0.6rem 0}
+.modal-content input,.modal-content select{width:100%;padding:.5rem;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.form-actions{display:flex;gap:.5rem;justify-content:flex-end;margin-top:.5rem}
+.sr-only{position:absolute;left:-9999px}
+@media (max-width:900px){
+  .fp-header .container{flex-direction:column;align-items:flex-start}
+  .actions{flex-wrap:wrap}
+}

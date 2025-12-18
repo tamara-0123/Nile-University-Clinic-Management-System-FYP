@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Principal Doctor — Clinic Summary</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <h1>Clinic Summary — Principal Doctor</h1>
+      <div class="header-actions">
+        <label for="date-range" class="sr-only">Date range</label>
+        <input id="date-range" type="date" aria-label="Filter by date">
+        <button id="refreshBtn" class="btn">Refresh</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <section class="summary-cards" aria-label="Key clinic statistics">
+      <div class="card">
+        <h3>Patients Today</h3>
+        <p id="patientsToday" class="stat">—</p>
+      </div>
+      <div class="card">
+        <h3>Admissions</h3>
+        <p id="admissions" class="stat">—</p>
+      </div>
+      <div class="card">
+        <h3>Discharges</h3>
+        <p id="discharges" class="stat">—</p>
+      </div>
+      <div class="card">
+        <h3>Bed Occupancy</h3>
+        <p id="occupancy" class="stat">—</p>
+      </div>
+    </section>
+
+    <section class="charts" aria-label="Clinic charts">
+      <div class="chart-card">
+        <h3>Appointments (7 days)</h3>
+        <canvas id="appointmentsChart" aria-label="Appointments line chart" role="img"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Top Diagnoses</h3>
+        <canvas id="diagnosesChart" aria-label="Top diagnoses pie chart" role="img"></canvas>
+      </div>
+    </section>
+
+    <section class="recent table-section" aria-label="Recent patients">
+      <h2>Recent Patients</h2>
+      <div class="table-actions">
+        <input id="search" type="search" placeholder="Search by name or id" aria-label="Search patients">
+        <button id="exportCsv" class="btn">Export CSV</button>
+      </div>
+      <table class="data-table" aria-describedby="recentDesc">
+        <caption id="recentDesc">Latest admitted and seen patients</caption>
+        <thead>
+          <tr>
+            <th scope="col">Patient ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Diagnosis</th>
+            <th scope="col">Admitted</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="patientsTable">
+          <!-- dynamically populated -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p>© <span id="year"></span> Clinic Summary — For Principal Doctor</p>
+  </footer>
+
+</body>
+</html>
