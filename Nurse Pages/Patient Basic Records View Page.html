@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>>Nile Univeristy CMS - Patient Basic Records</title>
+    <link rel="stylesheet" href="shared.css" />
+    <link rel="stylesheet" href="Patient Basic Records View Page.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <a>
+          <img src="image.png" alt="Nile University Logo" />
+        </a>
+        <i class="fas fa-hospital"></i>
+        <h1>Nile University Clinic</h1>
+      </div>
+      <nav class="navbar">
+        <ul>
+          <li>
+            <a href="Nurse Dashboard.html"
+              ><i class="fas fa-home"></i> Dashboard</a
+            >
+          </li>
+          <li>
+            <a href="Patient List Page.html"
+              ><i class="fas fa-users"></i> Patient List</a
+            >
+          </li>
+          <li>
+            <a href="Patient Vitals Entry Page.html"
+              ><i class="fas fa-heartbeat"></i> Record Vitals</a
+            >
+          </li>
+          <li>
+            <a href="Patient Basic Records View Page.html" class="active"
+              ><i class="fas fa-file-medical"></i> Patient Records</a
+            >
+          </li>
+          <li>
+            <a href="Patient Referral Page.html"
+              ><i class="fas fa-user-md"></i> Refer Patient</a
+            >
+          </li>
+          <li>
+            <a href="Daily Report Page.html"
+              ><i class="fas fa-chart-bar"></i> Daily Report</a
+            >
+          </li>
+          <li>
+            <button id="notificationBtn" class="icon-btn">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </button>
+          </li>
+          <li>
+            <button id="profileBtn" class="icon-btn">
+              <i class="fas fa-user-nurse"></i>
+            </button>
+          </li>
+          <li>
+            <button id="logoutBtn" class="icon-btn">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="container">
+      <!-- Patient Search and Selection -->
+      <div class="page-header">
+        <h2><i class="fas fa-file-medical"></i> Patient Medical Records</h2>
+        <div class="header-actions">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="recordSearch"
+              placeholder="Search patient records..."
+            />
+          </div>
+          <button class="btn" onclick="loadPatientRecords('all')">
+            <i class="fas fa-list"></i> All Records
+          </button>
+        </div>
+      </div>
+
+      <!-- Selected Patient Info -->
+      <div class="section" id="selectedPatientInfo">
+        <div class="patient-header">
+          <div class="patient-avatar">
+            <i class="fas fa-user-injured fa-2x"></i>
+          </div>
+          <div class="patient-details">
+            <h3 id="patientName">Select a patient to view records</h3>
+            <p id="patientInfo">
+              Choose from the list below or search for a patient
+            </p>
+          </div>
+          <div class="patient-actions">
+            <button
+              class="btn"
+              onclick="viewVitalsHistory()"
+              id="vitalsBtn"
+              disabled
+            >
+              <i class="fas fa-heartbeat"></i> Vitals History
+            </button>
+            <button
+              class="btn"
+              onclick="referThisPatient()"
+              id="referBtn"
+              disabled
+            >
+              <i class="fas fa-user-md"></i> Refer to Doctor
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient Records List -->
+      <div class="section">
+        <h3><i class="fas fa-history"></i> Available Patient Records</h3>
+        <div class="records-grid" id="recordsList">
+          <!-- Records will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Medical History Timeline -->
+      <div class="section" id="medicalHistorySection" style="display: none">
+        <h3><i class="fas fa-timeline"></i> Medical History Timeline</h3>
+        <div class="timeline" id="medicalTimeline">
+          <!-- Timeline will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Current Vitals Display -->
+      <div class="section" id="currentVitalsSection" style="display: none">
+        <h3><i class="fas fa-chart-line"></i> Current Vitals Status</h3>
+        <div class="vitals-display-grid">
+          <div class="vital-display-card">
+            <div class="vital-label">Blood Pressure</div>
+            <div class="vital-value" id="displayBP">--/--</div>
+            <div class="vital-status normal">Normal</div>
+          </div>
+          <div class="vital-display-card">
+            <div class="vital-label">Temperature</div>
+            <div class="vital-value" id="displayTemp">--°C</div>
+            <div class="vital-status normal">Normal</div>
+          </div>
+          <div class="vital-display-card">
+            <div class="vital-label">Pulse Rate</div>
+            <div class="vital-value" id="displayPulse">-- bpm</div>
+            <div class="vital-status normal">Normal</div>
+          </div>
+          <div class="vital-display-card">
+            <div class="vital-label">Oxygen Saturation</div>
+            <div class="vital-value" id="displayOxygen">--%</div>
+            <div class="vital-status normal">Normal</div>
+          </div>
+          <div class="vital-display-card">
+            <div class="vital-label">Weight</div>
+            <div class="vital-value" id="displayWeight">-- kg</div>
+            <div class="vital-status normal">--</div>
+          </div>
+          <div class="vital-display-card">
+            <div class="vital-label">BMI</div>
+            <div class="vital-value" id="displayBMI">--</div>
+            <div class="vital-status normal">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Consultations -->
+      <div class="section" id="consultationsSection" style="display: none">
+        <h3><i class="fas fa-stethoscope"></i> Recent Consultations</h3>
+        <div class="table-container">
+          <table class="patient-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>Diagnosis</th>
+                <th>Prescription</th>
+                <th>Follow-up</th>
+              </tr>
+            </thead>
+            <tbody id="consultationsTable">
+              <!-- Consultations will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Allergies & Conditions -->
+      <div class="form-row" id="conditionsSection" style="display: none">
+        <div class="form-group">
+          <h4><i class="fas fa-allergies"></i> Allergies</h4>
+          <div class="tags-container" id="allergiesList">
+            <!-- Allergies will be loaded here -->
+          </div>
+        </div>
+        <div class="form-group">
+          <h4><i class="fas fa-file-medical-alt"></i> Chronic Conditions</h4>
+          <div class="tags-container" id="conditionsList">
+            <!-- Conditions will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-nurse"></i>Nurse Profile</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="profile-info">
+            <div class="profile-avatar">
+              <i class="fas fa-user-name fa-3x"></i>
+            </div>
+            <div class="profile-details">
+              <p><strong>Name:</strong> Sarah Johnson</p>
+              <p><strong>ID:</strong> NUR-2025-001</p>
+              <p><strong>Role:</strong> Senior Nurse</p>
+              <p><strong>Email:</strong> sarah.j@nileuniversity.edu.ng</p>
+              <p><strong>Department:</strong> General Clinic</p>
+              <p><strong>Shift</strong> 8:00 AM - 4:00 PM</p>
+            </div>
+          </div>
+          <div class="profile-actions">
+            <button class="btn">
+              <i class="fas fa-edit">Edit Profile</i>
+            </button>
+            <button class="btn">
+              <i class="fas fa-key">Change Password</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-bell"></i>Notifications</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="notification-list">
+            <div class="notification-item unread">
+              <i class="fas fa-calender-check notification-icon"></i>
+              <div class="notification-content">
+                <p><strong>New appointment booked</strong></p>
+                <p>Patient Cynthia George booked for 2:30 PM</p>
+                <small>10 minutes ago</small>
+              </div>
+            </div>
+            <div class="notification-item unread">
+              <i class="fas fa-exclamation-triangle notification-icon"></i>
+              <div class="notification-content">
+                <p><strong>High BP Alert</strong></p>
+                <p>Patient Mary Smith has high blood pressure</p>
+                <small>25 minutes ago</small>
+              </div>
+            </div>
+            <div class="notification-item">
+              <i class="fas fa-user-md notification-icon"></i>
+              <div class="notification-content">
+                <p><strong>Doctor Request</strong></p>
+                <p>Dr. Umar requested for patient ID 002</p>
+                <small>1 hour ago</small>
+              </div>
+            </div>
+            <div class="notification-item">
+              <i class="fas fa-shield-alt notification-icon"></i>
+              <div class="notification-content">
+                <p><strong>System Update</strong></p>
+                <p>CMS will be updated tonight at 11 PM</p>
+                <small>3 hours ago</small>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-full">Mark All as Read</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-sign-out-alt"></i>Confirm Logout</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to log out from the Nurse Dashboard?</p>
+          <p><small>You will directed to the login page</small></p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-cancel">Cancel</button>
+          <button class="btn btn-cancel">Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vitals History Modal -->
+    <div id="vitalsHistoryModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-heartbeat"></i> Vitals History</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="table-container">
+            <table class="patient-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Blood Pressure</th>
+                  <th>Temperature</th>
+                  <th>Pulse Rate</th>
+                  <th>O₂ Saturation</th>
+                  <th>Recorded By</th>
+                </tr>
+              </thead>
+              <tbody id="vitalsHistoryBody">
+                <!-- Vitals history will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="shared.js"></script>
+    <script src="Patient Basic Records View Page.js"></script>
+  </body>
+</html>
