@@ -1,0 +1,91 @@
+/* Patient Records Styles */
+.form-control {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: "Poppins", sans-serif;
+  font-size: 0.95rem;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(6, 6, 186, 0.1);
+}
+
+/* Header Controls */
+.hero-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-controls .search-box {
+  flex: 1;
+  min-width: 250px;
+}
+
+.hero-controls .btn {
+  white-space: nowrap;
+}
+
+.patient-detail {
+  margin-top: 20px;
+}
+
+.patient-detail h2 {
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+
+.detail-card {
+  background: white;
+  border: 1px solid #d5d5d5;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.detail-card h3 {
+  color: var(--accent);
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.detail-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.detail-item p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

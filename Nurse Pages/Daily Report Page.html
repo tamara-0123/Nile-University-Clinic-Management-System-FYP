@@ -1,622 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>>Nile Univeristy CMS - Daily Report</title>
-    <link rel="stylesheet" href="shared.css" />
-    <link rel="stylesheet" href="Daily Report Page.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Daily Report — Clinic</title>
+    <link rel="stylesheet" href="shared-nurse.css" />
+    <link rel="stylesheet" href="daily-report.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
-    />
-    <!-- Chart.js for reporting -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="Daily Report Page.js" defer></script>
   </head>
   <body>
-    <header class="header">
-      <div class="logo">
-        <a>
-          <img src="image.png" alt="Nile University Logo" />
-        </a>
-        <i class="fas fa-hospital"></i>
-        <h1>Nile University Clinic</h1>
+    <div class="top">
+      <div class="navbar">
+        <nav class="nav">
+          <a>
+            <img src="image.png" alt="Clinic Logo" class="logo" />
+          </a>
+          <div class="links">
+            <ul class="nav-links">
+              <li><a href="Nurse Dashboard.html">Home</a></li>
+              <li><a href="Patient List Page.html">Patient List</a></li>
+              <li>
+                <a href="Patient Vitals Entry Page.html">Record Vitals</a>
+              </li>
+              <li>
+                <a href="Patient Basic Records View Page.html"
+                  >Patient Records</a
+                >
+              </li>
+              <li><a href="Patient Referral Page.html">Refer Patient</a></li>
+              <li>
+                <a href="Daily Report Page.html" class="active">Daily Report</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-buttons">
+            <button id="profileBtn" class="profile">Profile</button>
+            <button id="logoutBtn" class="logout">Logout</button>
+          </div>
+        </nav>
       </div>
-      <nav class="navbar">
-        <ul>
-          <li>
-            <a href="Nurse Dashboard.css"
-              ><i class="fas fa-home"></i> Dashboard</a
-            >
-          </li>
-          <li>
-            <a href="Patient List Page.html"
-              ><i class="fas fa-users"></i> Patient List</a
-            >
-          </li>
-          <li>
-            <a href="Patient Vitals Entry Page.html"
-              ><i class="fas fa-heartbeat"></i> Record Vitals</a
-            >
-          </li>
-          <li>
-            <a href="Patient Basic Records View Page.html"
-              ><i class="fas fa-file-medical"></i> Patient Records</a
-            >
-          </li>
-          <li>
-            <a href="Patient Referral Page.html"
-              ><i class="fas fa-user-md"></i> Refer Patient</a
-            >
-          </li>
-          <li>
-            <a href="Daily Report Page.html" class="active"
-              ><i class="fas fa-chart-bar"></i> Daily Report</a
-            >
-          </li>
-          <li>
-            <button id="notificationBtn" class="icon-btn">
-              <i class="fas fa-bell"></i>
-              <span class="badge">3</span>
-            </button>
-          </li>
-          <li>
-            <button id="profileBtn" class="icon-btn">
-              <i class="fas fa-user-nurse"></i>
-            </button>
-          </li>
-          <li>
-            <button id="logoutBtn" class="icon-btn">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
-          </li>
-        </ul>
-      </nav>
+    </div>
+
+    <header class="header">
+      <div class="container">
+        <div class="hero-left">
+          <h1>Daily Clinic Report</h1>
+          <p class="muted">Quick overview of today's activity and analytics</p>
+        </div>
+        <div class="hero-actions">
+          <input id="reportDate" type="date" class="form-control" />
+          <button id="generate" class="btn btn-primary">
+            <i class="fas fa-sync"></i> Generate
+          </button>
+        </div>
+      </div>
     </header>
 
     <main class="container">
-      <div class="page-header">
-        <h2><i class="fas fa-chart-bar"></i> Daily Clinic Report</h2>
-        <div class="header-actions">
-          <div class="date-selector">
-            <button class="btn" onclick="changeReportDate(-1)">
-              <i class="fas fa-chevron-left"></i> Previous
+      <section class="cards">
+        <div class="card">
+          <i class="fas fa-user-injured card-icon"></i>
+          <p class="card-title">Total Patients</p>
+          <p class="card-number" id="visits">28</p>
+        </div>
+        <div class="card">
+          <i class="fas fa-user-clock card-icon"></i>
+          <p class="card-title">Average Wait Time</p>
+          <p class="card-number" id="admissions">25 min</p>
+        </div>
+        <div class="card">
+          <i class="fas fa-check-circle card-icon"></i>
+          <p class="card-title">Completed</p>
+          <p class="card-number" id="discharges">22</p>
+        </div>
+      </section>
+
+      <section class="visuals">
+        <div class="chart-card">
+          <h3>Patient Flow (Last 7 Days)</h3>
+          <canvas id="visitsChart"></canvas>
+        </div>
+        <div class="chart-card small">
+          <h3>Department Distribution</h3>
+          <canvas id="deptChart"></canvas>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <div class="reports-header">
+          <h2>Daily Report Summary</h2>
+          <div class="reports-actions">
+            <button id="exportCsv" class="btn">
+              <i class="fas fa-download"></i> Export CSV
             </button>
-            <input
-              type="date"
-              id="reportDate"
-              class="form-control"
-              value="2025-04-15"
-            />
-            <button class="btn" onclick="changeReportDate(1)">
-              Next <i class="fas fa-chevron-right"></i>
+            <button id="downloadPdf" class="btn btn-primary">
+              <i class="fas fa-file-pdf"></i> PDF
             </button>
           </div>
-          <button class="btn" onclick="generateReport()">
-            <i class="fas fa-sync-alt"></i> Generate Report
-          </button>
-          <button class="btn" onclick="printReport()">
-            <i class="fas fa-print"></i> Print Report
-          </button>
         </div>
-      </div>
 
-      <!-- Report Summary Cards -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <i class="fas fa-user-injured"></i>
-          <h3>Total Patients</h3>
-          <p class="count">28</p>
-          <p class="stat-change positive">+3 from yesterday</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-user-clock"></i>
-          <h3>Average Wait Time</h3>
-          <p class="count">25 min</p>
-          <p class="stat-change negative">+5 min from average</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-user-md"></i>
-          <h3>Consultations</h3>
-          <p class="count">22</p>
-          <p class="stat-change positive">Completed</p>
-        </div>
-        <div class="stat-card">
-          <i class="fas fa-prescription-bottle-alt"></i>
-          <h3>Prescriptions</h3>
-          <p class="count">18</p>
-          <p class="stat-change">Issued</p>
-        </div>
-      </div>
-
-      <!-- Charts Section -->
-      <div class="section">
-        <h3><i class="fas fa-chart-line"></i> Daily Statistics Charts</h3>
-        <div class="charts-grid">
-          <div class="chart-container">
-            <h4>Patient Flow by Hour</h4>
-            <canvas id="patientFlowChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h4>Patient Conditions</h4>
-            <canvas id="conditionsChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h4>Wait Time Distribution</h4>
-            <canvas id="waitTimeChart"></canvas>
-          </div>
-          <div class="chart-container">
-            <h4>Referral Status</h4>
-            <canvas id="referralChart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Detailed Report Sections -->
-      <div class="section">
-        <h3><i class="fas fa-list-ol"></i> Patient Breakdown</h3>
-        <div class="form-row">
-          <div class="form-group">
-            <h4><i class="fas fa-users"></i> By Status</h4>
-            <div class="breakdown-list">
-              <div class="breakdown-item">
-                <span class="breakdown-label">Checked In</span>
-                <span class="breakdown-value">15 patients</span>
-                <div class="breakdown-bar" style="width: 54%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Waiting</span>
-                <span class="breakdown-value">8 patients</span>
-                <div class="breakdown-bar" style="width: 29%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Completed</span>
-                <span class="breakdown-value">22 patients</span>
-                <div class="breakdown-bar" style="width: 79%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Walk-ins</span>
-                <span class="breakdown-value">5 patients</span>
-                <div class="breakdown-bar" style="width: 18%"></div>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <h4><i class="fas fa-stethoscope"></i> Top Conditions</h4>
-            <div class="breakdown-list">
-              <div class="breakdown-item">
-                <span class="breakdown-label">Fever/Common Cold</span>
-                <span class="breakdown-value">8 cases</span>
-                <div class="breakdown-bar" style="width: 40%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Headache/Migraine</span>
-                <span class="breakdown-value">5 cases</span>
-                <div class="breakdown-bar" style="width: 25%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Stomach Issues</span>
-                <span class="breakdown-value">4 cases</span>
-                <div class="breakdown-bar" style="width: 20%"></div>
-              </div>
-              <div class="breakdown-item">
-                <span class="breakdown-label">Injury/Accident</span>
-                <span class="breakdown-value">3 cases</span>
-                <div class="breakdown-bar" style="width: 15%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Staff Performance -->
-      <div class="section">
-        <h3><i class="fas fa-user-md"></i> Staff Performance</h3>
-        <div class="table-container">
-          <table class="patient-table">
-            <thead>
-              <tr>
-                <th>Staff Member</th>
-                <th>Role</th>
-                <th>Patients Handled</th>
-                <th>Average Time</th>
-                <th>Efficiency</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Dr. Samuel Johnson</td>
-                <td>General Physician</td>
-                <td>12</td>
-                <td>18 min</td>
-                <td>
-                  <div class="efficiency-bar" style="width: 95%">95%</div>
-                </td>
-                <td><span class="status status-completed">Active</span></td>
-              </tr>
-              <tr>
-                <td>Dr. Fatima Bello</td>
-                <td>General Physician</td>
-                <td>10</td>
-                <td>22 min</td>
-                <td>
-                  <div class="efficiency-bar" style="width: 88%">88%</div>
-                </td>
-                <td><span class="status status-completed">Active</span></td>
-              </tr>
-              <tr>
-                <td>Nurse Sarah Johnson</td>
-                <td>Senior Nurse</td>
-                <td>28</td>
-                <td>8 min</td>
-                <td>
-                  <div class="efficiency-bar" style="width: 98%">98%</div>
-                </td>
-                <td><span class="status status-completed">On Duty</span></td>
-              </tr>
-              <tr>
-                <td>Nurse Mike Ade</td>
-                <td>Nurse</td>
-                <td>15</td>
-                <td>10 min</td>
-                <td>
-                  <div class="efficiency-bar" style="width: 92%">92%</div>
-                </td>
-                <td><span class="status status-checked-in">On Break</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Detailed Patient List -->
-      <div class="section">
-        <h3><i class="fas fa-file-medical-alt"></i> Today's Patient Details</h3>
-        <div class="table-container">
-          <table class="patient-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Patient Name</th>
-                <th>Time In</th>
-                <th>Time Out</th>
-                <th>Wait Time</th>
-                <th>Condition</th>
-                <th>Doctor</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="dailyPatientsTable">
-              <!-- Daily patients will be loaded by JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Report Actions -->
-      <div class="section">
-        <h3><i class="fas fa-cogs"></i> Report Actions</h3>
-        <div class="action-grid">
-          <button class="action-btn" onclick="exportReport('pdf')">
-            <i class="fas fa-file-pdf"></i>
-            <span>Export as PDF</span>
-          </button>
-          <button class="action-btn" onclick="exportReport('excel')">
-            <i class="fas fa-file-excel"></i>
-            <span>Export as Excel</span>
-          </button>
-          <button class="action-btn" onclick="emailReport()">
-            <i class="fas fa-envelope"></i>
-            <span>Email Report</span>
-          </button>
-          <button class="action-btn" onclick="compareReports()">
-            <i class="fas fa-chart-bar"></i>
-            <span>Compare Days</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Report Notes -->
-      <div class="section">
-        <h3><i class="fas fa-clipboard"></i> Report Notes & Observations</h3>
-        <div class="form-group">
-          <label for="reportNotes"><i class="fas fa-edit"></i> Add Notes</label>
-          <textarea
-            id="reportNotes"
-            class="form-control"
-            rows="4"
-            placeholder="Add any observations, issues, or notes for today's report..."
-          ></textarea>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-cancel" onclick="clearNotes()">
-            <i class="fas fa-trash"></i> Clear Notes
-          </button>
-          <button class="btn" onclick="saveReport()">
-            <i class="fas fa-save"></i> Save Report
-          </button>
-        </div>
-      </div>
+        <table class="reports-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Total Patients</th>
+              <th>Completed</th>
+              <th>Referred</th>
+              <th>Avg Wait Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTable">
+            <tr>
+              <td>2025-01-11</td>
+              <td>28</td>
+              <td>22</td>
+              <td>3</td>
+              <td>25 min</td>
+              <td>
+                <button class="btn-small">View</button>
+                <button class="btn-small">Print</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2025-01-10</td>
+              <td>25</td>
+              <td>20</td>
+              <td>2</td>
+              <td>20 min</td>
+              <td>
+                <button class="btn-small">View</button>
+                <button class="btn-small">Print</button>
+              </td>
+            </tr>
+            <tr>
+              <td>2025-01-09</td>
+              <td>30</td>
+              <td>25</td>
+              <td>4</td>
+              <td>28 min</td>
+              <td>
+                <button class="btn-small">View</button>
+                <button class="btn-small">Print</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
 
-    <!-- Modals -->
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-user-nurse"></i>Nurse Profile</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="profile-info">
-            <div class="profile-avatar">
-              <i class="fas fa-user-name fa-3x"></i>
-            </div>
-            <div class="profile-details">
-              <p><strong>Name:</strong> Sarah Johnson</p>
-              <p><strong>ID:</strong> NUR-2025-001</p>
-              <p><strong>Role:</strong> Senior Nurse</p>
-              <p><strong>Email:</strong> sarah.j@nileuniversity.edu.ng</p>
-              <p><strong>Department:</strong> General Clinic</p>
-              <p><strong>Shift</strong> 8:00 AM - 4:00 PM</p>
-            </div>
-          </div>
-          <div class="profile-actions">
-            <button class="btn">
-              <i class="fas fa-edit">Edit Profile</i>
-            </button>
-            <button class="btn">
-              <i class="fas fa-key">Change Password</i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <footer class="footer container">
+      <p>
+        Nile University Clinic Management System &copy;
+        <span id="year"></span>
+      </p>
+    </footer>
 
-    <!-- Notification Modal -->
-    <div id="notificationModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-bell"></i>Notifications</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="notification-list">
-            <div class="notification-item unread">
-              <i class="fas fa-calender-check notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>New appointment booked</strong></p>
-                <p>Patient Cynthia George booked for 2:30 PM</p>
-                <small>10 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item unread">
-              <i class="fas fa-exclamation-triangle notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>High BP Alert</strong></p>
-                <p>Patient Mary Smith has high blood pressure</p>
-                <small>25 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-user-md notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>Doctor Request</strong></p>
-                <p>Dr. Umar requested for patient ID 002</p>
-                <small>1 hour ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-shield-alt notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>System Update</strong></p>
-                <p>CMS will be updated tonight at 11 PM</p>
-                <small>3 hours ago</small>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-full">Mark All as Read</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-sign-out-alt"></i>Confirm Logout</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to log out from the Nurse Dashboard?</p>
-          <p><small>You will directed to the login page</small></p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel">Cancel</button>
-          <button class="btn btn-cancel">Logout</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Export Report Modal -->
-    <div id="exportModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-download"></i> Export Report</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="exportFormat"
-              ><i class="fas fa-file"></i> Export Format</label
-            >
-            <select id="exportFormat" class="form-control">
-              <option value="pdf">PDF Document</option>
-              <option value="excel">Excel Spreadsheet</option>
-              <option value="csv">CSV File</option>
-              <option value="html">HTML Report</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exportRange"
-              ><i class="fas fa-calendar"></i> Date Range</label
-            >
-            <select id="exportRange" class="form-control">
-              <option value="today">Today Only</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="custom">Custom Range</option>
-            </select>
-          </div>
-          <div class="form-group" id="customRangeGroup" style="display: none">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="startDate">Start Date</label>
-                <input type="date" id="startDate" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label for="endDate">End Date</label>
-                <input type="date" id="endDate" class="form-control" />
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label><i class="fas fa-filter"></i> Include Sections</label>
-            <div class="checkbox-group">
-              <label
-                ><input type="checkbox" checked /> Summary Statistics</label
-              >
-              <label><input type="checkbox" checked /> Patient Details</label>
-              <label><input type="checkbox" checked /> Staff Performance</label>
-              <label><input type="checkbox" /> Charts & Graphs</label>
-              <label><input type="checkbox" checked /> Notes</label>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel" onclick="closeExportModal()">
-            Cancel
-          </button>
-          <button class="btn" onclick="confirmExport()">Export Report</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Compare Reports Modal -->
-    <div id="compareModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-chart-bar"></i> Compare Reports</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="compareDate1">First Date</label>
-              <input
-                type="date"
-                id="compareDate1"
-                class="form-control"
-                value="2025-04-15"
-              />
-            </div>
-            <div class="form-group">
-              <label for="compareDate2">Second Date</label>
-              <input
-                type="date"
-                id="compareDate2"
-                class="form-control"
-                value="2025-04-14"
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <label><i class="fas fa-chart-line"></i> Compare Metrics</label>
-            <div class="checkbox-group">
-              <label><input type="checkbox" checked /> Total Patients</label>
-              <label><input type="checkbox" checked /> Average Wait Time</label>
-              <label><input type="checkbox" checked /> Consultations</label>
-              <label><input type="checkbox" checked /> Prescriptions</label>
-              <label><input type="checkbox" /> Staff Efficiency</label>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel" onclick="closeCompareModal()">
-            Cancel
-          </button>
-          <button class="btn" onclick="generateComparison()">
-            Generate Comparison
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Email Report Modal -->
-    <div id="emailModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-envelope"></i> Email Report</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label for="emailTo"
-              ><i class="fas fa-user"></i> Recipient Email</label
-            >
-            <input
-              type="email"
-              id="emailTo"
-              class="form-control"
-              placeholder="Enter email address"
-            />
-          </div>
-          <div class="form-group">
-            <label for="emailSubject"><i class="fas fa-tag"></i> Subject</label>
-            <input
-              type="text"
-              id="emailSubject"
-              class="form-control"
-              value="Daily Clinic Report - 2025-04-15"
-            />
-          </div>
-          <div class="form-group">
-            <label for="emailMessage"
-              ><i class="fas fa-comment"></i> Additional Message</label
-            >
-            <textarea
-              id="emailMessage"
-              class="form-control"
-              rows="4"
-              placeholder="Add any additional comments..."
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label><i class="fas fa-paperclip"></i> Attachments</label>
-            <div class="checkbox-group">
-              <label
-                ><input type="checkbox" checked /> Summary Report (PDF)</label
-              >
-              <label><input type="checkbox" /> Detailed Data (Excel)</label>
-              <label><input type="checkbox" /> Charts & Graphs</label>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel" onclick="closeEmailModal()">
-            Cancel
-          </button>
-          <button class="btn" onclick="sendEmailReport()">Send Email</button>
-        </div>
-      </div>
-    </div>
-
-    <script src="shared.js"></script>
-    <script src="Daily Report Page.js"></script>
+    <script src="shared.js" defer></script>
+    <script src="Daily Report Page.js" defer></script>
   </body>
 </html>

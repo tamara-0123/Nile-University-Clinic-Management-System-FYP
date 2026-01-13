@@ -1,393 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>>Nile Univeristy CMS - Patient Referrals</title>
-    <link rel="stylesheet" href="shared.css" />
-    <link rel="stylesheet" href="Patient Referral Page.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Patient Referral — Clinic</title>
+    <link rel="stylesheet" href="shared-nurse.css" />
+    <link rel="stylesheet" href="patient-referral.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
-    />
+    <script src="Patient Referral Page.js" defer></script>
   </head>
   <body>
-    <header class="header">
-      <div class="logo">
-        <a>
-          <img src="image.png" alt="Nile University Logo" />
-        </a>
-        <i class="fas fa-hospital"></i>
-        <h1>Nile University Clinic</h1>
+    <div class="top">
+      <div class="navbar">
+        <nav class="nav">
+          <a>
+            <img src="image.png" alt="Clinic Logo" class="logo" />
+          </a>
+          <div class="links">
+            <ul class="nav-links">
+              <li><a href="Nurse Dashboard.html">Home</a></li>
+              <li><a href="Patient List Page.html">Patient List</a></li>
+              <li>
+                <a href="Patient Vitals Entry Page.html">Record Vitals</a>
+              </li>
+              <li>
+                <a href="Patient Basic Records View Page.html"
+                  >Patient Records</a
+                >
+              </li>
+              <li>
+                <a href="Patient Referral Page.html" class="active"
+                  >Refer Patient</a
+                >
+              </li>
+              <li><a href="Daily Report Page.html">Daily Report</a></li>
+            </ul>
+          </div>
+          <div class="nav-buttons">
+            <button id="profileBtn" class="profile">Profile</button>
+            <button id="logoutBtn" class="logout">Logout</button>
+          </div>
+        </nav>
       </div>
-      <nav class="navbar">
-        <ul>
-          <li>
-            <a href="Nurse Dashboard.html"
-              ><i class="fas fa-home"></i> Dashboard</a
-            >
-          </li>
-          <li>
-            <a href="Patient List Page.html"
-              ><i class="fas fa-users"></i> Patient List</a
-            >
-          </li>
-          <li>
-            <a href="Patient Vitals Entry Page.html"
-              ><i class="fas fa-heartbeat"></i> Record Vitals</a
-            >
-          </li>
-          <li>
-            <a href="Patient Basic Records View Page.html"
-              ><i class="fas fa-file-medical"></i> Patient Records</a
-            >
-          </li>
-          <li>
-            <a href="Patient Referral Page.html" class="active"
-              ><i class="fas fa-user-md"></i> Refer Patient</a
-            >
-          </li>
-          <li>
-            <a href="Daily Report Page.html"
-              ><i class="fas fa-chart-bar"></i> Daily Report</a
-            >
-          </li>
-          <li>
-            <button id="notificationBtn" class="icon-btn">
-              <i class="fas fa-bell"></i>
-              <span class="badge">3</span>
-            </button>
-          </li>
-          <li>
-            <button id="profileBtn" class="icon-btn">
-              <i class="fas fa-user-nurse"></i>
-            </button>
-          </li>
-          <li>
-            <button id="logoutBtn" class="icon-btn">
-              <i class="fas fa-sign-out-alt"></i>
-            </button>
-          </li>
-        </ul>
-      </nav>
+    </div>
+
+    <header class="header">
+      <div class="container">
+        <div class="hero-left">
+          <h1>Refer Patient to Doctor</h1>
+          <p class="muted">
+            Assign patients to available doctors for consultation
+          </p>
+        </div>
+      </div>
     </header>
 
     <main class="container">
-      <div class="page-header">
-        <h2><i class="fas fa-user-md"></i> Refer Patient to Doctor</h2>
-        <p>Assign patients to available doctors for consultation</p>
-      </div>
-
-      <!-- Current Referrals Summary -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <i class="fas fa-clock"></i>
-          <h3>Pending Referrals</h3>
-          <p class="count">5</p>
+      <section class="cards">
+        <div class="card">
+          <i class="fas fa-clock card-icon"></i>
+          <p class="card-title">Pending Referrals</p>
+          <p class="card-number">5</p>
         </div>
-        <div class="stat-card">
-          <i class="fas fa-check-circle"></i>
-          <h3>Completed Today</h3>
-          <p class="count">12</p>
+        <div class="card">
+          <i class="fas fa-check-circle card-icon"></i>
+          <p class="card-title">Completed Today</p>
+          <p class="card-number">12</p>
         </div>
-        <div class="stat-card">
-          <i class="fas fa-user-md"></i>
-          <h3>Available Doctors</h3>
-          <p class="count">4</p>
+        <div class="card">
+          <i class="fas fa-user-md card-icon"></i>
+          <p class="card-title">Available Doctors</p>
+          <p class="card-number">4</p>
         </div>
-        <div class="stat-card">
-          <i class="fas fa-procedures"></i>
-          <h3>Waiting Patients</h3>
-          <p class="count">8</p>
-        </div>
-      </div>
+      </section>
 
-      <!-- Referral Form -->
-      <div class="section">
-        <h3><i class="fas fa-file-medical-alt"></i> New Referral Form</h3>
-        <div class="form-container">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="referPatientSelect"
-                ><i class="fas fa-user-injured"></i> Select Patient</label
-              >
-              <select id="referPatientSelect" class="form-control">
-                <option value="">Choose a patient...</option>
-                <option value="001">
-                  Samuel Okoye (ID: 2025-001) - Waiting
-                </option>
-                <option value="002">
-                  Ade Bayo (ID: 2025-002) - Checked In
-                </option>
-                <option value="003">
-                  Ahmed Musa (ID: 2025-003) - Vitals Taken
-                </option>
-                <option value="004">
-                  Chioma Okoro (ID: 2025-004) - Needs Review
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="patientCondition"
-                ><i class="fas fa-stethoscope"></i> Patient Condition</label
-              >
-              <input
-                type="text"
-                id="patientCondition"
-                class="form-control"
-                placeholder="e.g., Fever, Headache, etc."
-              />
-            </div>
-          </div>
+      <section class="form-section">
+        <h2>Create New Referral</h2>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="urgencyLevel"
-                ><i class="fas fa-exclamation-triangle"></i> Urgency
-                Level</label
-              >
-              <select id="urgencyLevel" class="form-control">
-                <option value="routine">Routine - Can wait 1-2 hours</option>
-                <option value="urgent">Urgent - Within 30 minutes</option>
-                <option value="emergency">
-                  Emergency - Immediate attention
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="referralReason"
-                ><i class="fas fa-comment-medical"></i> Referral Reason</label
-              >
-              <select id="referralReason" class="form-control">
-                <option value="consultation">General Consultation</option>
-                <option value="followup">Follow-up Visit</option>
-                <option value="specialist">Specialist Referral</option>
-                <option value="emergency">Emergency Case</option>
-                <option value="review">Case Review</option>
-              </select>
-            </div>
-          </div>
-
+        <div class="form-row">
           <div class="form-group">
-            <label for="clinicalNotes"
-              ><i class="fas fa-notes-medical"></i> Clinical Notes</label
+            <label for="refPatient"
+              ><i class="fas fa-user"></i> Select Patient</label
             >
-            <textarea
-              id="clinicalNotes"
-              class="form-control"
-              rows="4"
-              placeholder="Enter clinical observations, vital signs, and any relevant information for the doctor..."
-            ></textarea>
+            <select id="refPatient" class="form-control">
+              <option value="">Choose a patient...</option>
+              <option value="001">Samuel Okoye (ID: P-001)</option>
+              <option value="002">Ade Bayo (ID: P-002)</option>
+              <option value="003">Ahmed Musa (ID: P-003)</option>
+              <option value="004">Chioma Okoro (ID: P-004)</option>
+            </select>
           </div>
-
-          <!-- Doctor Selection -->
           <div class="form-group">
-            <label><i class="fas fa-user-md"></i> Available Doctors</label>
-            <div class="doctors-grid" id="doctorsList">
-              <!-- Doctors will be loaded here -->
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn btn-cancel" onclick="resetReferralForm()">
-              <i class="fas fa-redo"></i> Clear Form
-            </button>
-            <button class="btn btn-save" onclick="submitReferral()">
-              <i class="fas fa-paper-plane"></i> Submit Referral
-            </button>
+            <label for="refDoctor"
+              ><i class="fas fa-user-md"></i> Select Doctor</label
+            >
+            <select id="refDoctor" class="form-control">
+              <option value="">Choose a doctor...</option>
+              <option value="D001">Dr. Ahmed Hassan (General)</option>
+              <option value="D002">Dr. Zainab Malik (Pediatrics)</option>
+              <option value="D003">Dr. Ibrahim Okon (Cardiology)</option>
+              <option value="D004">Dr. Farah Ali (Emergency)</option>
+            </select>
           </div>
         </div>
-      </div>
 
-      <!-- Active Referrals -->
-      <div class="section">
-        <h3><i class="fas fa-tasks"></i> Active Referrals</h3>
-        <div class="table-container">
-          <table class="patient-table">
-            <thead>
-              <tr>
-                <th>Patient</th>
-                <th>Condition</th>
-                <th>Urgency</th>
-                <th>Referred To</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="activeReferralsTable">
-              <!-- Active referrals will be loaded here -->
-            </tbody>
-          </table>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="refReason"
+              ><i class="fas fa-stethoscope"></i> Reason</label
+            >
+            <select id="refReason" class="form-control">
+              <option value="consultation">Consultation</option>
+              <option value="specialist">Specialist Evaluation</option>
+              <option value="emergency">Emergency</option>
+              <option value="followup">Follow-up</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="refPriority"
+              ><i class="fas fa-exclamation-triangle"></i> Priority</label
+            >
+            <select id="refPriority" class="form-control">
+              <option value="normal">Normal</option>
+              <option value="urgent">Urgent</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Doctors Availability -->
-      <div class="section">
-        <h3><i class="fas fa-calendar-check"></i> Doctors Availability</h3>
-        <div class="doctors-availability-grid" id="doctorsAvailability">
-          <!-- Doctors availability will be loaded here -->
+        <div class="form-group">
+          <label for="refNotes"><i class="fas fa-sticky-note"></i> Notes</label>
+          <textarea
+            id="refNotes"
+            class="form-control"
+            rows="4"
+            placeholder="Enter clinical notes..."
+          ></textarea>
         </div>
-      </div>
 
-      <!-- Quick Referral Actions -->
-      <div class="section">
-        <h3><i class="fas fa-bolt"></i> Quick Referral Actions</h3>
-        <div class="action-grid">
-          <button class="action-btn" onclick="quickReferral('urgent')">
-            <i class="fas fa-exclamation-circle"></i>
-            <span>Urgent Referral</span>
+        <div class="form-actions">
+          <button class="btn alt" onclick="resetReferral()">
+            <i class="fas fa-redo"></i> Reset
           </button>
-          <button class="action-btn" onclick="quickReferral('walkin')">
-            <i class="fas fa-walking"></i>
-            <span>Walk-in Patient</span>
-          </button>
-          <button class="action-btn" onclick="viewAllReferrals()">
-            <i class="fas fa-list-alt"></i>
-            <span>View All Referrals</span>
-          </button>
-          <button class="action-btn" onclick="printReferralList()">
-            <i class="fas fa-print"></i>
-            <span>Print Referral List</span>
+          <button class="btn" onclick="submitReferral()">
+            <i class="fas fa-paper-plane"></i> Send Referral
           </button>
         </div>
-      </div>
+      </section>
+
+      <section class="reports">
+        <div class="reports-header">
+          <h2>Recent Referrals</h2>
+        </div>
+
+        <table class="reports-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Reason</th>
+              <th>Priority</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Samuel Okoye</td>
+              <td>Dr. Ahmed Hassan</td>
+              <td>Consultation</td>
+              <td>Normal</td>
+              <td>2025-12-15</td>
+              <td><span class="status-badge scheduled">Pending</span></td>
+              <td><a href="#" class="action-link">View</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
 
-    <!-- Modals -->
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-user-nurse"></i>Nurse Profile</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="profile-info">
-            <div class="profile-avatar">
-              <i class="fas fa-user-name fa-3x"></i>
-            </div>
-            <div class="profile-details">
-              <p><strong>Name:</strong> Sarah Johnson</p>
-              <p><strong>ID:</strong> NUR-2025-001</p>
-              <p><strong>Role:</strong> Senior Nurse</p>
-              <p><strong>Email:</strong> sarah.j@nileuniversity.edu.ng</p>
-              <p><strong>Department:</strong> General Clinic</p>
-              <p><strong>Shift</strong> 8:00 AM - 4:00 PM</p>
-            </div>
-          </div>
-          <div class="profile-actions">
-            <button class="btn">
-              <i class="fas fa-edit">Edit Profile</i>
-            </button>
-            <button class="btn">
-              <i class="fas fa-key">Change Password</i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Notification Modal -->
-    <div id="notificationModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-bell"></i>Notifications</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="notification-list">
-            <div class="notification-item unread">
-              <i class="fas fa-calender-check notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>New appointment booked</strong></p>
-                <p>Patient Cynthia George booked for 2:30 PM</p>
-                <small>10 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item unread">
-              <i class="fas fa-exclamation-triangle notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>High BP Alert</strong></p>
-                <p>Patient Mary Smith has high blood pressure</p>
-                <small>25 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-user-md notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>Doctor Request</strong></p>
-                <p>Dr. Umar requested for patient ID 002</p>
-                <small>1 hour ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-shield-alt notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>System Update</strong></p>
-                <p>CMS will be updated tonight at 11 PM</p>
-                <small>3 hours ago</small>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-full">Mark All as Read</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-sign-out-alt"></i>Confirm Logout</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to log out from the Nurse Dashboard?</p>
-          <p><small>You will directed to the login page</small></p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel">Cancel</button>
-          <button class="btn btn-cancel">Logout</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Referral Confirmation Modal -->
-    <div id="referralConfirmModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-check-circle"></i> Referral Confirmation</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="alert alert-success">
-            <i class="fas fa-check"></i>
-            <div>
-              <h4>Referral Submitted Successfully!</h4>
-              <p id="referralConfirmMessage"></p>
-            </div>
-          </div>
-          <div class="referral-details" id="referralDetails">
-            <!-- Referral details will be shown here -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" onclick="printReferral()">
-            <i class="fas fa-print"></i> Print Referral
-          </button>
-          <button class="btn" onclick="closeReferralModal()">
-            <i class="fas fa-times"></i> Close
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <script src="shared.js"></script>
-    <script src="Patient Referral Page.js"></script>
+    <footer class="footer container">
+      <p>
+        Nile University Clinic Management System &copy; <span id="year"></span>
+      </p>
+    </footer>
   </body>
 </html>

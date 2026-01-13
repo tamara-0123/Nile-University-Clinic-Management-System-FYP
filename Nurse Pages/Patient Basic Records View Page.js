@@ -1,53 +1,59 @@
-// Patient Records Page JavaScript
+// Set copyright year
+document.getElementById('year').textContent = new Date().getFullYear();
 
-// Sample patient records data
-const patientRecords = [
-  {
-    id: "2025-001",
-    name: "Samuel Okoye",
-    age: 22,
-    gender: "Male",
-    lastVisit: "2025-04-15",
-    condition: "Fever",
-  },
-  {
-    id: "2025-002",
-    name: "Ade Bayo",
-    age: 20,
-    gender: "Male",
-    lastVisit: "2025-04-14",
-    condition: "Headache",
-  },
-  {
-    id: "2025-003",
-    name: "Ahmed Musa",
-    age: 21,
-    gender: "Male",
-    lastVisit: "2025-04-13",
-    condition: "Stomach Pain",
-  },
-  {
-    id: "2025-004",
-    name: "Chioma Okoro",
-    age: 19,
-    gender: "Female",
-    lastVisit: "2025-04-12",
-    condition: "Common Cold",
-  },
-  {
-    id: "2025-005",
-    name: "Ruqqaiya Rita",
-    age: 20,
-    gender: "Female",
-    lastVisit: "2025-04-11",
-    condition: "Injury",
-  },
-  {
-    id: "2025-006",
-    name: "Fatima Ahmed",
-    age: 22,
-    gender: "Female",
-    lastVisit: "2025-04-10",
+// Search functionality
+document.getElementById('searchInput').addEventListener('keyup', function(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const rows = document.querySelectorAll('.reports-table tbody tr');
+  
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.style.display = text.includes(searchTerm) ? '' : 'none';
+  });
+});
+
+// View patient details
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('action-link')) {
+    e.preventDefault();
+    const row = e.target.closest('tr');
+    const cells = row.querySelectorAll('td');
+    
+    document.getElementById('detailID').textContent = cells[0].textContent;
+    document.getElementById('detailName').textContent = cells[1].textContent;
+    document.getElementById('detailDOB').textContent = '2000-' + cells[2].textContent + '-15';
+    document.getElementById('detailSex').textContent = cells[3].textContent;
+    document.getElementById('detailDiagnosis').textContent = cells[4].textContent;
+    document.getElementById('detailAdmitted').textContent = cells[5].textContent;
+    document.getElementById('detailMedStatus').textContent = cells[6].textContent;
+    document.getElementById('detailEmail').textContent = cells[1].textContent.toLowerCase().replace(' ', '.') + '@example.com';
+    document.getElementById('detailPhone').textContent = '0801-234-567';
+    
+    document.getElementById('patientDetail').style.display = 'block';
+    window.scrollTo(0, document.getElementById('patientDetail').offsetTop);
+  }
+});
+
+// Button handlers
+document.addEventListener('DOMContentLoaded', function() {
+  const profileBtn = document.getElementById('profileBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (profileBtn) {
+    profileBtn.addEventListener('click', function() {
+      alert('Profile modal would open here');
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = '../doctor_pageV1/doctor-login.html';
+      }
+    });
+  }
+});
+
     condition: "Allergy",
   },
 ];

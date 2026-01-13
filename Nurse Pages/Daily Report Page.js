@@ -1,5 +1,30 @@
 // Daily Report Page JavaScript
 
+// Sample report summary data
+const reportData = [
+  {
+    date: "2025-01-11",
+    totalPatients: 28,
+    completed: 22,
+    referred: 3,
+    avgWaitTime: 25,
+  },
+  {
+    date: "2025-01-10",
+    totalPatients: 25,
+    completed: 20,
+    referred: 2,
+    avgWaitTime: 20,
+  },
+  {
+    date: "2025-01-09",
+    totalPatients: 30,
+    completed: 25,
+    referred: 4,
+    avgWaitTime: 28,
+  },
+];
+
 // Sample daily patients data
 const dailyPatients = [
   {
@@ -100,6 +125,12 @@ function initDailyReport() {
 
   // Setup modal events
   setupModalEvents();
+
+  // Set current year in footer
+  const yearSpan = document.getElementById("year");
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
 }
 
 // Initialize charts
@@ -253,6 +284,104 @@ function initializeCharts() {
       },
     });
   }
+
+  // Visits Line Chart (new)
+  const visitsCtx = document.getElementById("visitsChart");
+  if (visitsCtx) {
+    new Chart(visitsCtx, {
+      type: "line",
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [
+          {
+            label: "Patient Visits",
+            data: [28, 25, 30, 22, 26, 24, 28],
+            borderColor: "#0606ba",
+            backgroundColor: "rgba(6, 6, 186, 0.1)",
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointRadius: 5,
+            pointBackgroundColor: "#0606ba",
+            pointBorderColor: "#fff",
+            pointBorderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              drawBorder: false,
+              color: "rgba(0, 0, 0, 0.05)",
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // Department Distribution Chart (new)
+  const deptCtx = document.getElementById("deptChart");
+  if (deptCtx) {
+    new Chart(deptCtx, {
+      type: "doughnut",
+      data: {
+        labels: [
+          "General",
+          "Pediatrics",
+          "Surgery",
+          "Orthopedics",
+          "Cardiology",
+        ],
+        datasets: [
+          {
+            data: [30, 20, 15, 20, 15],
+            backgroundColor: [
+              "#0606ba",
+              "#5555e8",
+              "#8888f0",
+              "#b0b0f5",
+              "#d8d8fa",
+            ],
+            borderColor: "#fff",
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              font: {
+                family: "'Poppins', sans-serif",
+                size: 12,
+              },
+              padding: 15,
+              color: "#333",
+            },
+          },
+        },
+      },
+    });
+  }
 }
 
 // Load daily patients
@@ -363,6 +492,42 @@ function setupReportEvents() {
   if (clearBtn) {
     clearBtn.addEventListener("click", clearNotes);
   }
+
+  // Export CSV button (new)
+  const exportBtn = document.getElementById("exportCsv");
+  if (exportBtn) {
+    exportBtn.addEventListener("click", function () {
+      exportToCSV();
+    });
+  }
+
+  // Download PDF button (new)
+  const pdfBtn = document.getElementById("downloadPdf");
+  if (pdfBtn) {
+    pdfBtn.addEventListener("click", function () {
+      alert(
+        "PDF download feature - would integrate with a PDF library like jsPDF"
+      );
+    });
+  }
+
+  // View and Print buttons in table (new)
+  const viewPrintButtons = document.querySelectorAll(
+    ".reports-table .btn-small"
+  );
+  viewPrintButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const action = this.textContent.trim();
+      const row = this.closest("tr");
+      const date = row.querySelector("td").textContent;
+
+      if (action === "View") {
+        alert(`Viewing details for ${date}`);
+      } else if (action === "Print") {
+        alert(`Printing report for ${date}`);
+      }
+    });
+  });
 }
 
 // Setup modal events
@@ -632,6 +797,28 @@ function showAlert(type, message) {
       alertDiv.remove();
     }
   }, 5000);
+}
+
+// Export to CSV
+function exportToCSV() {
+  let csv = "Date,Total Patients,Completed,Referred,Avg Wait Time\n";
+
+  reportData.forEach((row) => {
+    csv += `${row.date},${row.totalPatients},${row.completed},${row.referred},${row.avgWaitTime} min\n`;
+  });
+
+  const element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/csv;charset=utf-8," + encodeURIComponent(csv)
+  );
+  element.setAttribute("download", "daily_report.csv");
+  element.style.display = "none";
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+
+  showAlert("Report exported as CSV successfully!", "success");
 }
 
 // Initialize when page loads

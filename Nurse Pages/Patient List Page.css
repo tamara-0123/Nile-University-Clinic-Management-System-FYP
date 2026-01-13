@@ -1,34 +1,18 @@
 /* Patient List Page Specific Styles */
 
-.page-header {
+/* Controls section: search and filter buttons */
+.controls {
   display: flex;
-  justify-content: space-between;
+  gap: 1.5rem;
   align-items: center;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.page-header h2 {
-  margin: 0;
-  color: #0056b3;
-}
-
-.header-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-/* Search Box */
 .search-box {
   position: relative;
-  display: inline-block;
+  flex: 1;
+  min-width: 250px;
 }
 
 .search-box i {
@@ -36,23 +20,167 @@
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--muted);
   z-index: 1;
+  font-size: 0.9rem;
 }
 
 .search-box input {
   padding-left: 45px;
-  width: 300px;
-  height: 45px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-  font-size: 1rem;
+  width: 100%;
+  height: 44px;
+  border-radius: var(--radius);
+  border: 1px solid #d5d5d5;
+  font-size: 0.95rem;
+  font-family: "Poppins", sans-serif;
+  transition: all 0.3s;
+  background: var(--card);
 }
 
 .search-box input:focus {
   outline: none;
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(6, 6, 186, 0.1);
+}
+
+.search-box input::placeholder {
+  color: #999;
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 18px;
+  border: 1px solid #d5d5d5;
+  background: var(--card);
+  border-radius: var(--radius);
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #222;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background-color: rgba(6, 6, 186, 0.05);
+}
+
+.btn.btn-primary {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.btn.btn-primary:hover {
+  background: #0505a0;
+  border-color: #0505a0;
+  box-shadow: 0 4px 12px rgba(6, 6, 186, 0.2);
+}
+
+/* Table card wrapper */
+.table-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+/* Patient table */
+.patient-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.patient-table thead {
+  background: #f9f9f9;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.patient-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
+.patient-table tbody tr {
+  border-bottom: 1px solid #e5e5e5;
+  transition: background-color 0.2s;
+}
+
+.patient-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.patient-table td {
+  padding: 1rem;
+  color: #222;
+}
+
+.patient-table td strong {
+  font-weight: 600;
+  color: #0606ba;
+}
+
+/* Status badges */
+.status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.status-waiting {
+  background: rgba(255, 152, 0, 0.15);
+  color: #e65100;
+}
+
+.status-checked-in {
+  background: rgba(33, 150, 243, 0.15);
+  color: #1565c0;
+}
+
+.status-completed {
+  background: rgba(76, 175, 80, 0.15);
+  color: #2e7d32;
+}
+
+.status-referred {
+  background: rgba(156, 39, 176, 0.15);
+  color: #6a1b9a;
+}
+
+/* Action buttons in table */
+.action-btn-small {
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  margin-right: 0.5rem;
+}
+
+.action-btn-small:hover {
+  background: rgba(6, 6, 186, 0.1);
+  color: #0505a0;
 }
 
 /* Pagination */
@@ -60,56 +188,90 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin-top: 2rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .pagination-btn {
-  background: white;
-  border: 1px solid #ced4da;
-  padding: 8px 16px;
-  border-radius: 5px;
+  background: var(--card);
+  border: 1px solid #d5d5d5;
+  padding: 10px 16px;
+  border-radius: var(--radius);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #222;
   transition: all 0.3s;
 }
 
 .pagination-btn:hover {
-  background-color: #f8f9fa;
-  border-color: #0056b3;
-  color: #0056b3;
+  background-color: #f9f9f9;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.pagination span {
-  color: #666;
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#pageInfo {
+  color: var(--muted);
   font-weight: 600;
+  min-width: 120px;
+  text-align: center;
 }
 
-/* Responsive Design for Patient List */
+/* Responsive Design */
 @media (max-width: 1024px) {
-  .page-header {
+  .controls {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
-  .header-actions {
+  .search-box {
+    min-width: unset;
+  }
+
+  .actions {
     width: 100%;
   }
 
-  .search-box input {
-    width: 100%;
+  .btn {
+    flex: 1;
   }
 }
 
 @media (max-width: 768px) {
+  .table-card {
+    padding: 1rem;
+  }
+
+  .patient-table {
+    font-size: 0.85rem;
+  }
+
+  .patient-table th,
+  .patient-table td {
+    padding: 0.75rem;
+  }
+
   .pagination {
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .pagination-btn {
+    width: 100%;
+  }
+
+  #pageInfo {
+    width: 100%;
   }
 }

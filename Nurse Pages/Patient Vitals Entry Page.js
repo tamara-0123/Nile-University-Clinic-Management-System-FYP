@@ -1,52 +1,90 @@
-// Record Vitals Page JavaScript
+// Set copyright year
+document.getElementById('year').textContent = new Date().getFullYear();
 
-// Sample vitals history
-const vitalsHistory = [
-  {
-    patient: "Samuel Okoye",
-    bp: "120/80",
-    temp: "36.8",
-    pulse: "72",
-    oxygen: "98",
-    recordedBy: "Nurse Sarah",
-    time: "Today, 9:45 AM",
-  },
-  {
-    patient: "Ade Bayo",
-    bp: "118/78",
-    temp: "37.0",
-    pulse: "75",
-    oxygen: "97",
-    recordedBy: "Nurse Sarah",
-    time: "Today, 9:30 AM",
-  },
-  {
-    patient: "Ahmed Musa",
-    bp: "125/82",
-    temp: "36.9",
-    pulse: "70",
-    oxygen: "99",
-    recordedBy: "Nurse Mike",
-    time: "Yesterday, 2:15 PM",
-  },
-  {
-    patient: "Chioma Okoro",
-    bp: "115/75",
-    temp: "36.7",
-    pulse: "68",
-    oxygen: "98",
-    recordedBy: "Nurse Sarah",
-    time: "Yesterday, 10:30 AM",
-  },
-];
+// Set default datetime
+document.getElementById('vitalsDate').valueAsDate = new Date();
 
-// Initialize record vitals page
-function initRecordVitals() {
-  // Load vitals history
-  loadVitalsHistory();
+// Calculate BMI when weight or height changes
+document.getElementById('weight').addEventListener('change', calculateBMI);
+document.getElementById('height').addEventListener('change', calculateBMI);
 
-  // Setup BMI calculation
-  setupBMICalculation();
+function calculateBMI() {
+  const weight = parseFloat(document.getElementById('weight').value);
+  const height = parseFloat(document.getElementById('height').value);
+  
+  if (weight && height) {
+    const heightInMeters = height / 100;
+    const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+    document.getElementById('bmi').value = bmi;
+  }
+}
+
+function resetForm() {
+  document.getElementById('patientSelect').value = '';
+  document.getElementById('systolic').value = '';
+  document.getElementById('diastolic').value = '';
+  document.getElementById('temperature').value = '';
+  document.getElementById('pulseRate').value = '';
+  document.getElementById('respiratoryRate').value = '';
+  document.getElementById('oxygenSat').value = '';
+  document.getElementById('weight').value = '';
+  document.getElementById('height').value = '';
+  document.getElementById('bmi').value = '';
+  document.getElementById('notes').value = '';
+}
+
+function saveVitals() {
+  const patientId = document.getElementById('patientSelect').value;
+  
+  if (!patientId) {
+    alert('Please select a patient');
+    return;
+  }
+  
+  const vitalsData = {
+    patient: patientId,
+    systolic: document.getElementById('systolic').value,
+    diastolic: document.getElementById('diastolic').value,
+    temperature: document.getElementById('temperature').value,
+    pulseRate: document.getElementById('pulseRate').value,
+    respiratoryRate: document.getElementById('respiratoryRate').value,
+    oxygenSat: document.getElementById('oxygenSat').value,
+    weight: document.getElementById('weight').value,
+    height: document.getElementById('height').value,
+    bmi: document.getElementById('bmi').value,
+    notes: document.getElementById('notes').value,
+    dateTime: document.getElementById('vitalsDate').value
+  };
+  
+  alert('Vitals saved successfully!');
+  resetForm();
+}
+
+function saveAndRefer() {
+  saveVitals();
+  window.location.href = 'Patient Referral Page.html';
+}
+
+// Button handlers
+document.addEventListener('DOMContentLoaded', function() {
+  const profileBtn = document.getElementById('profileBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (profileBtn) {
+    profileBtn.addEventListener('click', function() {
+      alert('Profile modal would open here');
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = '../doctor_pageV1/doctor-login.html';
+      }
+    });
+  }
+});
+
 
   // Setup form events
   setupFormEvents();

@@ -1,105 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nile University CMS - Patient List</title>
-    <link rel="stylesheet" href="shared.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Patient List — Clinic</title>
+    <link rel="stylesheet" href="shared-nurse.css" />
     <link rel="stylesheet" href="Patient List Page.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <script src="Patient List Page.js" defer></script>
   </head>
   <body>
-    <header class="header">
-      <div class="logo">
-        <a>
-          <img src="image.png" alt="Nile University Logo" />
-        </a>
-        <i class="fas fa-hospital"></i>
-        <h1>Nile University Clinic</h1>
+    <div class="top">
+      <div class="navbar">
+        <nav class="nav">
+          <a>
+            <img src="image.png" alt="Clinic Logo" class="logo" />
+          </a>
+          <div class="links">
+            <ul class="nav-links">
+              <li><a href="Nurse Dashboard.html">Home</a></li>
+              <li>
+                <a href="Patient List Page.html" class="active">Patient List</a>
+              </li>
+              <li>
+                <a href="Patient Vitals Entry Page.html">Record Vitals</a>
+              </li>
+              <li>
+                <a href="Patient Basic Records View Page.html"
+                  >Patient Records</a
+                >
+              </li>
+              <li><a href="Patient Referral Page.html">Refer Patient</a></li>
+              <li><a href="Daily Report Page.html">Daily Report</a></li>
+            </ul>
+          </div>
+          <div class="nav-buttons">
+            <button id="profileBtn" class="profile">Profile</button>
+            <button id="logoutBtn" class="logout">Logout</button>
+          </div>
+        </nav>
       </div>
-      <nav class="navbar">
-        <ul>
-          <li>
-            <a href="Nurse Dashboard.html"
-              ><i class="fas fa-home"></i>Dashboard</a
-            >
-          </li>
-          <li>
-            <a href="Patient List Page.html" class="active"
-              ><i class="fas fa-users"></i>Patient List</a
-            >
-          </li>
-          <li>
-            <a href="Patient Vitals Entry Page.html"
-              ><i class="fas fa-heartbeat"></i>Record Vitals</a
-            >
-          </li>
-          <li>
-            <a href="Patient Basic Records View Page.html"
-              ><i class="fas fa-file-medical"></i> Patient Records</a
-            >
-          </li>
-          <li>
-            <a href="Patient Referral Page.html"
-              ><i class="fas fa-user-md"></i> Refer Patient</a
-            >
-          </li>
-          <li>
-            <a href="Daily Report Page.html"
-              ><i class="fas fa-chart-bar"></i> Daily Report</a
-            >
-          </li>
-          <li>
-            <button id="notificationBtn" class="icon-btn">
-              <i class="fas fa-bell"></i>
-              <span class="badge">3</span>
-            </button>
-          </li>
-          <li>
-            <button id="profileBtn" class="icon-btn">
-              <i class="fas fa-user-nurse"></i>
-            </button>
-          </li>
-          <li>
-            <button id="logoutBtn" class="icon-btn">
-              <i class="fas fa-sign-out"></i>
-            </button>
-          </li>
-        </ul>
-      </nav>
+    </div>
+
+    <header class="header">
+      <div class="container">
+        <div class="hero-left">
+          <h1>Patient List</h1>
+          <p class="muted">
+            Manage and search patients registered in the clinic.
+          </p>
+        </div>
+      </div>
     </header>
 
     <main class="container">
-      <div class="page-header">
-        <h2><i class="fas fa-users"></i>Patient List</h2>
-        <div class="header-actions">
-          <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input
-              type="text"
-              id="patientSearch"
-              placeholder="Search by name or ID..."
-            />
-          </div>
-          <button class="btn" onclick="filterPatients('all')">
-            <i class="fas fa-list"></i>
-            All Patients
-          </button>
-          <button class="btn" onclick="filterPatients('waiting')">
-            <i class="fas fa-list"></i>
-            Waiting
-          </button>
+      <section class="controls">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="patientSearch"
+            placeholder="Search by name or ID..."
+          />
         </div>
-      </div>
+        <div class="actions">
+          <button class="btn" id="btnAll">All Patients</button>
+          <button class="btn" id="btnWaiting">Waiting</button>
+          <button class="btn btn-primary" id="btnAdd">+ New Patient</button>
+        </div>
+      </section>
 
-      <div class="table-container">
+      <section class="table-card">
         <table class="patient-table">
           <thead>
             <tr>
@@ -108,129 +86,27 @@
               <th>Gender</th>
               <th>Age</th>
               <th>Department</th>
-              <th>appointment Time</th>
+              <th>Appt Time</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody id="patientTable">
-            <!-- Patient data inserted by JavaScript-->
-          </tbody>
+          <tbody id="patientTable"></tbody>
         </table>
-      </div>
+      </section>
 
       <div class="pagination">
-        <button class="pagination-btn">
+        <button class="pagination-btn" id="prevPage">
           <i class="fas fa-chevron-left"></i>
-          Previous
         </button>
-        <span>Page 1 of 3</span>
-        <button class="pagination-btn">
-          Next <i class="fas fa-chevron-right"></i>
+        <span id="pageInfo">Page 1 of 1</span>
+        <button class="pagination-btn" id="nextPage">
+          <i class="fas fa-chevron-right"></i>
         </button>
       </div>
     </main>
 
-    <!-- Modals -->
-    <!-- Profile Modal -->
-    <div id="profileModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-user-nurse"></i>Nurse Profile</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="profile-info">
-            <div class="profile-avatar">
-              <i class="fas fa-user-name fa-3x"></i>
-            </div>
-            <div class="profile-details">
-              <p><strong>Name:</strong> Sarah Johnson</p>
-              <p><strong>ID:</strong> NUR-2025-001</p>
-              <p><strong>Role:</strong> Senior Nurse</p>
-              <p><strong>Email:</strong> sarah.j@nileuniversity.edu.ng</p>
-              <p><strong>Department:</strong> General Clinic</p>
-              <p><strong>Shift</strong> 8:00 AM - 4:00 PM</p>
-            </div>
-          </div>
-          <div class="profile-actions">
-            <button class="btn">
-              <i class="fas fa-edit">Edit Profile</i>
-            </button>
-            <button class="btn">
-              <i class="fas fa-key">Change Password</i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Notification Modal -->
-    <div id="notificationModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-bell"></i>Notifications</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <div class="notification-list">
-            <div class="notification-item unread">
-              <i class="fas fa-calender-check notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>New appointment booked</strong></p>
-                <p>Patient Cynthia George booked for 2:30 PM</p>
-                <small>10 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item unread">
-              <i class="fas fa-exclamation-triangle notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>High BP Alert</strong></p>
-                <p>Patient Mary Smith has high blood pressure</p>
-                <small>25 minutes ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-user-md notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>Doctor Request</strong></p>
-                <p>Dr. Umar requested for patient ID 002</p>
-                <small>1 hour ago</small>
-              </div>
-            </div>
-            <div class="notification-item">
-              <i class="fas fa-shield-alt notification-icon"></i>
-              <div class="notification-content">
-                <p><strong>System Update</strong></p>
-                <p>CMS will be updated tonight at 11 PM</p>
-                <small>3 hours ago</small>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-full">Mark All as Read</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Logout Modal -->
-    <div id="logoutModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-sign-out-alt"></i>Confirm Logout</h3>
-          <button class="close-btn">&times;</button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to log out from the Nurse Dashboard?</p>
-          <p><small>You will directed to the login page</small></p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-cancel">Cancel</button>
-          <button class="btn btn-cancel">Logout</button>
-        </div>
-      </div>
-    </div>
-
-    <script src="shared.js"></script>
-    <script src="Patient List Page.js"></script>
+    <script src="shared.js" defer></script>
+    <script src="Patient List Page.js" defer></script>
   </body>
 </html>

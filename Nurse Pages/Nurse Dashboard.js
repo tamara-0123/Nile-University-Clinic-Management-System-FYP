@@ -1,53 +1,103 @@
-// Dashboard Page JavaScript
+// Update current time
+function updateTime() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('currentTime').textContent = timeString;
+}
 
-// Sample patient data for the queue
-const patients = [
-  {
-    id: "2025-001",
-    name: "Samuel Okoye",
-    time: "10:00 AM",
-    status: "waiting",
-    vitals: "Not Taken",
-  },
-  {
-    id: "2025-002",
-    name: "Ade Bayo",
-    time: "10:15 AM",
-    status: "checked-in",
-    vitals: "Taken",
-  },
-  {
-    id: "2025-003",
-    name: "Ahmed Musa",
-    time: "10:30 AM",
-    status: "waiting",
-    vitals: "Not Taken",
-  },
-  {
-    id: "2025-004",
-    name: "Chioma Okoro",
-    time: "10:45 AM",
-    status: "completed",
-    vitals: "Taken",
-  },
-  {
-    id: "2025-005",
-    name: "Ruqqaiya Rita",
-    time: "11:00 AM",
-    status: "waiting",
-    vitals: "Not Taken",
-  },
-  {
-    id: "2025-006",
-    name: "Fatima Ahmed",
-    time: "11:15 AM",
-    status: "referred",
-    vitals: "Taken",
-  },
-];
+setInterval(updateTime, 1000);
 
-// Initialize the dashboard
-function initDashboard() {
+// Set copyright year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Chart initialization - Patients Seen (Line Chart)
+const patientCtx = document.getElementById('patientChart');
+if (patientCtx) {
+  new Chart(patientCtx, {
+    type: 'line',
+    data: {
+      labels: ['-6 days', '-5 days', '-4 days', '-3 days', '-2 days', '-1 day', 'Today'],
+      datasets: [{
+        label: 'Patients',
+        data: [32, 42, 38, 50, 35, 50, 48],
+        borderColor: '#0606ba',
+        backgroundColor: 'rgba(6, 6, 186, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 5,
+        pointBackgroundColor: '#0606ba'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        },
+        x: {
+          grid: {
+            color: 'rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    }
+  });
+}
+
+// Chart initialization - Department Distribution (Pie Chart)
+const deptCtx = document.getElementById('departmentChart');
+if (deptCtx) {
+  new Chart(deptCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['General', 'Pediatrics', 'Cardiology', 'Other'],
+      datasets: [{
+        data: [45, 25, 20, 10],
+        backgroundColor: ['#ff6b6b', '#f9d966', '#4CAF50', '#87CEEB']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+}
+
+// Button handlers
+document.addEventListener('DOMContentLoaded', function() {
+  const profileBtn = document.getElementById('profileBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (profileBtn) {
+    profileBtn.addEventListener('click', function() {
+      alert('Profile modal would open here');
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      if (confirm('Are you sure you want to logout?')) {
+        window.location.href = '../doctor_pageV1/doctor-login.html';
+      }
+    });
+  }
+});
+
   // Set current time
   updateTime();
   setInterval(updateTime, 60000);
