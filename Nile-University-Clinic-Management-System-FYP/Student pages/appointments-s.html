@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="appointments-s.css">
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+    <title>Manage Appointments - Nile CMS</title>
+    <style>
+        /* Add these styles for time restrictions */
+        input[type="time"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .time-restriction-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .time-restriction-note i {
+            color: var(--primary);
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+
+    <header class="navbar">
+        <nav class="nav">
+            <a href="#"><img src="./image.png" alt="Nile Logo" class="logo"></a>
+            <ul class="nav-links">
+                <li><a href="homepage-s.html">Home</a></li>
+                <li><a href="appointments-s.html" class="active">Appointments</a></li>
+                <li><a href="prescriptions-s.html">Prescriptions</a></li>
+                <li><a href="medical-history.html">Medical History</a></li>
+
+            </ul>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        </nav>
+    </header>
+
+    <h1 class="page-title">Manage Appointments</h1>
+    <p class="subtitle">Book or reschedule your visits to the Nile University Clinic</p>
+
+    <div class="appointment-container">
+        <div class="action-bar">
+            <h2>Your Schedule</h2>
+            <button class="btn-primary" onclick="openModal('bookModal')">
+                <i class="fas fa-plus"></i> Book New Appointment
+            </button>
+        </div>
+
+        <div id="appointment-list">
+            <div class="visit-card" id="main-card">
+                <div class="visit-info">
+                    <span class="status-badge">CONFIRMED</span>
+                    <h3>Dr. Fatima Musa</h3>
+                    <div class="visit-meta">
+                        <span><i class="fas fa-calendar"></i> Nov 29, 2025</span>
+                        <span><i class="fas fa-clock"></i> 10:00 AM</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-outline" onclick="openModal('rescheduleModal')">Reschedule</button>
+                    <button class="btn-outline btn-cancel-text" onclick="openModal('cancelModal')">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="bookModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Book New Appointment</h3>
+            </div>
+            <form onsubmit="submitBooking(event)">
+
+                <div class="form-group">
+                    <label>Reason for Appointment</label>
+                    <textarea id="bookReason" required rows="4" cols="50"
+                        placeholder="Briefly describe your symptoms or reason for visit..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Date</label>
+                    <input type="date" id="bookDate" required onchange="setMinTimeForDate('bookDate', 'bookTime')">
+                </div>
+                <div class="form-group">
+                    <label>Preferred Time <span class="time-restriction-note"><i class="fas fa-clock"></i> Any time available</span></label>
+                    <input type="time" id="bookTime" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline" onclick="closeModal('bookModal')">Close</button>
+                    <button type="submit" class="btn-primary" style="box-shadow:none">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="rescheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Reschedule Appointment</h3>
+            </div>
+            <p id="rescheduleCurrent">Current: --</p>
+            <div class="form-group">
+                <label>New Date</label>
+                <input type="date" id="rescheduleDate" required
+                    onchange="setMinTimeForDate('rescheduleDate', 'rescheduleTime')">
+            </div>
+            <div class="form-group">
+                <label>New Time <span class="time-restriction-note"><i class="fas fa-clock"></i> Any time available</span></label>
+                <input type="time" id="rescheduleTime" required>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('rescheduleModal')">Go Back</button>
+                <button class="btn-primary" onclick="submitReschedule()" style="box-shadow:none">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="cancelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cancel Appointment?</h3>
+            </div>
+            <p id="cancelMessage">Are you sure?</p>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('cancelModal')">No, Keep it</button>
+                <button class="btn-primary" onclick="confirmCancel()"
+                    style="background:var(--danger); box-shadow:none">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-nav" id="mobileMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a href="homepage-s.html">Home</a>
+        <a href="appointments-s.html">Appointments</a>
+        <a href="prescriptions-s.html">Prescriptions</a>
+        <a href="medical-history.html">History</a>
+        <button class="logout" onclick="handleLogout()" style="width: 100%; margin-top: 20px;">Logout</button>
+    </div>
+    <div id="menuOverlay" onclick="toggleMenu()"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
+    </div>
+
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        let currentAppointments = [];
+        let selectedAppointmentId = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuthStatus();
+            loadAppointments();
+            highlightActiveLink();
+
+            // Set min date for date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('bookDate').min = today;
+            document.getElementById('rescheduleDate').min = today;
+
+            // Add real-time validation for date inputs
+            document.getElementById('bookDate').addEventListener('change', function () {
+                validateDateTime('bookDate', 'bookTime');
+            });
+
+            document.getElementById('rescheduleDate').addEventListener('change', function () {
+                validateDateTime('rescheduleDate', 'rescheduleTime');
+            });
+
+            const currentPath = decodeURIComponent(window.location.pathname);
+            const currentPage = currentPath.split("/").pop();
+
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+
+                const linkPage = linkHref.split("/").pop();
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+                else if (currentPage === "" && linkPage === "appointments-s.html") {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function checkAuthStatus() {
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+            }
+        }
+
+        // Function to validate date and time combination (prevents past times) - no hour restrictions
+        function validateDateTime(dateInputId, timeInputId) {
+            const dateInput = document.getElementById(dateInputId);
+            const timeInput = document.getElementById(timeInputId);
+
+            if (!dateInput || !timeInput || !dateInput.value) return;
+
+            const selectedDate = new Date(dateInput.value);
+            const now = new Date();
+
+            // If selected date is today, check if the time is in the past
+            if (selectedDate.toDateString() === now.toDateString()) {
+                // Remove any existing listener to avoid duplicates
+                timeInput.removeEventListener('change', checkPastTime);
+                timeInput.addEventListener('change', checkPastTime);
+                
+                function checkPastTime() {
+                    const timeValue = timeInput.value;
+                    if (timeValue) {
+                        const [hours, minutes] = timeValue.split(':').map(Number);
+
+                        // Create a Date object for today with the selected time
+                        const selectedDateTime = new Date(now);
+                        selectedDateTime.setHours(hours, minutes, 0, 0);
+
+                        // If selected time is in the past, show error and clear
+                        if (selectedDateTime < now) {
+                            alert('Cannot select a time in the past. Please choose a future time.');
+                            timeInput.value = '';
+                        }
+                    }
+                }
+                
+                // Check if time is already filled
+                if (timeInput.value) {
+                    const [hours, minutes] = timeInput.value.split(':').map(Number);
+                    const selectedDateTime = new Date(now);
+                    selectedDateTime.setHours(hours, minutes, 0, 0);
+                    if (selectedDateTime < now) {
+                        alert('Cannot select a time in the past. Please choose a future time.');
+                        timeInput.value = '';
+                    }
+                }
+            }
+        }
+
+        async function loadAppointments() {
+            const list = document.getElementById('appointment-list');
+            try {
+                const data = await API_CONFIG.request('/patient/appointments/history');
+                if (data.success) {
+                    currentAppointments = data.appointments;
+                    renderAppointments();
+                }
+            } catch (error) {
+                console.error('Failed to load appointments:', error);
+                list.innerHTML = '<p style="padding:20px; color:red;">Failed to load data from server.</p>';
+            }
+        }
+
+        function renderAppointments() {
+            const list = document.getElementById('appointment-list');
+            if (currentAppointments.length === 0) {
+                list.innerHTML = "<p style='padding:20px; color:#666;'>No upcoming appointments. Click 'Book New' to schedule one.</p>";
+                return;
+            }
+
+            // Show upcoming first (simplification: show all)
+            list.innerHTML = currentAppointments.map(app => {
+                const appDate = new Date(app.date);
+                const statusClass = app.status === 'scheduled' ? 'status-badge' : 'status-badge status-cancel';
+
+                return `
+                <div class="visit-card">
+                    <div class="visit-info">
+                        <span class="${statusClass}">${app.status.toUpperCase()}</span>
+                        <h3>${app.doctor?.name || 'Awaiting Doctor Assignment'}</h3>
+                        <div class="visit-meta">
+                            <span><i class="fas fa-calendar"></i> ${appDate.toLocaleDateString()}</span>
+                            <span><i class="fas fa-clock"></i> ${appDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                    </div>
+                    ${app.status === 'scheduled' ? `
+                        <div class="card-actions">
+                            <button class="btn-outline" onclick="openRescheduleModal('${app._id}', '${app.date}')">Reschedule</button>
+                            <button class="btn-outline btn-cancel-text" onclick="openCancelModal('${app._id}', '${app.doctor?.name || 'Doctor'}')">Cancel</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            }).join('');
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+            // Reset form when closing
+            if (id === 'bookModal') {
+                document.getElementById('bookReason').value = '';
+                document.getElementById('bookDate').value = '';
+                document.getElementById('bookTime').value = '';
+            } else if (id === 'rescheduleModal') {
+                document.getElementById('rescheduleDate').value = '';
+                document.getElementById('rescheduleTime').value = '';
+            }
+        }
+
+        async function submitBooking(event) {
+            event.preventDefault();
+            const reason = document.getElementById('bookReason').value.trim();
+            const dateVal = document.getElementById('bookDate').value;
+            const timeVal = document.getElementById('bookTime').value;
+
+            if (!dateVal || !timeVal) {
+                alert("Please select both date and time");
+                return;
+            }
+
+            // Combine date and time
+            const combinedDate = new Date(`${dateVal}T${timeVal}:00`);
+            const now = new Date();
+
+            // STRICT PAST DATE/TIME VALIDATION
+            if (combinedDate < now) {
+                alert("Cannot schedule appointments in the past. Please select a future date and time.");
+                return;
+            }
+
+            try {
+                const response = await API_CONFIG.request('/patient/appointments', {
+                    method: 'POST',
+                    body: JSON.stringify({ reason, date: combinedDate.toISOString() })
+                });
+
+                if (response.success) {
+                    alert("Appointment Booked Successfully!");
+                    closeModal('bookModal');
+                    loadAppointments();
+                }
+            } catch (error) {
+                alert(error.message || "Failed to book appointment.");
+            }
+        }
+
+        function openRescheduleModal(id, currentDate) {
+            selectedAppointmentId = id;
+            const dateObj = new Date(currentDate);
+            const dateStr = dateObj.toLocaleString();
+
+            // Set current date and time in the modal for reference
+            document.getElementById('rescheduleCurrent').innerHTML = `<strong>Current:</strong> ${dateStr}`;
+
+            // Pre-fill with current date but allow changes
+            const currentDateFormatted = dateObj.toISOString().split('T')[0];
+            const currentTimeFormatted = dateObj.toTimeString().slice(0, 5);
+
+            document.getElementById('rescheduleDate').value = currentDateFormatted;
+            document.getElementById('rescheduleTime').value = currentTimeFormatted;
+
+            openModal('rescheduleModal');
+        }
+
+        async function submitReschedule() {
+            const newDateValue = document.getElementById('rescheduleDate').value;
+            const newTimeValue = document.getElementById('rescheduleTime').value;
+
+            if (!newDateValue || !newTimeValue) {
+                alert("Please select both new date and time.");
+                return;
+            }
+
+            // Combine new date with new time
+            const combinedDate = new Date(`${newDateValue}T${newTimeValue}:00`);
+            const now = new Date();
+
+            // STRICT PAST DATE/TIME VALIDATION FOR RESCHEDULING
+            if (combinedDate < now) {
+                alert("Cannot reschedule to a past time. Please select a future date and time.");
+                return;
+            }
+
+            try {
+                const response = await API_CONFIG.request(
+                    `/patient/appointments/${selectedAppointmentId}/reschedule`,
+                    {
+                        method: 'PUT',
+                        body: JSON.stringify({ newDate: combinedDate.toISOString() })
+                    }
+                );
+
+                if (response.success) {
+                    alert("Appointment Rescheduled!");
+                    closeModal('rescheduleModal');
+                    loadAppointments();
+                }
+            } catch (error) {
+                alert(error.message || "Failed to reschedule.");
+            }
+        }
+
+        function openCancelModal(id, docName) {
+            selectedAppointmentId = id;
+            document.getElementById('cancelMessage').innerText = `Are you sure you want to cancel your appointment with ${docName}? This action cannot be undone.`;
+            openModal('cancelModal');
+        }
+
+        async function confirmCancel() {
+            try {
+                const response = await API_CONFIG.request(`/patient/appointments/${selectedAppointmentId}/cancel`, {
+                    method: 'PUT'
+                });
+
+                if (response.success) {
+                    alert("Appointment Cancelled.");
+                    closeModal('cancelModal');
+                    loadAppointments();
+                }
+            } catch (error) {
+                alert(error.message || "Failed to cancel.");
+            }
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        window.onclick = function (event) {
+            if (event.target.className === 'modal-overlay') {
+                event.target.style.display = 'none';
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                menu.classList.add('active');
+                overlay.style.display = 'block';
+            }
+        }
+
+        // This function is kept for compatibility but no longer enforces time restrictions
+        function setMinTimeForDate(dateInputId, timeInputId) {
+            // This function is called from onchange but we're not setting min/max times anymore
+            // Just validate past dates/times
+            validateDateTime(dateInputId, timeInputId);
+        }
+    </script>
+</body>
+
+</html>

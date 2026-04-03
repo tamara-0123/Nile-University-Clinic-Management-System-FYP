@@ -1,0 +1,266 @@
+[
+  {
+    "studentID": "020220124",
+    "name": "EZEKWU C"
+  },
+  {
+    "studentID": "020220150",
+    "name": "MOHAMMED BELLO F"
+  },
+  {
+    "studentID": "020220154",
+    "name": "ABUBAKAR F"
+  },
+  {
+    "studentID": "020220167",
+    "name": "ABDULSALAM YIDI I"
+  },
+  {
+    "studentID": "020220173",
+    "name": "SAMSON MSHELBWALA K"
+  },
+  {
+    "studentID": "020220187",
+    "name": "SULTAN OBA ALUKO A"
+  },
+  {
+    "studentID": "020220204",
+    "name": "MUSTAPHA IBRAHIM A"
+  },
+  {
+    "studentID": "020220207",
+    "name": "AHMAD A"
+  },
+  {
+    "studentID": "020220208",
+    "name": "IBRAHIM M"
+  },
+  {
+    "studentID": "020220214",
+    "name": "BUKAR Z"
+  },
+  {
+    "studentID": "020220229",
+    "name": "HABIBU A"
+  },
+  {
+    "studentID": "020220233",
+    "name": "MODIBBO Z"
+  },
+  {
+    "studentID": "020220240",
+    "name": "ALI U"
+  },
+  {
+    "studentID": "020220252",
+    "name": "HASSAN DAMAKASU M"
+  },
+  {
+    "studentID": "020220264",
+    "name": "TIJJANI B"
+  },
+  {
+    "studentID": "020220273",
+    "name": "DAUDA ABUBAKAR A"
+  },
+  {
+    "studentID": "020220278",
+    "name": "BELLO MALABU A"
+  },
+  {
+    "studentID": "020220294",
+    "name": "ABUBAKAR SADIQ M"
+  },
+  {
+    "studentID": "020220331",
+    "name": "BABANGIDA A"
+  },
+  {
+    "studentID": "020220397",
+    "name": "OCHEUJE J"
+  },
+  {
+    "studentID": "020220398",
+    "name": "AKINWANDE T"
+  },
+  {
+    "studentID": "020220436",
+    "name": "DAHIRU KIRAWA F"
+  },
+  {
+    "studentID": "020220455",
+    "name": "OKODO S"
+  },
+  {
+    "studentID": "020220459",
+    "name": "USMAN JIBRIN R"
+  },
+  {
+    "studentID": "020220543",
+    "name": "EZEAKU C"
+  },
+  {
+    "studentID": "020220573",
+    "name": "MOHAMMED JAMIL A"
+  },
+  {
+    "studentID": "020220583",
+    "name": "OMADE A"
+  },
+  {
+    "studentID": "020220624",
+    "name": "DUNOMA U"
+  },
+  {
+    "studentID": "020220716",
+    "name": "UMAR A"
+  },
+  {
+    "studentID": "020220741",
+    "name": "SABIU A"
+  },
+  {
+    "studentID": "020220881",
+    "name": "ANTIA E"
+  },
+  {
+    "studentID": "020220912",
+    "name": "GOSTA U"
+  },
+  {
+    "studentID": "020220985",
+    "name": "AHMAD A"
+  },
+  {
+    "studentID": "020220998",
+    "name": "IHEKWEME S"
+  },
+  {
+    "studentID": "020221089",
+    "name": "DANFULANI SANI A"
+  },
+  {
+    "studentID": "020221095",
+    "name": "ALIYU M"
+  },
+  {
+    "studentID": "020221130",
+    "name": "BELLO ABBA U"
+  },
+  {
+    "studentID": "020221226",
+    "name": "MUHAMMAD A"
+  },
+  {
+    "studentID": "020221289",
+    "name": "ORUPABO M"
+  },
+  {
+    "studentID": "020221361",
+    "name": "MICHAEL J"
+  },
+  {
+    "studentID": "020221399",
+    "name": "ADO FAROUQ H"
+  },
+  {
+    "studentID": "020221473",
+    "name": "HASSAN A"
+  },
+  {
+    "studentID": "020221554",
+    "name": "USMAN S"
+  },
+  {
+    "studentID": "020221559",
+    "name": "ZULKIFILU M"
+  },
+  {
+    "studentID": "020221588",
+    "name": "ATADASHI ABDULLAHI M"
+  },
+  {
+    "studentID": "020221616",
+    "name": "ABDULMALIK M"
+  },
+  {
+    "studentID": "020221695",
+    "name": "SAIDU H"
+  },
+  {
+    "studentID": "020221855",
+    "name": "BELLO A"
+  },
+  {
+    "studentID": "020221887",
+    "name": "BELLO KADEMI A"
+  },
+  {
+    "studentID": "020221909",
+    "name": "YUSUFARI A"
+  },
+  {
+    "studentID": "020221912",
+    "name": "BELLO A"
+  },
+  {
+    "studentID": "020221928",
+    "name": "RUFAI SULE M"
+  },
+  {
+    "studentID": "020221932",
+    "name": "EBUARA D"
+  },
+  {
+    "studentID": "020221988",
+    "name": "LAWAN A"
+  },
+  {
+    "studentID": "020222208",
+    "name": "EZAGA W"
+  },
+  {
+    "studentID": "020222234",
+    "name": "IMRANA ABDURRAHMAN I"
+  },
+  {
+    "studentID": "020222246",
+    "name": "YUSUF Y"
+  },
+  {
+    "studentID": "020231810",
+    "name": "BANK B"
+  },
+  {
+    "studentID": "020232657",
+    "name": "SULEMAN S"
+  },
+  {
+    "studentID": "211203034",
+    "name": "IKEGWURUKA P"
+  },
+  {
+    "studentID": "211203045",
+    "name": "YAHAYA J"
+  },
+  {
+    "studentID": "211212057",
+    "name": "OBIALOR K"
+  },
+  {
+    "studentID": "211212105",
+    "name": "ODIVWRI"
+  },
+  {
+    "studentID": "211212159",
+    "name": "OKWUONU U"
+  },
+  {
+    "studentID": "242120232",
+    "name": "AHMAD I"
+  },
+  {
+    "studentID": "242120253",
+    "name": "BABASHANI A"
+  }
+]

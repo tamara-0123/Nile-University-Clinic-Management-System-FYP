@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Record Vitals - Nile University CMS</title>
+  <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =========================================
+       CSS STYLES
+       ========================================= */
+    :root {
+      --primary: #003399;
+      /* Nile Blue */
+      --primary-600: #1A56DB;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --text-dark: #333;
+      --text-muted: #6c757d;
+      --border: #e0e0e0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --danger: #d32f2f;
+      --success: #28a745;
+      --primary-blue: #0606ba;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --border-color: #d5d5d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 3rem;
+    }
+
+    /* =========================================
+   2. NAVIGATION BAR (FIXED)
+   ========================================= */
+    .top {
+      width: 100%;
+    }
+
+    .navbar {
+      padding: 20px 40px;
+      background-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      height: 70px;
+      /* Slight increase for better spacing */
+      display: flex;
+      flex-direction: row;
+      background-color: var(--white);
+      padding: 0 30px;
+      border-radius: 50px;
+      align-items: center;
+      /* KEY FIX: Use space-between and nowrap to prevent breaking */
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 15px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      max-width: 150px;
+      display: block;
+      flex-shrink: 0;
+      /* Prevents logo squishing */
+    }
+
+    /* Links Container */
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 1;
+      /* Allows links container to shrink if needed */
+    }
+
+    /* Link Styling */
+    .nav-links a {
+      text-decoration: none;
+      color: black;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      /* Prevents text wrap */
+      padding-bottom: 3px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary-blue);
+      font-weight: 700;
+      /* Bold active state */
+      border-bottom: 2px solid var(--primary-blue);
+    }
+
+    .logout {
+      color: white;
+      background-color: red;
+      border: none;
+      height: 40px;
+      padding: 0 25px;
+      /* Use padding instead of fixed width */
+      border-radius: 50px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      /* Prevents button squishing */
+      white-space: nowrap;
+    }
+
+    .logout:hover {
+      opacity: 0.9;
+    }
+
+    /* --- Layout & Hero --- */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .hero .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .status-indicator {
+      font-size: 0.85rem;
+      color: #28a745;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #28a745;
+      border-radius: 50%;
+    }
+
+    /* --- Forms & Grid --- */
+    .panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Vitals Cards Grid */
+    .vitals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .vital-card {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      transition: 0.2s;
+    }
+
+    .vital-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .vital-card label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .vital-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vital-input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .vital-input-group .unit {
+      font-size: 0.8rem;
+      color: #888;
+      font-weight: 600;
+    }
+
+    .separator {
+      font-weight: bold;
+      color: #888;
+    }
+
+    .vital-card.locked {
+      background: #e9ecef;
+    }
+
+    .vital-card.locked input {
+      background: transparent;
+      border: none;
+    }
+
+    /* --- Buttons --- */
+    .form-actions {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-600);
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: #555;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-dark {
+      background: #343a40;
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background: #23272b;
+    }
+
+    /* --- History Table --- */
+    .history-panel h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+
+    .vitals-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .vitals-table th {
+      text-align: left;
+      padding: 1rem;
+      background: #f8f9fa;
+      font-size: 0.9rem;
+      color: #555;
+      border-bottom: 2px solid #eee;
+    }
+
+    .vitals-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+
+    /* --- Modal --- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal.text-center {
+      text-align: center;
+    }
+
+    .modal-actions.center {
+      justify-content: center;
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Nile University Logo" class="logo">
+        </a>
+        <div class="nav-links">
+          <a href="./homepage-n.html">Home</a>
+          <a href="./Patient List Page.html">Patient List</a>
+          <a href="./Patient Vitals Entry Page.html" class="active">Vitals Entry</a>
+          <a href="./Patient Referral Page.html">Referrals</a>
+          <a href="./Daily Report Page.html">Daily Report</a>
+        </div>
+        <div class="nav-buttons">
+          <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container fade-in">
+
+    <div class="hero">
+      <div>
+        <div class="title"><i class="fas fa-heartbeat"></i> Record Vitals</div>
+        <div class="meta">Enter new vitals for patient assessment</div>
+      </div>
+      <div class="header-actions">
+        <div class="status-indicator">
+          <span class="dot"></span> System Online
+        </div>
+      </div>
+    </div>
+
+    <div class="panel form-panel">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Select Patient</label>
+          <select id="patientSelect" class="form-control">
+            <option value="">Choose a patient...</option>
+            <option value="001">Samuel Okoye (ID: 2025-001)</option>
+            <option value="002">Ade Bayo (ID: 2025-002)</option>
+            <option value="003">Ahmed Musa (ID: 2025-003)</option>
+            <option value="004">Chioma Okoro (ID: 2025-004)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-calendar-alt"></i> Date & Time</label>
+          <input type="datetime-local" id="vitalsDate" class="form-control" />
+        </div>
+      </div>
+
+      <div class="vitals-grid">
+
+        <div class="vital-card">
+          <label><i class="fas fa-tint"></i> Blood Pressure</label>
+          <div class="vital-input-group">
+            <input type="number" id="systolic" placeholder="Sys" min="70" max="250" />
+            <span class="separator">/</span>
+            <input type="number" id="diastolic" placeholder="Dia" min="40" max="150" />
+            <span class="unit">mmHg</span>
+          </div>
+        </div>
+
+        <div class="vital-card">
+          <label><i class="fas fa-thermometer-half"></i> Temperature</label>
+          <div class="vital-input-group">
+            <input type="number" id="temperature" placeholder="36.5" step="0.1" />
+            <span class="unit">°C</span>
+          </div>
+        </div>
+
+        <div class="vital-card">
+          <label><i class="fas fa-heartbeat"></i> Pulse Rate</label>
+          <div class="vital-input-group">
+            <input type="number" id="pulseRate" placeholder="72" />
+            <span class="unit">bpm</span>
+          </div>
+        </div>
+
+        <div class="vital-card">
+          <label><i class="fas fa-weight"></i> Weight</label>
+          <div class="vital-input-group">
+            <input type="number" id="weight" placeholder="kg" step="0.1" />
+            <span class="unit">kg</span>
+          </div>
+        </div>
+
+        <div class="vital-card">
+          <label><i class="fas fa-ruler-vertical"></i> Height</label>
+          <div class="vital-input-group">
+            <input type="number" id="height" placeholder="cm" />
+            <span class="unit">cm</span>
+          </div>
+        </div>
+
+        <div class="vital-card locked">
+          <label><i class="fas fa-calculator"></i> BMI</label>
+          <div class="vital-input-group">
+            <input type="number" id="bmi" placeholder="--" readonly />
+            <span class="unit">kg/m²</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="form-group" style="margin-top: 1.5rem;">
+        <label><i class="fas fa-sticky-note"></i> Additional Observations</label>
+        <textarea id="notes" class="form-control" rows="3" placeholder="Enter any specific observations..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-outline" id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
+        <button class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> Save Vitals</button>
+        <button class="btn btn-dark" id="referBtn"><i class="fas fa-user-md"></i> Save & Refer</button>
+      </div>
+
+    </div>
+
+    <div class="panel history-panel">
+      <div class="panel-header">
+        <h3><i class="fas fa-history"></i> Recent Records</h3>
+      </div>
+      <div class="table-responsive">
+        <table class="vitals-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>BP</th>
+              <th>Temp</th>
+              <th>Pulse</th>
+              <th>Recorded By</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="vitalsHistory">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal text-center">
+      <h3>Confirm Logout</h3>
+      <p>Are you sure you want to end your session?</p>
+      <div class="modal-actions center">
+        <button class="btn btn-outline close-btn">Cancel</button>
+        <button class="btn btn-danger" onclick="window.location.href='../Shared Pages/login.html'">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Shared pages/api-config.js"></script>
+  <script>
+    // =========================================
+    // JAVASCRIPT LOGIC (API INTEGRATED)
+    // =========================================
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthStatus();
+      loadDailyQueue();
+      loadVitalsHistory();
+      setupBMICalculation();
+      setupButtons();
+      setCurrentDateTime();
+
+      // Animation trigger
+      document.querySelectorAll('.fade-in').forEach(el => {
+        setTimeout(() => el.classList.add('visible'), 100);
+      });
+    });
+
+    function checkAuthStatus() {
+      const token = API_CONFIG.getToken();
+      if (!token) {
+        window.location.href = '../Shared pages/login.html';
+      }
+    }
+
+    // Load History Table (from vitals endpoint - only show patients with vitals)
+    async function loadVitalsHistory() {
+      const historyBody = document.getElementById("vitalsHistory");
+      if (!historyBody) return;
+
+      try {
+        // Use a dedicated vitals endpoint instead of daily report
+        const data = await API_CONFIG.request('/nurse/vitals/recent');
+
+        if (data.success && data.vitals) {
+          historyBody.innerHTML = "";
+
+          // Only show entries that actually have vitals recorded
+          data.vitals.forEach((vital) => {
+            // Get patient name from the populated patient data
+            const patientName = vital.patient?.user?.name || 'Unknown Patient';
+
+            // Get nurse name from recordedBy (populated)
+            const nurseName = vital.recordedBy?.name || 'Nurse';
+
+            // Format BP if it exists
+            const bp = vital.bp || '--';
+
+            // Format temperature
+            const temp = vital.temperature ? vital.temperature + '°C' : '--';
+
+            // Format pulse
+            const pulse = vital.pulse ? vital.pulse + ' bpm' : '--';
+
+            // Format time
+            const recordTime = vital.createdAt ? new Date(vital.createdAt).toLocaleTimeString() : '--';
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+          <td><strong>${patientName}</strong></td>
+          <td>${bp}</td> 
+          <td>${temp}</td>
+          <td>${pulse}</td>
+          <td>${nurseName}</td>
+          <td>${recordTime}</td>
+        `;
+            historyBody.appendChild(row);
+          });
+        } else {
+          // Show empty state
+          historyBody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 2rem; color: #6c757d;">
+            No vitals recorded yet today
+          </td>
+        </tr>
+      `;
+        }
+      } catch (error) {
+        console.error('Failed to load vitals history:', error);
+        historyBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 2rem; color: #dc3545;">
+          Error loading vitals history
+        </td>
+      </tr>
+    `;
+      }
+    }
+
+    // Load Today's Queue for the Dropdown
+    async function loadDailyQueue() {
+      const patientSelect = document.getElementById("patientSelect");
+      try {
+        const data = await API_CONFIG.request('/nurse/queue');
+        if (data.success && data.appointments) {
+          patientSelect.innerHTML = '<option value="">Choose a patient...</option>';
+
+          // Filter to show only checked-in patients who don't have vitals yet
+          // You might need to check if they already have vitals recorded today
+          const checkedIn = data.appointments.filter(app => app.status === "checked-in");
+
+          if (checkedIn.length === 0) {
+            patientSelect.innerHTML = '<option value="">No patients awaiting vitals</option>';
+            return;
+          }
+
+          checkedIn.forEach(app => {
+            const patient = app.patient?.user;
+            const name = patient?.name || 'Unknown';
+            const id = patient?.studentID || patient?.staffID || 'N/A';
+            patientSelect.innerHTML += `<option value="${app._id}">${name} (ID: ${id})</option>`;
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load queue:', error);
+      }
+    }
+
+    // BMI Calculation Logic
+    function setupBMICalculation() {
+      const weightInput = document.getElementById("weight");
+      const heightInput = document.getElementById("height");
+
+      if (weightInput && heightInput) {
+        weightInput.addEventListener("input", calculateBMI);
+        heightInput.addEventListener("input", calculateBMI);
+      }
+    }
+
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById("weight").value);
+      const height = parseFloat(document.getElementById("height").value);
+      const bmiField = document.getElementById("bmi");
+
+      if (weight > 0 && height > 0) {
+        const heightInMeters = height / 100;
+        const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+        bmiField.value = bmi;
+      } else {
+        bmiField.value = "";
+      }
+    }
+
+    // Setup Buttons
+    function setupButtons() {
+      const saveBtn = document.getElementById('saveBtn');
+      const referBtn = document.getElementById('referBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      if (saveBtn) saveBtn.addEventListener('click', saveVitals);
+      if (referBtn) referBtn.addEventListener('click', saveAndRefer);
+      if (resetBtn) resetBtn.addEventListener('click', resetForm);
+    }
+
+    function handleLogout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+        API_CONFIG.auth.logout();
+      }
+    }
+
+    // Set Date Time to Now
+    function setCurrentDateTime() {
+      const vitalsDate = document.getElementById("vitalsDate");
+      if (vitalsDate) {
+        const now = new Date();
+        const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+        vitalsDate.value = localDateTime;
+      }
+    }
+
+    // Save Logic
+    async function saveVitals() {
+      const appointmentId = document.getElementById("patientSelect").value;
+      const sys = document.getElementById("systolic").value;
+      const dia = document.getElementById("diastolic").value;
+      const temp = document.getElementById("temperature").value;
+      const pulse = document.getElementById("pulseRate").value;
+      const weight = document.getElementById("weight").value;
+      const height = document.getElementById("height").value; // Get height if you want to save it
+      const notes = document.getElementById("notes").value;
+
+      if (!appointmentId || !sys || !dia || !temp || !pulse) {
+        alert("Please fill in Patient, BP, Temperature, and Pulse.");
+        return false;
+      }
+
+      const saveBtn = document.getElementById('saveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = "Saving...";
+
+      try {
+        const response = await API_CONFIG.request(`/nurse/vitals/${appointmentId}`, {
+          method: 'POST',
+          body: JSON.stringify({
+            bp: `${sys}/${dia}`,
+            temperature: parseFloat(temp),
+            pulse: parseInt(pulse),
+            weight: weight ? parseFloat(weight) : undefined,
+            height: height ? parseFloat(height) : undefined, // If you want to save height
+            notes: notes // If you want to save notes
+          })
+        });
+
+        if (response.success) {
+          alert("Vitals saved successfully!");
+          resetForm();
+          // Refresh both the queue and history
+          loadDailyQueue();
+          loadVitalsHistory();
+          return true;
+        }
+      } catch (error) {
+        alert(error.message || "Failed to save vitals.");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Save Vitals";
+      }
+      return false;
+    }
+
+    // Save & Refer
+    async function saveAndRefer() {
+      const success = await saveVitals();
+      if (success) {
+        // You might want to store the patient ID in sessionStorage for the referral page
+        const patientId = document.getElementById("patientSelect").value;
+        if (patientId) {
+          sessionStorage.setItem('referralPatientId', patientId);
+        }
+        window.location.href = "Patient Referral Page.html";
+      }
+    }
+
+    // Reset
+    function resetForm() {
+      document.getElementById("patientSelect").value = "";
+      setCurrentDateTime();
+
+      // Clear all inputs
+      const inputs = document.querySelectorAll('.vitals-grid input');
+      inputs.forEach(i => i.value = "");
+
+      document.getElementById("notes").value = "";
+    }
+  </script>
+</body>
+
+</html>

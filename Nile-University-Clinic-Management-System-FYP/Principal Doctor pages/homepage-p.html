@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-p.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../images/nile logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!--NavBar-->
+    <!-- <div class="top">
+        <div class="navbar">
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Nile University Logo" class="logo">
+                </a>
+                <div class="nav-links">
+                    <a href="homepage-p.html" class="active">Home</a>
+                    <a href="./User management page.html">Staff Management</a>
+                    <a href="./Reports Overview Page.html">Reports</a>
+                    <a href="./Schedule Management page.html">Schedule</a>
+                    <a href="./Full Patients Record Page.html">Appointment Records</a>
+                </div>
+                <div class="nav-buttons">
+                    <button class="logout" onclick="handleLogout()">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </div> -->
+    <div class="top">
+        <div class="navbar">
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Clinic Logo" class="logo">
+                </a>
+                <div class="links">
+                    <ul class="nav-links">
+                        <li><a href="./homepage-p.html" class="active" id="home-link">Home</a></li>
+                        <li><a href="./User management page.html">Staff Management</a></li>
+                        <li><a href="./Reports Overview Page.html">Reports</a></li>
+                        <li><a href="./Schedule Management page.html">Schedule</a></li>
+                        <li><a href="./Full Patients Record Page.html">Appointment Records</a></li>
+                    </ul>
+                </div>
+                <div class="nav-buttons">
+                    <button class="logout" onclick="handleLogout()">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Hero Section-->
+    <div class="hero">
+        <div class="user-name">
+            <p class="welcome">Welcome <br> <span class="user">Enoch Chukwudi</span></p>
+        </div>
+        <div class="user-class">
+            <div class="left">
+                <p class="header">USER</p>
+                <p class="content">Admin</p>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+        </div>
+        <div class="id-num-box">
+            <div class="left">
+                <p class="header">STAFF ID</p>
+                <p class="content">20215673</p>
+            </div>
+            <div class="right">
+                <i class="fa-regular fa-id-badge"></i>
+            </div>
+        </div>
+        <div class="quick-book">
+            <button class="book" onclick="window.location.href='./Reports Overview Page.html'">+
+                Generate Clinic Report</button>
+        </div>
+    </div>
+
+    <!--Dashboard Cards-->
+    <div class='cards'>
+        <div class='card next'>
+            <p class="card-title">Today's Activity</p>
+            <p class="card-number"><span id="visitsToday">0</span> <span class="card-content">appointments today</span></p>
+            <a href="./Reports Overview Page.html">
+                <p class="card-link">View details</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Total Staff</p>
+            <p class="card-number" id="totalStaffCount">0</p>
+            <a href="./User management page.html">
+                <p class="card-link">Manage users</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Active Doctors</p>
+            <p class="card-number" id="activeDoctorCount">0</p>
+            <a href="./User management page.html">
+                <p class="card-link">Staff list</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Notifications</p>
+            <p class="card-number"><span id="unreadNotifCount">0</span> <span class="card-content">unread</span></p>
+            <a href="#notifications">
+                <p class="card-link">View notifications</p>
+            </a>
+        </div>
+    </div>
+
+    <!--More Details section-->
+    <div class="more-details">
+        <div class="rec-patients">
+            <div class="more-header">
+                <h2>Daily Clinic Activity (Last 5 Days)</h2>
+                <i class="fa-solid fa-chart-line"></i>
+            </div>
+            <div class="activity-scrollable" id="activityList">
+                <!-- Populated by JS -->
+            </div>
+            <a href="./Reports Overview Page.html">View all reports</a>
+        </div>
+
+        <div class="rec-vitals">
+            <div class="more-header">
+                <h2>Recent System Actions</h2>
+                <i class="fa-solid fa-laptop-medical"></i>
+            </div>
+            <div class="actions-scrollable" id="systemActionsList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications" id="notifications">
+        <div class="more-header">
+            <h2>System Notifications</h2>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="send-notif-btn" onclick="openNotifModal()">+ Send Notification</button>
+                <i class="fa-solid fa-bell"></i>
+            </div>
+        </div>
+        <div class="notifications-scrollable" id="notificationList">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <div id="notifModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Send New Notification</h3>
+                <span class="close-btn" onclick="closeNotifModal()">&times;</span>
+            </div>
+            <form onsubmit="event.preventDefault(); sendNotification()">
+                <label for="recipient">Send To:</label>
+                <select id="recipient" required>
+                    <option value="all">All Users</option>
+                    <option value="doctors">Doctors Only</option>
+                    <option value="nurses">Nurses Only</option>
+                    <option value="students">Students Only</option>
+                </select>
+
+                <label for="notifTitle">Subject:</label>
+                <input type="text" id="notifTitle" placeholder="e.g. System Maintenance" required>
+
+                <label for="notifMessage">Message:</label>
+                <textarea id="notifMessage" rows="4" placeholder="Type your message here..." required></textarea>
+
+                <button type="submit" class="submit-btn">Send Notification</button>
+            </form>
+        </div>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>System Performance</option>
+                    <option>Staff Management Issue</option>
+                    <option>Reporting Module</option>
+                    <option>Scheduling & Shifts</option>
+                    <option>Data Access Concern</option>
+                    <option>Security or Compliance</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I manage staff accounts?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Admins can add, edit, or deactivate nurse and doctor accounts from the dashboard.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view clinic activity reports?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, custom reports are available in the reporting module.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I manage appointments?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Appointment management can be managed from the admin scheduling panel.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I manage clinic schedules?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, admins can manage staff and clinic operating schedules.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2026 Nile University of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            checkAuthStatus();
+            loadUserData();
+            await loadDashboardData();
+
+            // Listen for report generation events
+            window.addEventListener('reportGenerated', function (e) {
+                addSystemAction('Report Generated', `Report generated for period ${e.detail.period}`);
+            });
+
+            // Check for new reports every 30 seconds
+            setInterval(checkForNewReports, 30000);
+
+            const currentPath = decodeURIComponent(window.location.pathname);
+            const currentPage = currentPath.split("/").pop();
+
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+
+                const linkPage = linkHref.split("/").pop();
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+                else if (currentPage === "" && linkPage === "homepage-p.html") {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function checkAuthStatus() {
+            const token = API_CONFIG.getToken();
+            const user = API_CONFIG.getUser();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+            }
+        }
+
+        function loadUserData() {
+            const user = API_CONFIG.getUser();
+            if (user) {
+                document.querySelector('.user').textContent = user.name || user.staffID;
+                document.querySelector('.id-num-box .content').textContent = user.staffID || 'N/A';
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load staff stats
+                await loadStaffStats();
+
+                // Load today's visits
+                await loadTodaysVisits();
+
+                // Load last 5 days activity
+                await loadLastFiveDaysActivity();
+
+                // Load system actions
+                loadSystemActions();
+
+                // Load notifications
+                await loadNotifications();
+
+            } catch (error) {
+                console.error("Dashboard Load Error:", error);
+            }
+        }
+
+        async function loadStaffStats() {
+            try {
+                const staffResponse = await API_CONFIG.request('/admin/users');
+                if (staffResponse && staffResponse.users) {
+                    const staff = staffResponse.users;
+                    const totalStaff = staff.filter(u => u.role === 'doctor' || u.role === 'nurse').length;
+                    const activeDocs = staff.filter(u => u.role === 'doctor' && u.isActive).length;
+
+                    document.getElementById('totalStaffCount').innerText = totalStaff;
+                    document.getElementById('activeDoctorCount').innerText = activeDocs;
+                }
+            } catch (error) {
+                console.error("Failed to load staff stats:", error);
+            }
+        }
+
+        async function loadTodaysVisits() {
+            try {
+                // Get today's date range
+                const today = new Date().toISOString().split('T')[0];
+
+                // Try to get today's report
+                const response = await API_CONFIG.reports.getDateRangeReport({
+                    fromDate: today,
+                    toDate: today
+                });
+
+                if (response.success) {
+                    document.getElementById('visitsToday').innerText = response.summary.totalVisits || 0;
+                }
+            } catch (error) {
+                console.error("Failed to load today's appointments:", error);
+                // Fallback to daily schedule
+                try {
+                    const schedResponse = await API_CONFIG.doctor.getDailySchedule();
+                    if (schedResponse.success) {
+                        document.getElementById('visitsToday').innerText = schedResponse.appointments.length;
+                    }
+                } catch (e) {
+                    document.getElementById('visitsToday').innerText = '0';
+                }
+            }
+        }
+
+        async function loadLastFiveDaysActivity() {
+            const activityList = document.getElementById('activityList');
+
+            try {
+                const days = [];
+                const today = new Date();
+
+                // Generate last 5 days starting from today (today first, then yesterday, etc.)
+                for (let i = 0; i < 5; i++) {
+                    const date = new Date(today);
+                    date.setDate(date.getDate() - i);
+                    const dateStr = date.toISOString().split('T')[0];
+                    days.push({
+                        date: dateStr,
+                        dateObj: date,
+                        isToday: i === 0,
+                        index: i
+                    });
+                }
+
+                // Fetch data for each day
+                const activities = await Promise.all(days.map(async (day) => {
+                    try {
+                        // Try to get data from your reports API first
+                        let visits = 0, admissions = 0, discharges = 0;
+
+                        // Try using the reports API if available
+                        try {
+                            if (API_CONFIG.reports && API_CONFIG.reports.getDateRangeReport) {
+                                const response = await API_CONFIG.reports.getDateRangeReport({
+                                    fromDate: day.date,
+                                    toDate: day.date
+                                });
+
+                                if (response && response.success) {
+                                    visits = response.summary?.totalVisits || 0;
+                                    admissions = response.summary?.totalAdmissions || 0;
+                                    discharges = response.summary?.totalDischarges || 0;
+                                }
+                            }
+                        } catch (e) {
+                            console.log(`Reports API not available for ${day.date}`);
+                        }
+
+                        // If reports API failed, try individual endpoints
+                        if (visits === 0) {
+                            try {
+                                // Try to get appointments for this date
+                                const appointmentsResponse = await API_CONFIG.request(`/appointments?date=${day.date}`);
+                                if (appointmentsResponse && appointmentsResponse.appointments) {
+                                    visits = appointmentsResponse.appointments.length;
+                                }
+                            } catch (e) {
+                                console.log(`Appointments endpoint not available for ${day.date}`);
+                            }
+                        }
+
+                        if (admissions === 0) {
+                            try {
+                                // Try to get admissions for this date
+                                const admissionsResponse = await API_CONFIG.request(`/admissions?date=${day.date}`);
+                                if (admissionsResponse && admissionsResponse.admissions) {
+                                    admissions = admissionsResponse.admissions.length;
+                                }
+                            } catch (e) {
+                                console.log(`Admissions endpoint not available for ${day.date}`);
+                            }
+                        }
+
+                        if (discharges === 0) {
+                            try {
+                                // Try to get discharges for this date
+                                const dischargesResponse = await API_CONFIG.request(`/discharges?date=${day.date}`);
+                                if (dischargesResponse && dischargesResponse.discharges) {
+                                    discharges = dischargesResponse.discharges.length;
+                                }
+                            } catch (e) {
+                                console.log(`Discharges endpoint not available for ${day.date}`);
+                            }
+                        }
+
+                        // For demonstration, if all APIs fail, use realistic varying data based on day of week
+                        if (visits === 0 && admissions === 0 && discharges === 0) {
+                            // Generate realistic data based on day of week
+                            const dayOfWeek = day.dateObj.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+                            // Weekdays have more visits, weekends have fewer
+                            //     if (dayOfWeek === 0 || dayOfWeek === 6) { // Weekend
+                            //         visits = Math.floor(Math.random() * 5) + 3; // 3-7 visits
+                            //         admissions = Math.floor(Math.random() * 2) + 1; // 1-2 admissions
+                            //         discharges = Math.floor(Math.random() * 2); // 0-1 discharges
+                            //     } else if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) { // Busy days
+                            //         visits = Math.floor(Math.random() * 10) + 15; // 15-24 visits
+                            //         admissions = Math.floor(Math.random() * 5) + 5; // 5-9 admissions
+                            //         discharges = Math.floor(Math.random() * 4) + 3; // 3-6 discharges
+                            //     } else { // Regular weekdays
+                            //         visits = Math.floor(Math.random() * 8) + 10; // 10-17 visits
+                            //         admissions = Math.floor(Math.random() * 4) + 3; // 3-6 admissions
+                            //         discharges = Math.floor(Math.random() * 3) + 2; // 2-4 discharges
+                            //     }
+
+                            //     // Make today have slightly higher numbers
+                            //     if (day.isToday) {
+                            //         visits += 2;
+                            //         admissions += 1;
+                            //         discharges += 1;
+                            //     }
+                            // }
+                        }
+                        return {
+                            date: day.date,
+                            displayDate: day.dateObj,
+                            visits: visits,
+                            admissions: admissions,
+                            discharges: discharges,
+                            isToday: day.isToday
+                        };
+
+                    } catch (error) {
+                        console.error(`Failed to load data for ${day.date}:`, error);
+                        return {
+                            date: day.date,
+                            displayDate: day.dateObj,
+                            visits: 0,
+                            admissions: 0,
+                            discharges: 0,
+                            isToday: day.isToday
+                        };
+                    }
+                }));
+
+                // Filter out null values and render
+                const validActivities = activities.filter(a => a !== null);
+
+                if (validActivities.length === 0) {
+                    activityList.innerHTML = '<p style="padding:10px; color:#666; text-align:center;">No activity data available</p>';
+                } else {
+                    activityList.innerHTML = validActivities.map(day => {
+                        // Format the date properly
+                        const formattedDate = day.displayDate.toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric'
+                        });
+
+                        // Determine if it's a weekend for styling
+                        const isWeekend = day.displayDate.getDay() === 0 || day.displayDate.getDay() === 6;
+
+                        return `
+                <div class="activity-item ${day.isToday ? 'today-activity' : ''} ${isWeekend ? 'weekend-activity' : ''}">
+                    <div class="activity-header">
+                        <span class="activity-date">${formattedDate}</span>
+                        ${day.isToday ? '<span class="today-badge">Today</span>' : ''}
+                    </div>
+                    <div class="activity-stats">
+                        <div class="stat">
+                            <i class="fa-solid fa-user-check"></i>
+                            <span class="stat-label">Appointments:</span>
+                            <span class="stat-value">${day.visits}</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fa-solid fa-hospital-user"></i>
+                            <span class="stat-label">Admissions:</span>
+                            <span class="stat-value">${day.admissions}</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fa-solid fa-user-graduate"></i>
+                            <span class="stat-label">Discharges:</span>
+                            <span class="stat-value">${day.discharges}</span>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+                }
+            } catch (error) {
+                console.error("Failed to load activity data:", error);
+                activityList.innerHTML = '<p style="padding:10px; color:#666; text-align:center;">Failed to load activity data</p>';
+            }
+        }
+
+        function loadSystemActions() {
+            // Load actions from localStorage
+            const actions = JSON.parse(localStorage.getItem('systemActions') || '[]');
+            const actionsList = document.getElementById('systemActionsList');
+
+            if (actions.length === 0) {
+                actionsList.innerHTML = '<p style="padding:10px; color:#666; text-align:center;">No recent actions</p>';
+            } else {
+                actionsList.innerHTML = actions.slice(0, 10).map(action => `
+                    <div class="action-item">
+                        <div class="action-icon">
+                            <i class="fa-solid ${action.icon || 'fa-clock'}"></i>
+                        </div>
+                        <div class="action-details">
+                            <div class="action-title">${action.title}</div>
+                            <div class="action-time">${action.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function addSystemAction(title, description) {
+            const actions = JSON.parse(localStorage.getItem('systemActions') || '[]');
+
+            const newAction = {
+                id: Date.now(),
+                title: title,
+                description: description,
+                time: new Date().toLocaleString(),
+                icon: 'fa-file-alt'
+            };
+
+            actions.unshift(newAction);
+            if (actions.length > 20) actions.pop(); // Keep last 20 actions
+
+            localStorage.setItem('systemActions', JSON.stringify(actions));
+            loadSystemActions(); // Refresh the display
+        }
+
+        async function loadNotifications() {
+            try {
+                const notifResponse = await API_CONFIG.request('/notifications');
+                const notificationList = document.getElementById('notificationList');
+
+                if (notifResponse && notifResponse.notifications) {
+                    const notifs = notifResponse.notifications;
+                    document.getElementById('unreadNotifCount').innerText = notifs.length;
+
+                    if (notifs.length === 0) {
+                        notificationList.innerHTML = '<p style="padding:10px; color:#666; text-align:center;">No new notifications</p>';
+                    } else {
+                        notificationList.innerHTML = notifs.map(n => `
+                    <div class="notification-item">
+                        <p class="notif-content">Subject: ${n.title || 'System Update'}; Message: ${n.message}</p>
+                        <div class="notif-active">
+                            <div class="green-flash"></div>
+                            <p class="notif-date">New</p>
+                        </div>
+                    </div>
+                `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load notifications:", error);
+            }
+        }
+        function checkForNewReports() {
+            // Check if new reports were generated in sessionStorage
+            const savedReports = JSON.parse(sessionStorage.getItem('generatedReports') || '[]');
+            const lastCheck = localStorage.getItem('lastReportCheck') || '0';
+
+            if (savedReports.length > 0) {
+                const latestReport = savedReports[0];
+                if (latestReport.timestamp > parseInt(lastCheck)) {
+                    // New report found
+                    addSystemAction('New Report Generated',
+                        `Report for period ${latestReport.scope} was generated`);
+                    localStorage.setItem('lastReportCheck', Date.now().toString());
+
+                    // Also add a notification
+                    addNotification(
+                        'Report Generated',
+                        `A new report for ${latestReport.scope} has been generated successfully.`
+                    );
+                }
+            }
+        }
+
+        async function addNotification(title, message) {
+            try {
+                // This would typically be an API call
+                console.log('New notification:', title, message);
+
+                // For demo, we'll refresh notifications
+                await loadNotifications();
+            } catch (error) {
+                console.error("Failed to add notification:", error);
+            }
+        }
+
+        // Modal Logic
+        const notifModal = document.getElementById('notifModal');
+
+        function openNotifModal() {
+            notifModal.style.display = "block";
+        }
+
+        function closeNotifModal() {
+            notifModal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == notifModal) {
+                closeNotifModal();
+            }
+        }
+
+        async function sendNotification() {
+            const recipient = document.getElementById('recipient').value;
+            const title = document.getElementById('notifTitle').value;
+            const message = document.getElementById('notifMessage').value;
+
+            if (!title || !message) {
+                alert("Please fill in both title and message");
+                return;
+            }
+
+            try {
+                // Map recipient to targetRole for the API
+                let targetRole = null;
+                if (recipient === 'doctors') targetRole = 'doctor';
+                else if (recipient === 'nurses') targetRole = 'nurse';
+                else if (recipient === 'students') targetRole = 'student';
+
+                const response = await API_CONFIG.request('/admin/notifications', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        title: title,
+                        message: message,
+                        targetRole: targetRole,
+                        type: 'system'
+                    })
+                });
+
+                if (response.success) {
+                    alert("Notification Sent Successfully!");
+
+                    // Reset form
+                    document.getElementById('recipient').value = 'all';
+                    document.getElementById('notifTitle').value = '';
+                    document.getElementById('notifMessage').value = '';
+
+                    closeNotifModal();
+
+                    // Add to system actions
+                    addSystemAction('Notification Sent', `"${title}" sent to ${recipient}`);
+
+                    // Refresh notifications
+                    await loadNotifications();
+                }
+            } catch (error) {
+                console.error("Failed to send notification:", error);
+                alert("Failed to send notification: " + (error.message || "Unknown error"));
+            }
+        }
+
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        // function highlightActiveLink() {
+        //     const currentPath = window.location.pathname;
+        //     const currentPage = currentPath.split("/").pop();
+        //     const navLinks = document.querySelectorAll('.nav-links a');
+
+        //     navLinks.forEach(link => {
+        //         link.classList.remove('active');
+
+        //         const linkHref = link.getAttribute('href');
+        //         const linkPage = linkHref.replace('./', '');
+
+        //         // Check if current page matches link
+        //         if (linkPage === currentPage) {
+        //             link.classList.add('active');
+        //         }
+
+        //         // Special case for home page
+        //         if ((currentPage === '' || currentPage === 'homepage-p.html') &&
+        //             link.id === 'home-link') {
+        //             link.classList.add('active');
+        //         }
+        //     });
+        // }
+        // highlightActiveLink();
+    </script>
+</body>
+
+</html>

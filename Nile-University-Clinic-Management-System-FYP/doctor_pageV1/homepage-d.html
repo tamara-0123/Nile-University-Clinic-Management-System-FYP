@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-d.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="../../images/nile logo.png">
+</head>
+
+<body>
+    <!--NavBar-->
+    <!-- <div class="top">
+        <div class="mobile-header">
+            <button class="menu-btn" onclick="openMenu()">☰</button>
+            <img src="image.png" class="mobile-logo" alt="Logo">
+        </div>
+        <div class="mobile-overlay" onclick="closeMenu()"></div>
+
+        <nav class="mobile-nav">
+            <button class="close-btn" onclick="closeMenu()">×</button>
+
+            <ul class="mobile-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Appointments</a></li>
+                <li><a href="#">Consultations</a></li>
+                <li><a href="#">Prescriptions</a></li>
+            </ul>
+
+            <div class="mobile-actions">
+                <button class="profile">Profile</button>
+                <button class="logout">Logout</button>
+            </div>
+        </nav> -->
+
+    <div class="navbar">
+        <nav class="nav">
+            <a href="#">
+                <img src="image.png" alt="Nile University Logo" class="logo">
+            </a>
+            <div class="nav-links">
+                <a href="./doctor_pageV1/homepage-d.html" class="active">Home</a>
+                <a href="./doctor.html">Dashboard</a>
+                <a href="./doctor-schedule.html">My Schedule</a>
+                <a href="./doctor-profile.html">Records</a>
+            </div>
+            <div class="nav-buttons">
+                <button class="logout" onclick="handleLogout()">Logout</button>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Section-->
+    <div class="hero">
+        <div class="user-name">
+            <p class="welcome">Welcome <br> <span class="user">Doctor</span></p>
+        </div>
+        <div class="user-class">
+            <div class="left">
+                <p class="header">USER</p>
+                <p class="content">Doctor</p>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-user-doctor"></i>
+            </div>
+        </div>
+        <div class="id-num-box">
+            <div class="left">
+                <p class="header">STAFF ID</p>
+                <p class="content">---</p>
+            </div>
+            <div class="right">
+                <i class="fa-regular fa-id-badge"></i>
+            </div>
+
+        </div>
+        <div class="quick-book" style="display:flex; gap:10px;">
+            <button class="book" onclick="window.location.href='./doctor.html'">+ Start Consultation</button>
+            <!-- <button class="book" style="background:#2e7d32;" onclick="openAdmitModal()">+ Admit Patient</button> -->
+        </div>
+    </div>
+
+    <!-- Admission Modal -->
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+        }
+    </style>
+    <div id="admitModal" class="modal-overlay">
+        <div class="modal">
+            <h3>Admit Patient</h3>
+            <p>Assign a patient for admission. They will appear on the Principal Admin's dashboard.</p>
+            <div style="margin-top:1rem;">
+                <label>Select Patient</label>
+                <select id="admitPatientSelect"
+                    style="width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ddd;">
+                    <option value="">Loading patients...</option>
+                </select>
+
+                <label style="display:block; margin-top:15px;">Admission Notes / Ward</label>
+                <textarea id="admitNotes" placeholder="Reason for admission, ward preference..."
+                    style="width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ddd;"
+                    rows="3"></textarea>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+                <button onclick="closeAdmitModal()"
+                    style="padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">Cancel</button>
+                <button onclick="submitAdmission()"
+                    style="padding:10px 20px; background:#2e7d32; color:white; border:none; border-radius:5px; cursor:pointer;">Confirm
+                    Admission</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Dashboard Cards-->
+    <div class='cards'>
+        <div class='card next'>
+            <p class="card-title">Next Appointment</p>
+            <div class="card-nurse" id="nextApptContainer">
+                <p class="card-content" id="nextApptDate">Loading...</p>
+                <p class="card-content" id="nextApptPatient"></p>
+            </div>
+            <a href="./doctor.html">
+                <p class="card-link">View details</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Appointments Today</p>
+            <p class="card-number" id="todayApptCount">0</p>
+            <a href="./doctor-schedule.html">
+                <p class="card-link">View schedule</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Referred Patients</p>
+            <p class="card-number" id="referralCount">0</p>
+            <a href="./doctor.html">
+                <p class="card-link">View referrals</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Notifications</p>
+            <p class="card-number"><span id="unreadNotifCount">0</span> <span class="card-content">unread</span></p>
+            <a href="#notifications">
+                <p class="card-link">View notifications</p>
+            </a>
+        </div>
+    </div>
+
+    <!--More Details section-->
+    <div class="more-details">
+        <div class="rec-patients">
+            <div class="more-header">
+                <h2>Recent Consultations</h2>
+                <i class="fa-solid fa-book-medical"></i>
+            </div>
+            <div id="recentConsultList">
+                <p style="padding:10px; color:#666;">Loading consultations...</p>
+            </div>
+        </div>
+
+        <div class="rec-vitals">
+            <div class="more-header">
+                <h2>Recent Referrals</h2>
+                <i class="fa-solid fa-hospital-user"></i>
+            </div>
+            <div id="recentReferralList">
+                <p style="padding:10px; color:#666;">No recent referrals</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications" id="notifications">
+        <div class="more-header">
+            <h2>Notifications</h2>
+            <i class="fa-solid fa-bell"></i>
+        </div>
+        <div id="notificationList">
+            <p style="padding:10px; color:#666;">No new notifications</p>
+        </div>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>Consultation Workflow</option>
+                    <option>Prescription Module Issue</option>
+                    <option>Patient Record Access</option>
+                    <option>System Performance</option>
+                    <option>Scheduling Conflict</option>
+                    <option>Lab Test Request Issue</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I access my daily appointments?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Your dashboard displays all scheduled appointments for the day in order.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view full patient medical records?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, doctors can view patient history, vitals, and previous consultations.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I prescribe medication?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Use the prescription tab during consultation and save it to the patient record.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I mark an appointment as completed?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Click “Finalize & Complete” after finishing a patient consultation.
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2026 Nile University of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script src="../../Shared pages/api-config.js"></script>
+    <script>
+        // AUTHENTICATION AND DATA POPULATION
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Check Auth
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../../Shared pages/login.html';
+                return;
+            }
+
+            // 2. Populate User Data
+            const user = API_CONFIG.getUser();
+            if (user) {
+                const userElements = document.querySelectorAll('.user');
+                userElements.forEach(el => el.textContent = user.name || user.staffID);
+
+                const idElements = document.querySelectorAll('.id-num-box .content');
+                idElements.forEach(el => el.textContent = user.staffID || user.idNumber);
+
+                const roleElements = document.querySelectorAll('.user-class .content');
+                roleElements.forEach(el => el.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1));
+            }
+
+            // 3. FETCH DASHBOARD DATA
+            try {
+                // A. Daily Appointments / Schedule
+                console.log("Fetching appointments...");
+                let appointments = [];
+                const schedResponse = await API_CONFIG.doctor.getDailySchedule();
+                console.log("Response:", schedResponse);
+                if (schedResponse.success) {
+                    appointments = schedResponse.appointments || [];
+                    document.getElementById('todayApptCount').innerText = appointments.length;
+
+                    // Next Appointment (Future only, from today list)
+                    // Get today's date range
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+
+                    // Filter for today's appointments only
+                    const todayAppointments = appointments
+                        .filter(a => {
+                            const appDate = new Date(a.date);
+                            // Check if appointment is today
+                            return appDate >= today &&
+                                appDate < tomorrow &&
+                                a.status !== 'cancelled' &&
+                                a.status !== 'completed';
+                        })
+                        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                    if (todayAppointments.length > 0) {
+                        const next = todayAppointments[0];
+                        const date = new Date(next.date);
+
+                        document.getElementById('nextApptDate').innerText = `Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}`;
+
+                        const pUser = next.patient?.user;
+                        const pName = pUser?.name ? pUser.name : (pUser?.studentID || pUser?.staffID || 'Unknown');
+                        document.getElementById('nextApptPatient').innerText = `Patient: ${pName}`;
+                    } else {
+                        document.getElementById('nextApptDate').innerText = "No upcoming appointments";
+                        document.getElementById('nextApptPatient').innerText = "";
+                    }
+
+                    // Count Referrals (status waiting or in-consultation)
+                    const waiting = appointments.filter(a => a.status === 'waiting' || a.status === 'referral');
+                    document.getElementById('referralCount').innerText = waiting.length;
+
+                    const recentReferralList = document.getElementById('recentReferralList');
+                    if (waiting.length === 0) {
+                        recentReferralList.innerHTML = '<p style="padding:10px; color:#666;">No pending referrals</p>';
+                    } else {
+                        recentReferralList.innerHTML = waiting.slice(0, 3).map(a => `
+                        <li class="patient-item">
+                            <div class="patient-left">
+                                <p class="patient-name">${a.patient?.user?.name || 'Unknown'}</p>
+                                <p class="patient-id">${a.patient?.user?.studentID || a.patient?.user?.staffID || 'N/A'}</p>
+                            </div>
+                        </li>
+                    `).join('');
+                    }
+
+                    // Populate Admit Select
+                    const admitSelect = document.getElementById('admitPatientSelect');
+                    if (admitSelect) {
+                        admitSelect.innerHTML = '<option value="">Choose patient...</option>' +
+                            appointments.map(a => `<option value="${a.patient?._id}">${a.patient?.user?.name || 'Unknown'}</option>`).join('');
+                    }
+
+                    // Recent Consultations 
+                    const completed = appointments.filter(a => a.status.toLowerCase() === 'completed');
+                    const consultList = document.getElementById('recentConsultList');
+                    if (completed.length === 0) {
+                        consultList.innerHTML = '<p style="padding:10px; color:#666;">No completed consultations today</p>';
+                    } else {
+                        consultList.innerHTML = completed.map(c => `
+                        <div class="history-card">
+                            <div class="history-main">
+                                <div class="history-info">
+                                    <p class="history-name">
+                                        ${c.patient?.user?.name || 'Unknown'}
+                                    </p>
+                                    <span class="history-status completed">Completed</span>
+                                </div>
+                                <a href="./doctor.html" class="history-link">
+                                    View Details <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `).join('');
+                    }
+                }
+
+                // B. Notifications
+                try {
+                    const notifResponse = await API_CONFIG.request('/notifications');
+
+                    if (notifResponse && notifResponse.success) {
+                        const notifs = notifResponse.notifications || [];
+                        const visibleNotifs = notifs.slice(0, 5);
+
+                        const badge = document.getElementById('unreadNotifCount');
+                        if (badge) badge.innerText = visibleNotifs.length;
+
+                        const list = document.getElementById('notificationList');
+                        if (notifs.length === 0) {
+                            list.innerHTML = '<p style="padding:10px; color:#666;">No new notifications</p>';
+                        } else {
+                            // Limit to max 5 notifications 
+                            const displayNotifs = notifs.slice(0, 5);
+                            list.innerHTML = displayNotifs.map(n => `
+                            <div class="notification">
+                                <p class="notif-content">${n.message}</p>
+                                <div class="notif-active">
+                                    <div class="green-flash"></div>
+                                    <p class="notif-date">New</p>
+                                </div>
+                            </div>
+                        `).join('');
+                        }
+                    }
+                } catch (error) {
+                    console.error("Notifications Load Error:", error);
+                }
+
+            } catch (error) {
+                console.error("Dashboard Load Error:", error);
+                document.getElementById('nextApptDate').innerText = "Error loading data";
+            }
+        });
+
+        function handleLogout() {
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+        function openMenu() {
+            document.querySelector('.mobile-nav').classList.add('open');
+            document.querySelector('.mobile-overlay').classList.add('show');
+        }
+
+        function closeMenu() {
+            document.querySelector('.mobile-nav').classList.remove('open');
+            document.querySelector('.mobile-overlay').classList.remove('show');
+        }
+
+        function openAdmitModal() {
+            document.getElementById('admitModal').style.display = 'flex';
+        }
+
+        function closeAdmitModal() {
+            document.getElementById('admitModal').style.display = 'none';
+        }
+
+        async function submitAdmission() {
+            const patientId = document.getElementById('admitPatientSelect').value;
+            const reason = document.getElementById('admitNotes').value;
+
+            if (!patientId) {
+                alert("Please select a patient.");
+                return;
+            }
+
+            try {
+                const response = await API_CONFIG.request('/doctor/admit', {
+                    method: 'POST',
+                    body: JSON.stringify({ patientId, reason })
+                });
+
+                if (response.success) {
+                    alert("Patient Admission Request Sent!");
+                    closeAdmitModal();
+                }
+            } catch (error) {
+                alert("Failed to admit patient: " + error.message);
+            }
+        }
+    </script>
+</body>
+
+</html>

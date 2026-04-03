@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Staff Management - Nile University CMS</title>
+	<link rel="stylesheet" href="user-management.css">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	    <link rel="icon" type="image/png" href="../../images/nile logo.png">
+
+</head>
+
+<body>
+	<div class="top">
+		<div class="navbar">
+			<nav class="nav">
+				<a>
+					<img src="image.png" alt="Clinic Logo" class="logo">
+				</a>
+				<div class="links">
+					<ul class="nav-links">
+						<li><a href="./homepage-p.html">Home</a></li>
+						<li><a href="./User management page.html" class="active">Staff Management</a></li>
+						<li><a href="./Reports Overview Page.html">Reports</a></li>
+						<li><a href="./Schedule Management page.html">Schedule</a></li>
+						<li><a href="./Full Patients Record Page.html">Appointment Records</a></li>
+					</ul>
+				</div>
+				<div class="nav-buttons">
+					<button class="logout" onclick="handleLogout()">Logout</button>
+				</div>
+			</nav>
+		</div>
+	</div>
+
+	<header class="um-header">
+		<div class="container">
+			<h1 class='staff-heading'>Staff Management</h1>
+			<div class="controls">
+				<input id="search" type="search" placeholder="Search staff by name or ID" aria-label="Search staff">
+				<button id="addBtn" class="btn">Add Staff</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="table-wrap" aria-label="Staff list">
+			<table class="staff-table" aria-describedby="staffDesc">
+				
+				<thead>
+					<tr>
+						<th scope="col"><input id="selectAll" type="checkbox" aria-label="Select all staff"></th>
+						<th scope="col">ID</th>
+						<th scope="col">Name</th>
+						<th scope="col">Role</th>
+						<th scope="col">Email</th>
+						<th scope="col">Status</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody id="staffBody">
+					<!-- populated by JS -->
+				</tbody>
+			</table>
+		</section>
+
+		<aside class="panel">
+			<h2>Bulk Actions</h2>
+			<button id="deactivateSelected" class="btn warn">Deactivate selected</button>
+			<p class="muted">Select rows using the checkboxes in the first column.</p>
+		</aside>
+
+		<!-- Add/Edit modal -->
+		<div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<div class="modal-content">
+				<h3 id="modalTitle">Add Staff</h3>
+				<form id="staffForm">
+					<label>Staff ID <input name="id" required></label>
+					<label>Name <input name="name" required></label>
+					<label>Role
+						<select name="role" id="roleSelect" required>
+							<option value="Doctor">Doctor</option>
+							<option value="Nurse">Nurse</option>
+							<option value="Pharmacist">Pharmacist</option>
+						</select>
+					</label>
+					<label>Email <input name="email" type="email"></label>
+					<div class="form-actions">
+						<button type="submit" class="btn">Save</button>
+						<button type="button" id="cancelBtn" class="btn alt">Cancel</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</main>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			// 1. Get the current page filename (e.g., "Schedule Management page.html")
+			// decodeURIComponent is used to handle spaces in filenames (e.g., "%20")
+			const currentPath = decodeURIComponent(window.location.pathname);
+			const currentPage = currentPath.split("/").pop();
+
+			// 2. Select all navigation links
+			const navLinks = document.querySelectorAll('.nav-links a');
+
+			navLinks.forEach(link => {
+				// 3. Get the link's href attribute (e.g., "../User Management Page/User management page.html")
+				const linkHref = link.getAttribute('href');
+
+				// 4. Extract the filename from the href
+				const linkPage = linkHref.split("/").pop();
+
+				// 5. Compare. If they match, add the 'active' class
+				if (linkPage === currentPage) {
+					link.classList.add('active');
+				}
+				// Optional: Handle the "Home" case if the URL is just "/" or empty
+				else if (currentPage === "" && linkPage === "Schedule Management page.html") {
+					link.classList.add('active');
+				}
+			});
+		});
+
+		function handleLogout() {
+			const confirmLogout = confirm("Are you sure you want to log out?");
+			if (confirmLogout) {
+
+				window.location.href = '../Shared Pages/login.html';
+			}
+		}
+	</script>
+	<script src="../Shared pages/api-config.js"></script>
+	<script src="user-management.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports Overview - Nile University CMS</title>
+  <link rel="stylesheet" href="reports.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="../Shared pages/api-config.js"></script>
+  <script src="reports.js" defer></script>
+  <link rel="icon" type="image/png" href="../../images/nile logo.png">
+
+</head>
+
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Clinic Logo" class="logo">
+        </a>
+        <div class="links">
+          <ul class="nav-links">
+            <li><a href="./homepage-p.html">Home</a></li>
+            <li><a href="./User management page.html">Staff Management</a></li>
+            <li><a href="./Reports Overview Page.html" class="active">Reports</a></li>
+            <li><a href="./Schedule Management page.html">Schedule</a></li>
+            <li><a href="./Full Patients Record Page.html">Appointment Records</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+          <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="hero-left">
+      <h1>Reports Overview</h1>
+      
+    </div>
+    <div class="hero-actions">
+      <label class="sr-only">From date</label>
+      <input id="fromDate" type="date" aria-label="From date">
+      <label class="sr-only">To date</label>
+      <input id="toDate" type="date" aria-label="To date">
+      
+      <button id="generate" class="btn">Generate</button>
+    </div>
+  </div>
+
+
+  <main class="container">
+    <section class="cards">
+      <div class="card">
+        <p class="card-title">Appointments</p>
+        <p class="card-number" id="visits">—</p>
+        <p class="card-content">Today</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Admissions</p>
+        <p class="card-number" id="admissions">—</p>
+        <p class="card-content">Today</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Discharges</p>
+        <p class="card-number" id="discharges">—</p>
+        <p class="card-content">Today</p>
+      </div>
+
+    </section>
+
+    <section class="visuals">
+      <div class="chart-card">
+        <h3>Appointments</h3>
+        <canvas id="visitsChart" aria-label="Visits line chart" role="img"></canvas>
+      </div>
+      <div class="chart-card small">
+        <h3>Top Complaints</h3>
+        <canvas id="deptChart" aria-label="Departments pie chart" role="img"></canvas>
+      </div>
+    </section>
+
+    <section class="recent table-section" aria-label="Recent patients">
+      <div class="table-header">
+        <h2>Recent Patients</h2>
+        <div class="table-actions">
+          <input id="search" type="search" placeholder="Search patients..." aria-label="Search patients">
+          <button id="exportCsv" class="btn">Export CSV</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table" aria-describedby="recentDesc">
+          <caption id="recentDesc" class="sr-only">Latest admitted and seen patients</caption>
+          <thead>
+            <tr>
+              <th scope="col">Patient ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Complaint</th>
+              <th scope="col">Admitted</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="patientsTable">
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+<section class="reports">
+  <div class="reports-header">
+    <h2>Generated Reports</h2>
+    <div class="reports-actions">
+      <button id="printView" class="btn alt"><i class="fas fa-print"></i> Print View</button>
+    </div>
+  </div>
+
+  <div class="reports-table-container">
+    <table class="reports-table" aria-describedby="reportsDesc">
+      <caption id="reportsDesc" class="sr-only">List of generated reports</caption>
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Time</th>
+          <th scope="col">Type</th>
+          <th scope="col">Scope</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="reportsBody">
+        <!-- populated by JS -->
+      </tbody>
+    </table>
+  </div>
+</section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const currentPath = decodeURIComponent(window.location.pathname);
+      const currentPage = currentPath.split("/").pop();
+
+
+      const navLinks = document.querySelectorAll('.nav-links a');
+
+      navLinks.forEach(link => {
+        const linkHref = link.getAttribute('href');
+
+        const linkPage = linkHref.split("/").pop();
+
+        if (linkPage === currentPage) {
+          link.classList.add('active');
+        }
+        else if (currentPage === "" && linkPage === "Schedule Management page.html") {
+          link.classList.add('active');
+        }
+      });
+    });
+    function handleLogout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+
+        window.location.href = '../Shared Pages/login.html';
+      }
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Management - Nile CMS</title>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="../Shared pages/api-config.js"></script>
+    <style>
+        :root {
+            --primary-blue: #0606ba;
+            --primary-green: #10b981;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --emergency-red: #dc2626;
+            --urgent-orange: #f97316;
+            --routine-green: #10b981;
+            --gray-light: #f3f4f6;
+            --gray-border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .navbar-area {
+            padding: 20px 40px;
+            background-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            height: 60px;
+            display: flex;
+            flex-direction: row;
+            background-color: var(--white);
+            padding: 0 30px;
+            border-radius: 50px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #d5d5d5;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 3px;
+        }
+
+        .logout {
+            color: var(--white);
+            background-color: red;
+            border: none;
+            height: 40px;
+            width: 90px;
+            border-radius: 50px;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout:hover {
+            opacity: 0.8;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--primary-blue);
+        }
+
+        .side-nav {
+            position: fixed;
+            top: 0;
+            right: -360px;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 4000;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px 30px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .side-nav.active {
+            right: 0;
+        }
+
+        .side-nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .side-nav .close-btn {
+            font-size: 2.5rem;
+            align-self: flex-end;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 40px 30px 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border: 1px solid var(--gray-border);
+            border-radius: 30px;
+            padding: 5px 15px;
+        }
+
+        .search-box i {
+            color: #999;
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            border: none;
+            padding: 8px 0;
+            width: 200px;
+            font-family: "Poppins", sans-serif;
+            outline: none;
+        }
+
+        .filter-dropdown {
+            padding: 10px 15px;
+            border: 1px solid var(--gray-border);
+            border-radius: 30px;
+            font-family: "Poppins", sans-serif;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-blue);
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .missing-data {
+            display: inline-block;
+            background: #fef3c7;
+            color: #d97706;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .prescription-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .prescription-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .prescription-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--primary-blue);
+            transition: transform 0.2s, opacity 0.3s;
+            position: relative;
+        }
+
+        .prescription-card.completed {
+            opacity: 0.85;
+            border-left-color: var(--primary-green);
+        }
+
+        .prescription-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .time-stamp {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: #999;
+            background: #f5f5f5;
+            padding: 4px 8px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .time-stamp i {
+            font-size: 0.65rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--gray-border);
+            padding-bottom: 10px;
+            padding-right: 100px;
+        }
+
+        .patient-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .priority-emergency {
+            background: #fee2e2;
+            color: var(--emergency-red);
+            border: 1px solid #fecaca;
+        }
+
+        .priority-urgent {
+            background: #fff3e0;
+            color: var(--urgent-orange);
+            border: 1px solid #fed7aa;
+        }
+
+        .priority-routine {
+            background: #e0f2e9;
+            color: var(--routine-green);
+            border: 1px solid #a7f3d0;
+        }
+
+        .patient-details {
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-row i {
+            width: 20px;
+            color: var(--primary-blue);
+        }
+
+        .diagnosis-box {
+            background: var(--gray-light);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--primary-blue);
+        }
+
+        .diagnosis-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn-view {
+            background: #f0f2ff;
+            color: var(--primary-blue);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        .btn-view:hover {
+            background: #e0e5ff;
+        }
+
+        .btn-issue,
+        .btn-edit {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+            flex: 1;
+        }
+
+        .btn-edit {
+            background: #f59e0b;
+        }
+
+        .btn-issue:hover:not(:disabled),
+        .btn-edit:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .btn-issue:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .completed-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-green);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Modal Styles - Same as Page 1 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .close-modal {
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #999;
+            transition: 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 25px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .patient-info-section {
+            background: var(--gray-light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .info-value.missing {
+            color: #d97706;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        .allergies-section,
+        .conditions-section {
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .allergies-section {
+            background: #fff0f0;
+            border-left: 3px solid #ef4444;
+        }
+
+        .conditions-section {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: white;
+        }
+
+        .badge-allergy {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-condition {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .vitals-section {
+            margin-bottom: 20px;
+        }
+
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .vital-card {
+            background: #e6f0ff;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .vital-card i {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .vital-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .vital-value.missing {
+            color: #d97706;
+            font-weight: normal;
+        }
+
+        .vital-label {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .history-item {
+            border-left: 3px solid var(--primary-blue);
+            padding-left: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-prescriptions {
+            min-width: 180px;
+            background: #f9f9f9;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .history-prescriptions h5 {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .history-prescriptions ul {
+            list-style: none;
+            padding: 0;
+            font-size: 0.75rem;
+        }
+
+        .history-prescriptions li {
+            padding: 3px 0;
+            color: #333;
+        }
+
+        .history-date {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .history-diagnosis {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .history-treatment {
+            font-size: 0.85rem;
+            color: #444;
+        }
+
+        .prescription-detail {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px dashed var(--primary-blue);
+        }
+
+        .medication-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .medication-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .medication-item:last-child {
+            border-bottom: none;
+        }
+
+        .med-name {
+            font-weight: 600;
+        }
+
+        .med-dosage {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-border);
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--gray-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .btn-secondary {
+            background: #f0f2ff;
+            color: var(--primary-blue);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links, .nav .logout { display: none !important; }
+            .menu-toggle { display: block; }
+            .side-nav { display: flex; }
+            .page-header { margin: 0 20px 20px 20px; flex-direction: column; align-items: flex-start; }
+            .prescription-container { padding: 0 20px; }
+            .prescription-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .info-grid, .form-row { grid-template-columns: 1fr; }
+            .card-header { padding-right: 0; flex-wrap: wrap; gap: 10px; }
+            .time-stamp { position: relative; top: auto; right: auto; display: inline-block; margin-top: 5px; }
+            .history-item { flex-direction: column; }
+            .history-prescriptions { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar-area">
+        <nav class="nav">
+            <a href="homepage-p.html"><img src="image.png" alt="Nile Logo" class="logo"></a>
+            <div class="nav-links">
+                <a href="homepage-p.html">Home</a>
+                <a href="prescriptions-p.html" class="active">Prescriptions</a>
+                <a href="reports-p.html">Reports</a>
+            </div>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></div>
+        </nav>
+    </header>
+
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Prescription Management</h1>
+        </div>
+        <div class="filter-section">
+            <div class="search-box">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search patient...">
+            </div>
+            <select class="filter-dropdown" id="priorityFilter">
+                <option value="all">All Priorities</option>
+                <option value="emergency">Emergency</option>
+                <option value="urgent">Urgent</option>
+                <option value="routine">Routine</option>
+            </select>
+            <select class="filter-dropdown" id="statusFilter">
+                <option value="all">All Status</option>
+                <option value="pending">Pending Only</option>
+                <option value="completed">Completed Only (24h)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="prescription-container">
+        <div class="prescription-grid" id="prescriptionGrid">
+            <div class="loading-spinner"><i class="fas fa-spinner"></i><p>Loading prescriptions...</p></div>
+        </div>
+    </div>
+
+    <!-- View Modal - Same as Page 1 -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user"></i> Patient Medical Record</h3>
+                <span class="close-modal" onclick="closeModal('viewModal')">&times;</span>
+            </div>
+            <div class="modal-body" id="viewModalBody">
+                <div class="loading-spinner">Loading patient data...</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('viewModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Prescription Modal -->
+    <div class="modal-overlay" id="issueModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-prescription"></i> Complete Prescription</h3>
+                <span class="close-modal" onclick="closeModal('issueModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="prescriptionForm">
+                    <input type="hidden" id="currentPrescriptionId">
+                    <div class="form-group"><label>Patient Name</label><input type="text" id="patientName" readonly></div>
+                    <div class="form-group"><label>Drug Name <span style="color: red;">*</span></label><input type="text" id="drugName" required placeholder="e.g., Amoxicillin"></div>
+                    <div class="form-row"><div class="form-group"><label>Dosage <span style="color: red;">*</span></label><input type="text" id="dosage" required placeholder="e.g., 500mg"></div><div class="form-group"><label>Duration <span style="color: red;">*</span></label><input type="text" id="duration" required placeholder="e.g., 7 days"></div></div>
+                    <div class="form-row"><div class="form-group"><label>Frequency <span style="color: red;">*</span></label><select id="frequency" required><option value="">Select</option><option value="Once daily">Once daily</option><option value="Twice daily">Twice daily</option><option value="Three times daily">Three times daily</option><option value="Four times daily">Four times daily</option><option value="Every 6 hours">Every 6 hours</option><option value="Every 8 hours">Every 8 hours</option><option value="As needed">As needed</option></select></div><div class="form-group"><label>Quantity</label><input type="number" id="quantity" placeholder="e.g., 30"></div></div>
+                    <div class="form-group"><label>Instructions <span style="color: red;">*</span></label><textarea id="instructions" rows="3" required placeholder="e.g., Take after meals with lots of water"></textarea></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn-secondary" onclick="closeModal('issueModal')">Cancel</button><button class="btn-primary" onclick="submitPrescription()">Complete Prescription</button></div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fa-solid fa-pen"></i> Edit Prescription</h3><span class="close-modal" onclick="closeModal('editModal')">&times;</span></div>
+            <div class="modal-body">
+                <form id="editPrescriptionForm">
+                    <input type="hidden" id="editPrescriptionId">
+                    <div class="form-group"><label>Patient Name</label><input type="text" id="editPatientName" readonly></div>
+                    <div class="form-group"><label>Drug Name *</label><input type="text" id="editDrugName" required></div>
+                    <div class="form-row"><div class="form-group"><label>Dosage *</label><input type="text" id="editDosage" required></div><div class="form-group"><label>Duration *</label><input type="text" id="editDuration" required></div></div>
+                    <div class="form-row"><div class="form-group"><label>Frequency *</label><select id="editFrequency" required><option value="Once daily">Once daily</option><option value="Twice daily">Twice daily</option><option value="Three times daily">Three times daily</option><option value="Four times daily">Four times daily</option><option value="Every 6 hours">Every 6 hours</option><option value="Every 8 hours">Every 8 hours</option><option value="As needed">As needed</option></select></div><div class="form-group"><label>Quantity</label><input type="number" id="editQuantity"></div></div>
+                    <div class="form-group"><label>Instructions *</label><textarea id="editInstructions" rows="3" required></textarea></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn-secondary" onclick="closeModal('editModal')">Cancel</button><button class="btn-primary" onclick="updatePrescription()">Update</button></div>
+        </div>
+    </div>
+
+    <div class="side-nav" id="mobileMenu"><div class="close-btn" onclick="toggleMenu()">&times;</div><a href="homepage-p.html">Home</a><a href="prescriptions-p.html">Prescriptions</a><button class="logout" onclick="handleLogout()" style="width:80%; margin:20px auto;">Logout</button></div>
+    <div id="menuOverlay" onclick="toggleMenu()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;"></div>
+
+    <script>
+        let allPrescriptionsRaw = [];
+        let filteredPrescriptions = [];
+
+        function formatRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffSeconds = Math.floor(diffMs / 1000);
+            const diffMins = Math.floor(diffSeconds / 60);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+            
+            if (diffDays >= 1) {
+                return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+            }
+            if (diffHours >= 1) {
+                return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            }
+            if (diffMins >= 1) {
+                return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+            }
+            return 'Just now';
+        }
+
+        function isWithinLast24Hours(date) {
+            const now = new Date();
+            const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            return date >= twentyFourHoursAgo;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `position: fixed; bottom: 20px; right: 20px; background: ${type === 'success' ? '#10b981' : '#ef4444'}; color: white; padding: 12px 24px; border-radius: 8px; z-index: 10000; animation: slideIn 0.3s ease; font-family: 'Poppins', sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15);`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+        // CORE FILTER LOGIC: ALL pending (any date) + completed only if within last 24h
+        function applyTimeFilter(prescriptionsList) {
+            return prescriptionsList.filter(p => {
+                const createdAt = new Date(p.createdAt);
+                if (p.status === 'pending-pharmacist') {
+                    return true;
+                } else if (p.status === 'completed') {
+                    return isWithinLast24Hours(createdAt);
+                }
+                return false;
+            });
+        }
+
+        // SORTING: All pending first (newest to oldest), then completed at bottom (newest to oldest within completed)
+        function sortPrescriptionsByStatusThenDate(prescriptionsList) {
+            const pending = prescriptionsList.filter(p => p.status === 'pending-pharmacist');
+            const completed = prescriptionsList.filter(p => p.status === 'completed');
+            
+            pending.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            completed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            return [...pending, ...completed];
+        }
+
+        async function loadPrescriptions() {
+            const grid = document.getElementById('prescriptionGrid');
+            grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner"></i><p>Loading prescriptions...</p></div>';
+            try {
+                const pendingResponse = await API_CONFIG.request('/pharmacist/prescriptions/pending');
+                const completedResponse = await API_CONFIG.request('/pharmacist/prescriptions/history?status=completed');
+                let combined = [];
+                if (pendingResponse.success) combined.push(...(pendingResponse.prescriptions || []));
+                if (completedResponse.success) combined.push(...(completedResponse.prescriptions || []));
+                
+                const filteredByRule = applyTimeFilter(combined);
+                const sortedList = sortPrescriptionsByStatusThenDate(filteredByRule);
+                allPrescriptionsRaw = sortedList;
+                filteredPrescriptions = [...allPrescriptionsRaw];
+                renderPrescriptions();
+                if (filteredPrescriptions.length === 0) {
+                    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-prescription-bottle"></i><p>No prescriptions match the view rules.</p><p style="font-size:0.85rem;">All pending prescriptions appear regardless of date. Completed only if within last 24h.</p></div>`;
+                }
+            } catch (error) {
+                console.error(error);
+                grid.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error: ${error.message}</p><button onclick="loadPrescriptions()" style="margin-top:15px;padding:8px 20px;background:var(--primary-blue);color:white;border:none;border-radius:5px;">Retry</button></div>`;
+                showToast('Failed to load prescriptions', 'error');
+            }
+        }
+
+        function renderPrescriptions() {
+            const grid = document.getElementById('prescriptionGrid');
+            if (!filteredPrescriptions.length) {
+                grid.innerHTML = `<div class="empty-state"><i class="fas fa-prescription-bottle"></i><p>No matching prescriptions found</p><p style="font-size:0.85rem;">Adjust filters or refresh</p></div>`;
+                return;
+            }
+            grid.innerHTML = filteredPrescriptions.map(p => {
+                const patient = p.consultation?.appointment?.patient?.user;
+                const patientName = patient?.name || 'Unknown Patient';
+                const patientId = patient?.studentID || patient?.staffID || 'Not assigned';
+                const diagnosis = p.consultation?.diagnosis || 'No diagnosis recorded';
+                const doctor = p.createdBy?.name || p.consultation?.appointment?.doctor?.name || 'Doctor not assigned';
+                let urgency = p.urgency || 'routine';
+                if (!urgency && p.consultation?.appointment?.urgency) urgency = p.consultation.appointment.urgency;
+                const priorityClass = urgency === 'emergency' ? 'priority-emergency' : urgency === 'urgent' ? 'priority-urgent' : 'priority-routine';
+                const priorityDisplay = urgency.charAt(0).toUpperCase() + urgency.slice(1);
+                const createdAt = new Date(p.createdAt);
+                const timeAgo = formatRelativeTime(createdAt);
+                const isCompleted = p.status === 'completed';
+                return `
+                    <div class="prescription-card ${isCompleted ? 'completed' : ''}" data-id="${p._id}">
+                        <div class="time-stamp"><i class="fa-regular fa-clock"></i> ${timeAgo}</div>
+                        <div class="card-header"><h3 class="patient-name">${escapeHtml(patientName)}</h3><span class="priority-badge ${priorityClass}">${priorityDisplay}</span></div>
+                        <div class="patient-details"><div class="detail-row"><i class="fa-solid fa-id-card"></i><span>ID: ${escapeHtml(patientId)}</span></div><div class="detail-row"><i class="fa-solid fa-user-doctor"></i><span>Doctor: ${escapeHtml(doctor)}</span></div><div class="detail-row"><i class="fa-regular fa-calendar"></i><span>Created: ${createdAt.toLocaleString()}</span></div></div>
+                        <div class="diagnosis-box"><strong><i class="fa-solid fa-stethoscope"></i> Diagnosis:</strong> ${escapeHtml(diagnosis)}</div>
+                        <div class="prescription-detail" style="margin:15px 0; padding:12px; background: ${p.status === 'pending-pharmacist' ? '#fef3c7' : '#f0fdf4'}">
+                            <strong><i class="fa-solid fa-prescription"></i> Prescribed Drug:</strong>
+                            <div style="margin-top:8px;">${p.medications?.map(med => `<div style="padding:5px 0;"><strong>${escapeHtml(med.name)}</strong>${med.dosage ? `<span style="color:#666;"> - ${escapeHtml(med.dosage)}</span>` : `<span class="missing-data">Pending pharmacist details</span>`}</div>`).join('') || '<span class="missing-data">No medications recorded</span>'}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-view" onclick="viewPatientDetails('${p._id}')"><i class="fa-solid fa-eye"></i> View Record</button>
+                            ${p.status === 'pending-pharmacist' ? `<button class="btn-issue" onclick="openIssueModal('${p._id}')"><i class="fa-solid fa-pen"></i> Complete</button>` : `<button class="btn-edit" onclick="openEditModal('${p._id}')"><i class="fa-solid fa-edit"></i> Edit</button>`}
+                        </div>
+                        ${isCompleted ? '<div class="completed-label"><i class="fa-solid fa-circle-check"></i> Completed</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterPrescriptions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const priority = document.getElementById('priorityFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            filteredPrescriptions = allPrescriptionsRaw.filter(p => {
+                const patient = p.consultation?.appointment?.patient?.user;
+                const patientName = (patient?.name || '').toLowerCase();
+                const patientId = (patient?.studentID || patient?.staffID || '').toLowerCase();
+                const matchesSearch = patientName.includes(searchTerm) || patientId.includes(searchTerm);
+                let urgency = p.urgency || 'routine';
+                if (!urgency && p.consultation?.appointment?.urgency) urgency = p.consultation.appointment.urgency;
+                const matchesPriority = priority === 'all' || urgency === priority;
+                let matchesStatus = true;
+                if (status === 'pending') matchesStatus = p.status === 'pending-pharmacist';
+                else if (status === 'completed') matchesStatus = p.status === 'completed';
+                return matchesSearch && matchesPriority && matchesStatus;
+            });
+            renderPrescriptions();
+        }
+
+        // viewPatientDetails - Same as Page 1 with full vitals, allergies, medical history
+        async function viewPatientDetails(prescriptionId) {
+            const modalBody = document.getElementById('viewModalBody');
+            modalBody.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner"></i><p>Loading patient data...</p></div>';
+            document.getElementById('viewModal').style.display = 'flex';
+
+            try {
+                const response = await API_CONFIG.request(`/pharmacist/prescription/${prescriptionId}/vitals`);
+                console.log('Patient data response:', response);
+
+                if (response.success) {
+                    const { patient, vitals, medicalHistory } = response;
+                    const user = patient?.user || {};
+
+                    const displayInfo = (value) => {
+                        if (!value || value === '' || value === 'N/A') {
+                            return '<span class="info-value missing"><i class="fa-regular fa-circle-question"></i> Not recorded</span>';
+                        }
+                        return `<span class="info-value">${escapeHtml(value)}</span>`;
+                    };
+
+                    const getVitalValue = (value) => {
+                        if (!value || value === '' || value === 'N/A') {
+                            return '<span class="vital-value missing">Not recorded</span>';
+                        }
+                        return `<span class="vital-value">${escapeHtml(value)}</span>`;
+                    };
+
+                    modalBody.innerHTML = `
+                        <div class="patient-info-section">
+                            <h4><i class="fa-solid fa-user"></i> Patient Information</h4>
+                            <div class="info-grid">
+                                <div class="info-item"><span class="info-label">Name</span>${displayInfo(user.name)}</div>
+                                <div class="info-item"><span class="info-label">ID</span>${displayInfo(user.studentID || user.staffID)}</div>
+                                <div class="info-item"><span class="info-label">Age</span>${displayInfo(user.age ? `${user.age} years` : null)}</div>
+                                <div class="info-item"><span class="info-label">Gender</span>${displayInfo(user.gender)}</div>
+                                <div class="info-item"><span class="info-label">Blood Group</span>${displayInfo(patient?.bloodGroup)}</div>
+                                <div class="info-item"><span class="info-label">Department</span>${displayInfo(user.department || patient?.department)}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="allergies-section">
+                            <div class="section-title"><i class="fa-solid fa-allergies"></i> Allergies</div>
+                            <div class="badge-list">${patient?.allergies && patient.allergies.length > 0 ? patient.allergies.map(a => `<span class="badge badge-allergy">${escapeHtml(a)}</span>`).join('') : '<span class="missing-data">No known allergies</span>'}</div>
+                        </div>
+                        
+                        <div class="conditions-section">
+                            <div class="section-title"><i class="fa-solid fa-notes-medical"></i> Chronic Conditions</div>
+                            <div class="badge-list">${patient?.chronicConditions && patient.chronicConditions.length > 0 ? patient.chronicConditions.map(c => `<span class="badge badge-condition">${escapeHtml(c)}</span>`).join('') : '<span class="missing-data">No chronic conditions</span>'}</div>
+                        </div>
+
+                        <div class="vitals-section">
+                            <h4><i class="fa-solid fa-heart-pulse"></i> Latest Vitals</h4>
+                            ${vitals && vitals.length > 0 ? `
+                                <div class="vitals-grid">
+                                    <div class="vital-card"><i class="fa-solid fa-temperature-high"></i>${getVitalValue(vitals[0]?.temperature)}<div class="vital-label">Temp (°C)</div></div>
+                                    <div class="vital-card"><i class="fa-solid fa-heart"></i>${getVitalValue(vitals[0]?.pulse)}<div class="vital-label">Heart Rate</div></div>
+                                    <div class="vital-card"><i class="fa-solid fa-gauge-high"></i>${getVitalValue(vitals[0]?.bp)}<div class="vital-label">Blood Pressure</div></div>
+                                    <div class="vital-card"><i class="fa-solid fa-weight-scale"></i>${getVitalValue(vitals[0]?.weight)}<div class="vital-label">Weight (kg)</div></div>
+                                </div>
+                                <p style="font-size: 0.7rem; color: #999; margin-top: 8px; text-align: center;"><i class="fa-regular fa-calendar"></i> Recorded: ${new Date(vitals[0].createdAt).toLocaleString()}</p>
+                            ` : '<p style="color: #666; text-align: center; padding: 20px;"><i class="fa-regular fa-heart"></i> No vitals recorded</p>'}
+                        </div>
+
+                        <div class="history-section">
+                            <h4><i class="fa-solid fa-clock-rotate-left"></i> Medical History</h4>
+                            ${medicalHistory && medicalHistory.length > 0 ? medicalHistory.map(h => `
+                                <div class="history-item">
+                                    <div class="history-content">
+                                        <div class="history-date">${new Date(h.createdAt).toLocaleDateString()}</div>
+                                        <div class="history-diagnosis"><strong>Diagnosis:</strong> ${escapeHtml(h.diagnosis || 'No diagnosis recorded')}</div>
+                                        <div class="history-treatment"><strong>Notes:</strong> ${escapeHtml(h.notes || 'No additional notes')}</div>
+                                        ${h.appointment?.doctor?.name ? `<div class="history-treatment"><strong>Doctor:</strong> ${escapeHtml(h.appointment.doctor.name)}</div>` : ''}
+                                    </div>
+                                    ${h.prescriptions && h.prescriptions.length > 0 ? `
+                                        <div class="history-prescriptions">
+                                            <h5><i class="fa-solid fa-prescription"></i> Prescriptions (${h.prescriptions.length})</h5>
+                                            <ul>
+                                                ${h.prescriptions.map(rx => `
+                                                    <li>
+                                                        • <strong>${escapeHtml(rx.name)}</strong>
+                                                        ${rx.dosage ? `<br><span style="font-size: 0.7rem; color: #666;">${escapeHtml(rx.dosage)}</span>` : ''}
+                                                        ${rx.frequency ? `<span style="font-size: 0.7rem; color: #666;"> | ${escapeHtml(rx.frequency)}</span>` : ''}
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            `).join('') : '<p style="color: #666; text-align: center; padding: 20px;"><i class="fa-regular fa-folder-open"></i> No medical history found</p>'}
+                        </div>
+
+                        <div class="prescription-detail">
+                            <h4><i class="fa-solid fa-prescription"></i> Current Prescription</h4>
+                            ${(() => {
+                                const prescription = allPrescriptionsRaw.find(p => p._id === prescriptionId);
+                                if (prescription?.medications?.length > 0) {
+                                    return `<ul class="medication-list">${prescription.medications.map(med => `
+                                        <li class="medication-item">
+                                            <span class="med-name">${escapeHtml(med.name)}</span>
+                                            <span class="med-dosage">
+                                                ${med.dosage ? escapeHtml(med.dosage) : '<span class="missing-data">Awaiting details</span>'}
+                                            </span>
+                                        </li>
+                                    `).join('')}</ul>`;
+                                }
+                                return '<p style="color: #666;">No prescription details available</p>';
+                            })()}
+                        </div>
+                    `;
+                } else {
+                    modalBody.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading patient data: ' + (response.message || 'Unknown error') + '</p></div>';
+                }
+            } catch (error) {
+                console.error('Error loading patient details:', error);
+                modalBody.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading patient data: ${error.message}</p></div>`;
+            }
+        }
+
+        async function openIssueModal(id) {
+            try {
+                const res = await API_CONFIG.request(`/pharmacist/prescription/${id}`);
+                if(res.success){
+                    const p = res.prescription;
+                    const patient = p.consultation?.appointment?.patient?.user;
+                    document.getElementById('currentPrescriptionId').value = id;
+                    document.getElementById('patientName').value = patient?.name || 'Unknown';
+                    ['drugName','dosage','duration','frequency','quantity','instructions'].forEach(f=>{ if(document.getElementById(f)) document.getElementById(f).value=''; });
+                    document.getElementById('issueModal').style.display='flex';
+                }
+            } catch(e){ showToast('Error loading', 'error'); }
+        }
+
+        async function openEditModal(id) {
+            try {
+                const res = await API_CONFIG.request(`/pharmacist/prescription/${id}`);
+                if(res.success){
+                    const p = res.prescription;
+                    const patient = p.consultation?.appointment?.patient?.user;
+                    const med = p.medications?.[0] || {};
+                    document.getElementById('editPrescriptionId').value = id;
+                    document.getElementById('editPatientName').value = patient?.name || 'Unknown';
+                    document.getElementById('editDrugName').value = med.name || '';
+                    document.getElementById('editDosage').value = med.dosage || '';
+                    document.getElementById('editDuration').value = med.duration || '';
+                    document.getElementById('editFrequency').value = med.frequency || '';
+                    document.getElementById('editQuantity').value = med.quantity || '';
+                    document.getElementById('editInstructions').value = med.instructions || '';
+                    document.getElementById('editModal').style.display='flex';
+                }
+            } catch(e){ showToast('Error loading edit','error'); }
+        }
+
+        async function updatePrescription() {
+            const id = document.getElementById('editPrescriptionId').value;
+            const medications = [{ name: document.getElementById('editDrugName').value.trim(), dosage: document.getElementById('editDosage').value.trim(), duration: document.getElementById('editDuration').value.trim(), frequency: document.getElementById('editFrequency').value, instructions: document.getElementById('editInstructions').value.trim(), quantity: parseInt(document.getElementById('editQuantity').value) || null }];
+            if(!medications[0].name||!medications[0].dosage||!medications[0].duration||!medications[0].frequency||!medications[0].instructions) return alert('Fill required fields');
+            try {
+                const resp = await API_CONFIG.request(`/pharmacist/prescription/${id}/update`, { method:'PUT', body:JSON.stringify({ medications }) });
+                if(resp.success){ showToast('Updated'); closeModal('editModal'); await loadPrescriptions(); }
+                else showToast(resp.message||'Error','error');
+            } catch(e){ showToast(e.message,'error'); }
+        }
+
+        async function submitPrescription() {
+            const id = document.getElementById('currentPrescriptionId').value;
+            const medications = [{ name: document.getElementById('drugName').value.trim(), dosage: document.getElementById('dosage').value.trim(), duration: document.getElementById('duration').value.trim(), frequency: document.getElementById('frequency').value, instructions: document.getElementById('instructions').value.trim(), quantity: parseInt(document.getElementById('quantity').value) || null }];
+            if(!medications[0].name||!medications[0].dosage||!medications[0].duration||!medications[0].frequency||!medications[0].instructions) return alert('Complete all required fields');
+            try {
+                const resp = await API_CONFIG.request(`/pharmacist/prescription/${id}/complete`, { method:'PUT', body:JSON.stringify({ medications }) });
+                if(resp.success){ showToast('Prescription completed'); closeModal('issueModal'); await loadPrescriptions(); }
+                else showToast(resp.message||'Error','error');
+            } catch(e){ showToast(e.message,'error'); }
+        }
+
+        function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+        function toggleMenu(){ const m=document.getElementById('mobileMenu'), o=document.getElementById('menuOverlay'); if(m.classList.contains('active')){ m.classList.remove('active'); o.style.display='none'; } else{ m.classList.add('active'); o.style.display='block'; } }
+        function handleLogout(){ if(confirm('Logout?')) API_CONFIG.auth.logout(); }
+        
+        document.addEventListener('DOMContentLoaded',()=>{ 
+            if(!API_CONFIG.getToken()) window.location.href='../Shared pages/login.html'; 
+            loadPrescriptions(); 
+            document.getElementById('searchInput').addEventListener('input',filterPrescriptions); 
+            document.getElementById('priorityFilter').addEventListener('change',filterPrescriptions); 
+            document.getElementById('statusFilter').addEventListener('change',filterPrescriptions); 
+        });
+        
+        window.onclick = (e)=>{ if(e.target.classList.contains('modal-overlay')) e.target.style.display='none'; };
+    </script>
+</body>
+</html>

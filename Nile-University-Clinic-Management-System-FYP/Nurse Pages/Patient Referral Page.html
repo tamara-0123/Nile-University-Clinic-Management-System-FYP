@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Referral - Nile University CMS</title>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =========================================
+       CSS STYLES
+       ========================================= */
+    :root {
+      --primary: #003399;
+      /* Nile Blue */
+      --primary-600: #1A56DB;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --text-dark: #333;
+      --text-muted: #6c757d;
+      --border: #e0e0e0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --danger: #d32f2f;
+      --success: #28a745;
+      --primary-blue: #0606ba;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --border-color: #d5d5d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 3rem;
+    }
+
+    /* =========================================
+   2. NAVIGATION BAR (FIXED)
+   ========================================= */
+    .top {
+      width: 100%;
+    }
+
+    .navbar {
+      padding: 20px 40px;
+      background-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      height: 70px;
+      /* Slight increase for better spacing */
+      display: flex;
+      flex-direction: row;
+      background-color: var(--white);
+      padding: 0 30px;
+      border-radius: 50px;
+      align-items: center;
+      /* KEY FIX: Use space-between and nowrap to prevent breaking */
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 15px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      max-width: 150px;
+      display: block;
+      flex-shrink: 0;
+      /* Prevents logo squishing */
+    }
+
+    /* Links Container */
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 1;
+      /* Allows links container to shrink if needed */
+    }
+
+    /* Link Styling */
+    .nav-links a {
+      text-decoration: none;
+      color: black;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      /* Prevents text wrap */
+      padding-bottom: 3px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary-blue);
+      font-weight: 700;
+      /* Bold active state */
+      border-bottom: 2px solid var(--primary-blue);
+    }
+
+    .logout {
+      color: white;
+      background-color: red;
+      border: none;
+      height: 40px;
+      padding: 0 25px;
+      /* Use padding instead of fixed width */
+      border-radius: 50px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      /* Prevents button squishing */
+      white-space: nowrap;
+    }
+
+    .logout:hover {
+      opacity: 0.9;
+    }
+
+    /* --- Layout & Hero --- */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .hero .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .stat-pill {
+      background: #f0f4ff;
+      color: var(--primary);
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* --- Form Panel --- */
+    .panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Doctor Selection Grid */
+    .doctor-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .doctor-option {
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .doctor-option:hover {
+      background: #f9f9f9;
+      border-color: #ccc;
+    }
+
+    .doctor-option.selected {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+
+    .doc-avatar {
+      width: 35px;
+      height: 35px;
+      background: #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    .doc-info h5 {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .doc-info small {
+      color: #28a745;
+      font-size: 0.75rem;
+    }
+
+    /* Buttons */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1rem;
+      border-top: 1px solid #eee;
+      padding-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-600);
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: #555;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .referral-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .referral-table th {
+      text-align: left;
+      padding: 1rem;
+      background: #f8f9fa;
+      font-size: 0.85rem;
+      color: #555;
+      border-bottom: 2px solid #eee;
+    }
+
+    .referral-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+
+    /* Status Pills */
+    .pill-urgent {
+      background: #ffebee;
+      color: var(--danger);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .pill-routine {
+      background: #e3f2fd;
+      color: var(--primary);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .pill-status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal.text-center {
+      text-align: center;
+    }
+
+    .modal-icon-success {
+      font-size: 3rem;
+      color: var(--success);
+      margin-bottom: 1rem;
+    }
+
+    .modal-actions.center {
+      justify-content: center;
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .form-row,
+      .doctor-select-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Nile University Logo" class="logo">
+        </a>
+        <div class="nav-links">
+          <a href="./homepage-n.html">Home</a>
+          <a href="./Patient List Page.html">Patient List</a>
+          <a href="./Patient Vitals Entry Page.html">Vitals Entry</a>
+          <a href="./Patient Referral Page.html" class="active">Referrals</a>
+          <a href="./Daily Report Page.html">Daily Report</a>
+        </div>
+        <div class="nav-buttons">
+          <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container fade-in">
+
+    <div class="hero">
+      <div>
+        <div class="title"><i class="fas fa-user-md"></i> Patient Referral</div>
+        <div class="meta">Assign patients to doctors for consultation</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <i class="fas fa-clock"></i> <span>Pending: <strong>5</strong></span>
+        </div>
+        <div class="stat-pill">
+          <i class="fas fa-user-check"></i> <span>Available Doctors: <strong>4</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="form-section-title">New Referral</div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <div class="form-group">
+            <label><i class="fas fa-user-injured"></i> Select Patient</label>
+            <select id="referPatientSelect" class="form-control">
+              <option value="">Choose a patient...</option>
+              <option value="001">Samuel Okoye (ID: 2025-001)</option>
+              <option value="002">Ade Bayo (ID: 2025-002)</option>
+              <option value="003">Ahmed Musa (ID: 2025-003)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-stethoscope"></i> Condition / Complaint</label>
+            <input type="text" id="patientCondition" class="form-control" placeholder="e.g. High Fever, Headache" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-notes-medical"></i> Clinical Notes</label>
+            <textarea id="clinicalNotes" class="form-control" rows="3"
+              placeholder="Vitals summary, observations..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-col">
+          <div class="form-group">
+            <label><i class="fas fa-exclamation-triangle"></i> Urgency Level</label>
+            <select id="urgencyLevel" class="form-control">
+              <option value="routine">Routine</option>
+              <option value="urgent">Urgent</option>
+              <option value="emergency">Emergency</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label><i class="fas fa-user-md"></i> Assign Doctor</label>
+            <div class="doctor-select-grid" id="doctorGrid">
+            </div>
+            <input type="hidden" id="selectedDoctorId">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-outline" id="clearBtn"><i class="fas fa-eraser"></i> Clear</button>
+        <button class="btn btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit Referral</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <h3><i class="fas fa-tasks"></i> Active Referrals</h3>
+      </div>
+      <div class="table-responsive">
+        <table class="referral-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Condition</th>
+              <th>Urgency</th>
+              <th>Assigned To</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="activeReferralsTable">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="successModal" class="modal-overlay">
+    <div class="modal text-center">
+      <div class="modal-icon-success"><i class="fas fa-check"></i></div>
+      <h3>Referral Sent!</h3>
+      <p id="successMessage">Patient has been assigned successfully.</p>
+      <div class="modal-actions center">
+        <button class="btn btn-primary close-modal">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal text-center">
+      <h3>Confirm Logout</h3>
+      <p>Are you sure you want to end your session?</p>
+      <div class="modal-actions center">
+        <button class="btn btn-outline close-modal">Cancel</button>
+        <button class="btn btn-danger" onclick="window.location.href='../Shared Pages/login.html'">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Shared pages/api-config.js"></script>
+  <script>
+    // =========================================
+    // JAVASCRIPT LOGIC (API INTEGRATED)
+    // =========================================
+
+    let currentQueue = [];
+
+    // 2. Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthStatus();
+      loadPatients();
+      loadDoctors();
+      loadActiveReferrals();
+      setupButtons();
+
+      // Animation
+      setTimeout(() => document.querySelector('.container').classList.add('visible'), 100);
+    });
+
+    function checkAuthStatus() {
+      const token = API_CONFIG.getToken();
+      if (!token) {
+        window.location.href = '../Shared pages/login.html';
+      }
+    }
+
+    async function loadPatients() {
+      const select = document.getElementById("referPatientSelect");
+      try {
+        const data = await API_CONFIG.request('/nurse/queue');
+        if (data.success && data.appointments) {
+          currentQueue = data.appointments;
+          select.innerHTML = '<option value="">Choose a patient...</option>';
+
+          // Filter: only show checked-in patients
+          const checkInRecords = data.appointments.filter(app => app.status === "checked-in");
+
+          if (checkInRecords.length === 0) {
+            select.innerHTML = '<option value="">No patients ready for referral.</option>';
+            return;
+          }
+
+          checkInRecords.forEach(app => {
+            const name = app.patient?.user?.name || 'Unknown';
+            const id = app.patient?.user?.studentID || app.patient?.user?.staffID || 'N/A';
+            select.innerHTML += `<option value="${app._id}">${name} (ID: ${id})</option>`;
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load queue:', error);
+      }
+    }
+
+    // 3. Load Doctors Grid
+    async function loadDoctors() {
+      const grid = document.getElementById("doctorGrid");
+      try {
+        const data = await API_CONFIG.request('/nurse/doctors');
+        if (data.success && data.doctors) {
+          // Update stat pills
+          if (data.pendingCount !== undefined) {
+            document.querySelector('.stat-pill span strong').innerText = data.pendingCount;
+          }
+          const availablePill = document.querySelectorAll('.stat-pill span strong')[1];
+          if (availablePill) availablePill.innerText = data.availableDoctorsCount || 0;
+
+          grid.innerHTML = "";
+          data.doctors.forEach(doc => {
+            const div = document.createElement("div");
+            div.className = `doctor-option ${doc.isFull ? 'full' : ''}`;
+            div.dataset.id = doc._id;
+            div.dataset.name = doc.name;
+
+            const statusColor = doc.isFull ? "#d32f2f" : "#28a745";
+            let statusText = doc.isFull ? "Full" : `Available (${doc.currentAppointments}/${doc.totalSlots})`;
+
+            if (!doc.hasSlots) {
+              statusText = `Available (${doc.currentAppointments})`;
+            }
+
+            div.innerHTML = `
+                        <div class="doc-avatar"><i class="fas fa-user-md"></i></div>
+                        <div class="doc-info">
+                            <h5>${doc.name}</h5>
+                            <small style="color:${statusColor}">${statusText}</small>
+                        </div>
+                    `;
+
+            if (!doc.isFull) {
+              div.addEventListener("click", () => selectDoctor(div));
+            } else {
+              div.style.opacity = "0.6";
+              div.style.cursor = "not-allowed";
+            }
+            grid.appendChild(div);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load doctors:', error);
+      }
+    }
+
+    function selectDoctor(element) {
+      document.querySelectorAll(".doctor-option").forEach(el => el.classList.remove("selected"));
+      element.classList.add("selected");
+      document.getElementById("selectedDoctorId").value = element.dataset.id;
+    }
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        API_CONFIG.auth.logout();
+      }
+    }
+
+    // 5. Submit Logic
+    async function submitReferral() {
+      const appointmentId = document.getElementById("referPatientSelect").value;
+      const condition = document.getElementById("patientCondition").value;
+      const notes = document.getElementById("clinicalNotes").value;
+      const urgency = document.getElementById("urgencyLevel").value;
+      const doctorId = document.getElementById("selectedDoctorId").value;
+
+      if (!appointmentId || !condition || !doctorId) {
+        alert("Please select a patient, enter a condition, and choose a doctor.");
+        return;
+      }
+
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Submitting...";
+
+      try {
+        const response = await API_CONFIG.request(`/nurse/refer/${appointmentId}`, {
+          method: 'POST',
+          body: JSON.stringify({
+            doctorId,
+            condition,
+            notes,
+            urgency
+          })
+        });
+
+        if (response.success) {
+          const select = document.getElementById("referPatientSelect");
+          const patientName = select.options[select.selectedIndex].text.split('(')[0].trim();
+
+          document.getElementById("successMessage").textContent =
+            `${patientName} has been referred successfully.`;
+
+          document.getElementById("successModal").style.display = "flex";
+
+          resetForm();
+          loadPatients();
+          loadActiveReferrals();
+        }
+      } catch (error) {
+        alert(error.message || "Failed to submit referral.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Referral";
+      }
+    }
+
+
+    function resetForm() {
+      document.getElementById("referPatientSelect").value = "";
+      document.getElementById("patientCondition").value = "";
+      document.getElementById("clinicalNotes").value = "";
+      document.getElementById("selectedDoctorId").value = "";
+      document.querySelectorAll(".doctor-option").forEach(el => el.classList.remove("selected"));
+    }
+
+    async function loadActiveReferrals() {
+      const tbody = document.getElementById("activeReferralsTable");
+      try {
+        const data = await API_CONFIG.request('/nurse/queue');
+        if (data.success && data.appointments) {
+          // Active referrals are patients in 'waiting' status (for doctor)
+          const referrals = data.appointments.filter(app => app.status === "waiting" || app.status === "in-consultation");
+
+          tbody.innerHTML = referrals.map(app => `
+                    <tr>
+                        <td><strong>${app.patient?.user?.name || 'Unknown'}</strong></td>
+                        <td>${app.condition || 'N/A'}</td>
+                        <td>
+                          <span class="${app.urgency === 'urgent' ? 'pill-urgent' :
+                            app.urgency === 'emergency' ? 'pill-urgent' :
+                              'pill-routine'
+                          }">
+                            ${app.urgency ? app.urgency.charAt(0).toUpperCase() + app.urgency.slice(1) : 'Routine'}
+                          </span>
+                        </td>
+                        <td>${app.doctor?.name || 'Assigned'}</td>
+                        <td>${new Date(app.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td><span class="pill-status">${app.status}</span></td>
+                    </tr>
+                `).join('');
+
+          if (referrals.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No active referrals currently.</td></tr>';
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // 6. Setup Buttons & Modals
+    function setupButtons() {
+      document.getElementById("submitBtn").addEventListener("click", submitReferral);
+      document.getElementById("clearBtn").addEventListener("click", resetForm);
+
+      document.querySelectorAll(".close-modal").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".modal-overlay").forEach(m => m.style.display = "none");
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

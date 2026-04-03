@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Prescriptions - Nile CMS</title>
+    <link rel="stylesheet" href="prescriptions-s.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        /* Keep your original styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .prescription-document {
+            border: 1px solid #e5e7eb;
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .document-body {
+            padding: 20px;
+        }
+
+        .doc-row {
+            margin-bottom: 10px;
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .doc-row strong {
+            color: #555;
+        }
+
+        .med-info-box {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .med-info-box h2 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .med-detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+
+        .med-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .med-detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .med-detail-value {
+            color: #333;
+        }
+
+        .instruction-note {
+            margin-top: 12px;
+            padding: 10px;
+            background: #fef3c7;
+            border-radius: 6px;
+            border-left: 3px solid #f59e0b;
+            font-size: 0.85rem;
+        }
+
+        .instruction-note strong {
+            color: #d97706;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+
+        .rx-stamp {
+            text-align: right;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #e5e7eb;
+            color: #666;
+            font-size: 0.75rem;
+        }
+
+        .status-badge {
+            background: #10b981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 6px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: #f5f5f5;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .prescription-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .prescription-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .med-main-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .med-meta {
+            display: flex;
+            gap: 12px;
+            color: #666;
+            font-size: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .med-meta span i {
+            margin-right: 3px;
+            color: var(--primary-blue);
+        }
+
+        .prescription-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .status-pending {
+            background: #fff3e0;
+            color: #f59e0b;
+            border: 1px solid #fed7aa;
+        }
+
+        .status-completed {
+            background: #e0f2e9;
+            color: #10b981;
+            border: 1px solid #a7f3d0;
+        }
+
+        .btn-view {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-view:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .doc-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 3px;
+            }
+            
+            .med-detail-row {
+                flex-direction: column;
+                gap: 3px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                max-height: 85vh;
+            }
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+    <header class="navbar">
+        <nav class="nav">
+            <a href="#"><img src="./image.png" alt="Nile Logo" class="logo"></a>
+            <ul class="nav-links">
+                <li><a href="homepage-s.html">Home</a></li>
+                <li><a href="appointments-s.html">Appointments</a></li>
+                <li><a href="prescriptions-s.html" class="active">Prescriptions</a></li>
+                <li><a href="medical-history.html">Medical History</a></li>
+            </ul>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        </nav>
+    </header>
+
+    <h1 class="page-title">My Prescriptions</h1>
+    <p style="text-align: center; color: #666; margin-top: -30px; margin-bottom: 40px;">View and manage your current
+        medications from Nile University Clinic.</p>
+
+    <div class="prescription-container">
+        <div class="prescription-grid" id="prescription-list">
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="prescriptionModal">
+        <div class="modal-content prescription-document">
+            <div class="modal-header">
+                <div style="display:flex; justify-content: space-between; align-items: center;">
+                    <h3 id="modalMedName" style="font-size: 1.1rem; margin: 0;">Prescription Detail</h3>
+                    <span class="status-badge">Official Document</span>
+                </div>
+            </div>
+
+            <div class="document-body">
+                <div class="doc-row">
+                    <strong>Patient:</strong>
+                    <span id="modalPatientName">Loading...</span>
+                </div>
+                <div class="doc-row">
+                    <strong>Date Prescribed:</strong>
+                    <span id="modalPrescriptionDate">N/A</span>
+                </div>
+                <div class="doc-row">
+                    <strong>Issuer:</strong>
+                    <span>Nile University Health Services</span>
+                </div>
+                <hr style="margin: 10px 0;">
+                <div class="med-info-box">
+                    <h2 id="displayMed">Amoxicillin</h2>
+                    
+                    <div class="med-detail-row">
+                        <span class="med-detail-label"><i class="fas fa-pills"></i> Dosage:</span>
+                        <span class="med-detail-value" id="displayDosage">500mg</span>
+                    </div>
+                    
+                    <div class="med-detail-row">
+                        <span class="med-detail-label"><i class="fas fa-clock"></i> Frequency:</span>
+                        <span class="med-detail-value" id="displayFrequency">Three times daily</span>
+                    </div>
+                    
+                    <div class="med-detail-row">
+                        <span class="med-detail-label"><i class="fas fa-hourglass-half"></i> Duration:</span>
+                        <span class="med-detail-value" id="displayDuration">7 days</span>
+                    </div>
+                    
+                    <div class="med-detail-row">
+                        <span class="med-detail-label"><i class="fas fa-box"></i> Quantity:</span>
+                        <span class="med-detail-value" id="displayQuantity">21 tablets</span>
+                    </div>
+                    
+                    <div class="instruction-note">
+                        <strong><i class="fas fa-info-circle"></i> Instructions:</strong>
+                        <span id="displayNotes">Take after meals to avoid stomach upset.</span>
+                    </div>
+                </div>
+                <div class="rx-stamp">
+                    <p>Digitally Signed by</p>
+                    <strong>Health Services Dept.</strong>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('prescriptionModal')">Close</button>
+                <button class="btn-primary" onclick="window.print()">Print / Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-nav" id="mobileMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a href="homepage-s.html">Home</a>
+        <a href="appointments-s.html">Appointments</a>
+        <a href="prescriptions-s.html">Prescriptions</a>
+        <a href="medical-history.html">History</a>
+        <button class="logout" onclick="handleLogout()" style="width: 100%; margin-top: 20px;">Logout</button>
+    </div>
+    <div id="menuOverlay" onclick="toggleMenu()"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
+    </div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        // --- JAVASCRIPT LOGIC (API INTEGRATED) ---
+        let currentPrescriptions = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuthStatus();
+            loadPrescriptions();
+            const currentPath = decodeURIComponent(window.location.pathname);
+            const currentPage = currentPath.split("/").pop();
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                const linkPage = linkHref.split("/").pop();
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+                else if (currentPage === "" && linkPage === "prescriptions-s.html") {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function checkAuthStatus() {
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+            }
+        }
+
+        async function loadPrescriptions() {
+            const list = document.getElementById('prescription-list');
+            try {
+                const data = await API_CONFIG.request('/patient/prescriptions');
+                if (data.success) {
+                    currentPrescriptions = data.prescriptions;
+                    renderPrescriptions();
+                } else {
+                    list.innerHTML = '<p style="padding:20px; color:#666; text-align:center;">No prescriptions found.</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load prescriptions:', error);
+                list.innerHTML = '<p style="padding:20px; color:red; text-align:center;">Failed to load data from server.</p>';
+            }
+        }
+
+        function renderPrescriptions() {
+            const list = document.getElementById('prescription-list');
+
+            let allMedications = [];
+
+            if (currentPrescriptions && currentPrescriptions.length > 0) {
+                currentPrescriptions.forEach(px => {
+                    if (px.medications && Array.isArray(px.medications)) {
+                        px.medications.forEach(med => {
+                            allMedications.push({
+                                ...med,
+                                prescriptionId: px._id,
+                                prescriptionDate: px.createdAt,
+                                isPendingPharmacist: med.isPendingPharmacist !== undefined ? med.isPendingPharmacist : true
+                            });
+                        });
+                    }
+                });
+            }
+
+            if (allMedications.length === 0) {
+                list.innerHTML = "<div style='text-align: center; padding: 40px;'><i class='fas fa-prescription-bottle' style='font-size: 3rem; color: #ccc; margin-bottom: 15px; display: block;'></i><p style='color:#666;'>No prescriptions found.</p></div>";
+                return;
+            }
+
+            list.innerHTML = allMedications.map((rx, index) => {
+                const isPending = rx.isPendingPharmacist === true;
+                const statusClass = isPending ? 'status-pending' : 'status-completed';
+                const statusText = isPending ? 'Pending Pharmacy Review' : 'Completed';
+                
+                return `
+                <div class="prescription-card">
+                    <div class="med-main-info">
+                        <h2 style="padding-bottom: 0; font-size: 1.25rem; color: #333;">${escapeHtml(rx.name || 'Unknown Drug')}</h2>
+                        <div class="med-meta">
+                            <span><i class="fas fa-pills"></i> ${rx.dosage || 'N/A'}</span>
+                            <span><i class="fas fa-clock"></i> ${rx.frequency || 'N/A'}</span>
+                            <span><i class="fas fa-calendar-alt"></i> ${rx.duration || 'N/A'}</span>
+                        </div>
+                        <div>
+                            <span class="prescription-status ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                    <button class="btn-view" onclick="viewPrescription('${rx.prescriptionId}', '${escapeHtml(rx.name)}')">
+                        <i class="fas fa-file-medical"></i> View / Download
+                    </button>
+                </div>
+            `}).join('');
+        }
+
+        function viewPrescription(prescriptionId, medName) {
+            const rxDoc = currentPrescriptions.find(p => p._id === prescriptionId);
+
+            if (rxDoc && rxDoc.medications) {
+                const med = rxDoc.medications.find(m => m.name === medName);
+
+                if (med) {
+                    const user = API_CONFIG.getUser();
+                    
+                    document.getElementById('modalPatientName').innerText = user ? user.name : "Student";
+                    document.getElementById('modalPrescriptionDate').innerText = new Date(rxDoc.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+
+                    document.getElementById('modalMedName').innerText = (med.name || 'Medication') + " Prescription";
+                    document.getElementById('displayMed').innerText = med.name || 'N/A';
+                    document.getElementById('displayDosage').innerText = med.dosage || 'N/A';
+                    document.getElementById('displayFrequency').innerText = med.frequency || 'N/A';
+                    document.getElementById('displayDuration').innerText = med.duration || 'N/A';
+                    document.getElementById('displayQuantity').innerText = med.quantity ? `${med.quantity} units` : 'N/A';
+                    document.getElementById('displayNotes').innerText = med.instructions || "No specific instructions.";
+                    
+                    document.getElementById('prescriptionModal').style.display = 'flex';
+                }
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            menu.classList.toggle('active');
+            overlay.style.display = menu.classList.contains('active') ? 'block' : 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target.className === 'modal-overlay') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

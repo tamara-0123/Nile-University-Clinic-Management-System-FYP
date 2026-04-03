@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-s.css">
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="navbar-area">
+        <nav class="nav">
+            <a href="homepage-s.html">
+                <img src="image.png" alt="Nile Logo" class="logo">
+            </a>
+
+            <div class="nav-links">
+                <a href="homepage-s.html" class="active">Home</a>
+                <a href="appointments-s.html">Appointments</a>
+                <a href="prescriptions-s.html">Prescriptions</a>
+                <a href="medical-history.html">Medical History</a>
+            </div>
+
+            <button class="logout" onclick="handleLogout()">Logout</button>
+
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-content">
+
+        <div class="hero">
+            <div class="user-name">
+                <p class="welcome">Welcome <br> <span class="user">Cynthia George</span></p>
+            </div>
+            <div class="user-class">
+                <div class="left">
+                    <p class="header">USER</p>
+                    <p class="content">Student</p>
+                </div>
+                <div class="right">
+                    <i class="fa-solid fa-school"></i>
+                </div>
+            </div>
+            <div class="id-num-box">
+                <div class="left">
+                    <p class="header">STUDENT ID</p>
+                    <p class="content">20220000</p>
+                </div>
+                <div class="right">
+                    <i class="fa-regular fa-id-badge"></i>
+                </div>
+            </div>
+            <div class="quick-book">
+                <button class="book" onclick="window.location.href='appointments-s.html'">+ Book Appointment</button>
+            </div>
+        </div>
+
+        <div class='cards'>
+            <div class='card next'>
+                <p class="card-title">Next Appointment</p>
+                <div id="nextApptContainer">
+                    <p class="card-content" id="nextApptDate">Loading...</p>
+                    <p class="card-content" id="nextApptDoc"></p>
+                </div>
+                <a href="appointments-s.html">
+                    <p class="card-link">View details</p>
+                </a>
+            </div>
+            <div class='card'>
+                <p class="card-title">Total Appointments</p>
+                <p class="card-number" id="totalApptCount">0</p>
+                <a href="appointments-s.html">
+                    <p class="card-link">View all appointments</p>
+                </a>
+            </div>
+            <div class='card'>
+                <p class="card-title">Issued Prescriptions</p>
+                <p class="card-number" id="activePrescriptionCount">0</p>
+                <a href="prescriptions-s.html">
+                    <p class="card-link">View all prescriptions</p>
+                </a>
+            </div>
+            <div class='card'>
+                <p class="card-title">Notifications</p>
+                <p class="card-number"><span id="unreadNotifCount">0</span> <span class="card-content">unread</span></p>
+                <a href="#notifications">
+                    <p class="card-link">View notifications</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="more-details">
+            <div class="med-history">
+                <div class="more-header">
+                    <h2>Recent Medical History</h2>
+                    <i class="fa-solid fa-file-medical"></i>
+                </div>
+                <div id="recentHistoryList">
+                    <p style="padding:10px; color:#666;">Loading history...</p>
+                </div>
+            </div>
+
+            <div class="prescriptions">
+                <div class="more-header">
+                    <h2>Recent Prescriptions</h2>
+                    <i class="fa-solid fa-prescription-bottle-medical"></i>
+                </div>
+                <div id="recentPrescriptionList">
+                    <p style="padding:10px; color:#666;">Loading prescriptions...</p>
+                </div>
+                <a href="prescriptions-s.html" class="card-link">View prescription history</a>
+            </div>
+        </div>
+
+        <div class="notifications" id="notifications">
+            <div class="more-header">
+                <h2>Notifications</h2>
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <div id="notificationList">
+                <p style="padding:10px; color:#666;">No new notifications</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="feedback-section">
+                <div class="more-header">
+                    <h2>Feedback Form</h2>
+                    <i class="fa-solid fa-comment-medical"></i>
+                </div>
+                <form id="feedbackForm">
+                    <label for="feedbackReason">Reason for Feedback</label>
+                    <select id="feedbackReason">
+                        <option>Appointment Delay</option>
+                        <option>Prescription Issue</option>
+                        <option>Other</option>
+                    </select>
+                    <label for="feedbackDetails">Details</label>
+                    <textarea id="feedbackDetails" rows="7" placeholder="Please provide more information..."></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+            <!--FAQ Section -->
+            <div class="faq-section">
+                <div class="more-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <i class="fa-solid fa-clipboard-question"></i>
+                </div>
+
+                <div class="faq-list">
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            What are the clinic working hours?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            The clinic operates for 24hrs, Monday to Sunday.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How do I book an appointment?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            You can book through this portal by navigating to the Appointments tab.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Can I reschedule appointments?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Yes, appointments can be rescheduled.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Do I need my student ID to visit the clinic?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Yes, you must present your student ID for verification.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Are laboratory tests available?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Yes, the clinic has an in-house lab for basic tests.
+                        </div>
+                    </div>
+
+
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Are emergency services available?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            The clinic handles minor emergencies; severe cases are referred.
+                        </div>
+                    </div>
+
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            Is mental health support provided?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Yes, mental health counselling is available upon request.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How long are medical records kept?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Medical records are maintained throughout your study duration.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>Nile University Clinic Management System &copy; 2026 Nile Uinversity of Nigeria - All Rights Reserved</p>
+        </div>
+    </div>
+    <div class="side-nav" id="mobileMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a href="homepage-s.html">Home</a>
+        <a href="appointments-s.html">Appointments</a>
+        <a href="prescriptions-s.html">Prescriptions</a>
+        <a href="medical-history.html">History</a>
+        <button class="logout" onclick="handleLogout()"
+            style="width: 80%; margin: 20px auto; display:block;">Logout</button>
+    </div>
+
+    <div id="menuOverlay" onclick="toggleMenu()"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
+    </div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        // AUTHENTICATION AND DATA POPULATION
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Check Auth
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+                return;
+            }
+
+            // 2. Populate User Data
+            const user = API_CONFIG.getUser();
+            if (user) {
+                const userElements = document.querySelectorAll('.user');
+                userElements.forEach(el => el.textContent = user.name || user.studentID);
+
+                const idElements = document.querySelectorAll('.id-num-box .content');
+                idElements.forEach(el => el.textContent = user.studentID || user.idNumber);
+
+                const roleElements = document.querySelectorAll('.user-class .content');
+                roleElements.forEach(el => el.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1));
+            }
+
+            const currentPath = decodeURIComponent(window.location.pathname);
+            const currentPage = currentPath.split("/").pop();
+
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+
+                const linkPage = linkHref.split("/").pop();
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+                else if (currentPage === "" && linkPage === "homepage-s.html") {
+                    link.classList.add('active');
+                }
+            });
+
+            // 3. FETCH DASHBOARD DATA
+            try {
+                // A. Appointments
+                const apptResponse = await API_CONFIG.patient.getAppointmentHistory();
+                if (apptResponse.success) {
+                    const appointments = apptResponse.appointments;
+
+                    // Total count
+                    document.getElementById('totalApptCount').innerText = appointments.length;
+
+                    // Next Appointment (Future only)
+                    const now = new Date();
+                    const upcoming = appointments
+                        .filter(a => new Date(a.date) > now && a.status !== 'cancelled' && a.status !== 'completed')
+                        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                    if (upcoming.length > 0) {
+                        const next = upcoming[0];
+                        const date = new Date(next.date);
+                        document.getElementById('nextApptDate').innerText = `Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                        document.getElementById('nextApptDoc').innerText = `Doctor: ${next.doctor?.name || 'Assigned Doctor'}`;
+                    } else {
+                        document.getElementById('nextApptDate').innerText = "No upcoming appointments";
+                    }
+                }
+
+                // B. Prescriptions
+                const rxResponse = await API_CONFIG.patient.getPrescriptions();
+                if (rxResponse.success) {
+                    const prescriptions = rxResponse.prescriptions;
+
+                    // Flatten medications for counting
+                    let medCount = 0;
+                    prescriptions.forEach(p => {
+                        if (p.medications) medCount += p.medications.length;
+                    });
+                    document.getElementById('activePrescriptionCount').innerText = medCount;
+
+                    // Render Recent Prescriptions
+                    const list = document.getElementById('recentPrescriptionList');
+                    if (prescriptions.length === 0) {
+                        list.innerHTML = '<p style="padding:10px; color:#666;">No recent prescriptions</p>';
+                    } else {
+                        list.innerHTML = prescriptions.slice(0, 2).map(p => { // Show last 2
+                            const meds = p.medications.map(m => m.name).join(', ');
+                            return `
+                                <div class="prescription-card ${p.isActive ? 'pres-active' : ''}">
+    <div class="pres-left">
+        <div class="pres-date">
+            Date: ${new Date(p.createdAt).toLocaleDateString()}
+        </div>
+        <div class="pres-meds">
+            ${meds}
+        </div>
+    </div>
+
+    <div class="pres-right">
+        <span class="pres-count">
+            ${p.medications.length} item${p.medications.length !== 1 ? 's' : ''}
+        </span>
+    </div>
+</div>
+`;
+                        }).join('');
+                    }
+                }
+
+                // C. Notifications
+                const notifResponse = await API_CONFIG.request('/notifications');
+
+                if (notifResponse && notifResponse.notifications) {
+                    const notifs = notifResponse.notifications;
+                    const list = document.getElementById('notificationList');
+
+                    // Only show first 3 notifications
+                    const visibleNotifs = notifs.slice(0, 5);
+
+                    // Set badge count to number displayed
+                    document.getElementById('unreadNotifCount').innerText = visibleNotifs.length;
+
+                    if (visibleNotifs.length === 0) {
+                        list.innerHTML = '<p style="padding:10px; color:#666;">No new notifications</p>';
+                    } else {
+                        list.innerHTML = visibleNotifs.map(n => `
+            <div class="notification">
+                <p class="notif-content">${n.message}</p>
+                <div class="notif-active">
+                    <div class="green-flash"></div>
+                    <p class="notif-date">New</p>
+                </div>
+            </div>
+        `).join('');
+                    }
+                }
+
+                // D. Medical History (Consultations)
+                const histResponse = await API_CONFIG.patient.getMedicalHistory();
+                if (histResponse.success && histResponse.history) {
+                    const history = histResponse.history;
+                    const list = document.getElementById('recentHistoryList');
+
+                    if (history.length === 0) {
+                        list.innerHTML = '<p style="padding:10px; color:#666;">No recent history</p>';
+                    } else {
+                        list.innerHTML = history.slice(0, 3).map(h => `
+                            <div class="visit-card">
+    <div class="visit-info">
+        <div class="visit-date">
+            ${new Date(h.createdAt).toLocaleDateString()}
+        </div>
+        <div class="visit-diagnosis">
+            ${h.diagnosis || 'Pending diagnosis'}
+        </div>
+    </div>
+
+    <a href="medical-history.html" class="visit-link">
+        View Record
+    </a>
+</div>
+
+                        `).join('');
+                    }
+                }
+
+
+            } catch (error) {
+                console.error("Dashboard Load Error:", error);
+            }
+        });
+
+        // Add missing API methods if not in api-config.js yet (Check consistency)
+        if (!API_CONFIG.patient.getAppointmentHistory) {
+            API_CONFIG.patient.getAppointmentHistory = () => API_CONFIG.request('/patient/appointments');
+        }
+        if (!API_CONFIG.patient.getPrescriptions) {
+            API_CONFIG.patient.getPrescriptions = () => API_CONFIG.request('/patient/prescriptions');
+        }
+        if (!API_CONFIG.patient.getMedicalHistory) {
+            API_CONFIG.patient.getMedicalHistory = () => API_CONFIG.request('/patient/medical-record');
+        }
+
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                menu.classList.add('active');
+                overlay.style.display = 'block';
+            }
+        }
+
+        function handleLogout() {
+            const confirmLogout = confirm("Are you sure you want to log out?");
+            if (confirmLogout) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+        // Feedback Submission
+        const feedbackForm = document.getElementById('feedbackForm');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const reason = document.getElementById('feedbackReason').value;
+                const details = document.getElementById('feedbackDetails').value;
+
+                if (!reason || !details) {
+                    alert("Please fill in all fields.");
+                    return;
+                }
+
+                try {
+                    const response = await API_CONFIG.request('/patient/feedback', {
+                        method: 'POST',
+                        body: JSON.stringify({ reason, details })
+                    });
+
+                    if (response.success) {
+                        alert("Thank you for your feedback! It has been submitted successfully.");
+                        feedbackForm.reset();
+                    }
+                } catch (error) {
+                    alert(error.message || "Failed to submit feedback.");
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>

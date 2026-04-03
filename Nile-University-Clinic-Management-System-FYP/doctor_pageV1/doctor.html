@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor Dashboard - Nile University CMS</title>
+  <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="doctor.css">
+  
+  <style>
+    /* Additional styles for diagnosis dropdown */
+    .consultation-section {
+      padding: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #333;
+    }
+    
+    .diagnosis-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: "Poppins", sans-serif;
+      font-size: 0.95rem;
+      background-color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .diagnosis-select:hover {
+      border-color: var(--primary-blue);
+    }
+    
+    .diagnosis-select:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(6, 6, 186, 0.1);
+    }
+    
+    .other-diagnosis {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: "Poppins", sans-serif;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .other-diagnosis:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(6, 6, 186, 0.1);
+    }
+    
+    .consultation-notes {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: "Poppins", sans-serif;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 120px;
+      transition: all 0.3s ease;
+    }
+    
+    .consultation-notes:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 2px rgba(6, 6, 186, 0.1);
+    }
+    
+    /* Button container styling */
+    .button-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    
+    .btn-save-draft {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: "Poppins", sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-save-draft:hover {
+      background: #5a6268;
+    }
+    
+    .btn-finalize-notes {
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: "Poppins", sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-finalize-notes:hover {
+      opacity: 0.9;
+    }
+    
+    .tab-panel {
+      display: none;
+    }
+    
+    .tab-panel.active {
+      display: block;
+    }
+    
+    .prescription-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: #f9f9f9;
+      border-radius: 6px;
+      border-left: 3px solid var(--primary-blue);
+    }
+    
+    .prescription-item:hover {
+      background: #f0f0f0;
+    }
+    
+    @media (max-width: 768px) {
+      .consultation-section {
+        padding: 15px;
+      }
+      
+      .diagnosis-select,
+      .other-diagnosis,
+      .consultation-notes {
+        font-size: 0.9rem;
+      }
+      
+      .button-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Topbar -->
+  <div class="navbar">
+    <nav class="nav">
+      <a href="#">
+        <img src="image.png" alt="Nile University Logo" class="logo">
+      </a>
+      <div class="nav-links">
+        <a href="./homepage-d.html">Home</a>
+        <a href="./doctor.html" class="active">Dashboard</a>
+        <a href="./doctor-schedule.html">My Schedule</a>
+        <a href="./doctor-profile.html">Records</a>
+      </div>
+      <div class="nav-buttons">
+        <button class="logout" onclick="handleLogout()">Logout</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Page -->
+  <div class="container" role="main">
+    <div class="hero fade-in">
+      <div>
+        <div class="title">Doctor Dashboard — Dr. <span id="doc-name-display">Umar</span></div>
+        <div class="meta">Today • -- -- -- • -- appointments</div>
+      </div>
+      <div class="modal-overlay" id="slotModal">
+        <div class="modal">
+          <h3>Create Availability Slot</h3>
+
+          <label>Date</label>
+          <input type="date" id="slotDate">
+
+          <label>Start Time</label>
+          <input type="time" id="startTime">
+
+          <label>End Time</label>
+          <input type="time" id="endTime">
+
+          <div class="modal-actions">
+            <button class="btn btn-outline" id="cancelSlot">Cancel</button>
+            <button class="btn btn-primary" id="saveSlot">Save Slot</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="main">
+      <!-- Left: schedule -->
+      <aside class="left panel fade-in" aria-labelledby="schedule">
+        <div class="header">
+          <h3 id="schedule">Today's Appointments</h3>
+          <div style="color:var(--muted);font-size:0.9rem" id="countLabel">--</div>
+        </div>
+
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="Search patient name or ID"
+            aria-label="Search appointments">
+        </div>
+
+        <div class="filters" role="tablist" aria-label="Filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="waiting">Waiting</button>
+          <button class="chip" data-filter="admitted">Admitted</button>
+          <button class="chip" data-filter="completed">Completed</button>
+        </div>
+
+        <div class="appt-list" id="appointmentList" tabindex="0" aria-live="polite">
+          <!-- Appointment items injected by JS -->
+        </div>
+      </aside>
+
+      <!-- Right: workspace -->
+      <section class="workspace" aria-label="Patient workspace">
+        <div class="patient-header panel fade-in" id="patientHeader">
+          <div class="patient-meta">
+            <h2 id="pName">Select an appointment</h2>
+            <div class="sub" id="pSub">Patient • ID</div>
+            <div class="patient-tags" id="pTags"></div>
+          </div>
+          <div class="patient-actions" id="patientActions">
+            <button class="btn btn-outline" id="btnStart">Start</button>
+            <button class="btn btn-primary" id="btnFinalize">Finalize & Complete</button>
+          </div>
+        </div>
+
+        <div class="grid-small fade-in">
+          <div class="card vitals" id="vitalsCard" aria-live="polite">
+            <h4>Latest Vitals</h4>
+            <p id="vitalsContent">No vitals recorded</p>
+            <div style="margin-top:0.6rem">
+              <button class="btn-small" id="addVitalsBtn">Edit Vitals</button>
+            </div>
+          </div>
+
+          <div class="card last-visit">
+            <h4>Last Visit</h4>
+            <p id="lastVisit">No previous visit</p>
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="notes">Consultation Notes</button>
+            <button class="tab" data-tab="prescriptions">Prescriptions</button>
+            <button class="tab" data-tab="history">History</button>
+          </div>
+
+          <div class="tab-panels">
+            <!-- Notes Panel -->
+            <div id="notesPanel" class="tab-panel active">
+              <div class="consultation-section">
+                <div class="form-group">
+                  <label>Diagnosis <span style="color: red;">*</span></label>
+                  <select id="diagnosisSelect" class="diagnosis-select">
+                    <option value="">Select a diagnosis...</option>
+                  </select>
+                  <input type="text" id="otherDiagnosis" class="other-diagnosis" placeholder="Enter custom diagnosis" style="display: none;">
+                </div>
+                <div class="form-group">
+                  <label>Consultation Notes</label>
+                  <textarea id="consultationNotes" class="consultation-notes" rows="6" placeholder="Enter your clinical notes here..."></textarea>
+                </div>
+                <div class="button-container">
+                  <button class="btn btn-outline" id="btnSaveDraftNotes">
+                    Save Draft
+                  </button>
+                  <button class="btn btn-primary" id="btnFinalize">
+                     Finalize & Complete
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prescriptions Panel -->
+            <div id="prescriptionsPanel" class="tab-panel">
+              <div style="padding: 20px;">
+                <div style="margin-bottom: 20px;">
+                  <label style="display: block; margin-bottom: 8px; font-weight: 600;">Drug Name</label>
+                  <div style="display: flex; gap: 10px;">
+                    <input type="text" id="drugNameInput" placeholder="Enter drug name (e.g., Amoxicillin)" style="flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit;">
+                    <button id="addDrugBtn" style="padding: 12px 24px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                      <i class="fa-solid fa-plus"></i> Add
+                    </button>
+                  </div>
+                  <p style="font-size: 12px; color: #666; margin-top: 8px;">
+                    <i class="fa-solid fa-info-circle"></i> Only drug name is required. Pharmacist will add dosage and instructions.
+                  </p>
+                </div>
+                
+                <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                  <label style="font-weight: 600;">Prescription List</label>
+                  <button id="clearAllBtn" class="btn-small btn-outline" style="padding: 5px 10px; font-size: 12px;">
+                    <i class="fa-solid fa-trash"></i> Clear All
+                  </button>
+                </div>
+                
+                <div id="prescriptionListDisplay" style="border: 1px solid #eee; border-radius: 8px; min-height: 150px; max-height: 300px; overflow-y: auto; background: #fff;">
+                  <div style="padding: 15px; text-align: center; color: #999; font-style: italic;">No prescriptions added yet. Add drug names above.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- History Panel -->
+            <div id="historyPanel" class="tab-panel">
+              <div style="padding: 20px;">
+                <label style="font-weight:600;display:block;margin-bottom:0.6rem">Patient History</label>
+                <div id="historyListContainer" style="height: 300px; max-height: 400px; overflow-y: auto;">
+                  <div id="historyList">
+                    <!-- history items injected by JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+  
+  <div class="modal-overlay" id="vitalsModal">
+    <div class="modal">
+      <h3>Add Patient Vitals</h3>
+
+      <label>Blood Pressure</label>
+      <input type="text" id="bp" placeholder="e.g. 120/80">
+
+      <label>Temperature (°C)</label>
+      <input type="number" id="temp" step="0.1">
+
+      <label>Pulse (bpm)</label>
+      <input type="number" id="pulse">
+
+      <label>Weight (kg)</label>
+      <input type="number" id="weight">
+
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelVitals">Cancel</button>
+        <button class="btn btn-primary" id="saveVitals">Save Vitals</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    function handleLogout() {
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+        window.location.href = '../Shared pages/login.html';
+      }
+    }
+    
+    // Tab switching functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tab');
+      const panels = {
+        notes: document.getElementById('notesPanel'),
+        prescriptions: document.getElementById('prescriptionsPanel'),
+        history: document.getElementById('historyPanel')
+      };
+      
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const targetTab = tab.getAttribute('data-tab');
+          
+          // Update active tab styling
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Update active panel
+          Object.values(panels).forEach(panel => {
+            if (panel) panel.classList.remove('active');
+          });
+          
+          if (panels[targetTab]) {
+            panels[targetTab].classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+  <script src="../Shared pages/api-config.js"></script>
+  <script src="doctor.js"></script>
+
+</body>
+
+</html>

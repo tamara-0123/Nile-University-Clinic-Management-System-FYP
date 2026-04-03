@@ -1,0 +1,460 @@
+/* 1. Global Reset & Fixes */
+:root {
+    --primary-blue: #0606ba;
+    --bg-light: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: var(--bg-light);
+    color: #333;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* 2. Navigation */
+.navbar {
+    padding: 20px 40px
+}
+
+.nav {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    padding: 20px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 100px;
+    border: 1px solid #d5d5d5;
+}
+
+.logo {
+    height: 40px;
+    width: 150px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+}
+
+.nav-links a:hover {
+    color: #0606ba;
+}
+
+.nav-links li a:active,
+.nav-links li a:focus {
+    color: #0606ba;
+    border-bottom: 2px solid #0606ba;
+    padding-bottom: 3px;
+    font-weight: 600;
+}
+.nav-links a:hover, .nav-links a.active { 
+    color: var(--primary-blue); 
+    font-weight: 600; 
+}
+.nav-links a.active {
+    border-bottom: 2px solid var(--primary-blue);
+    padding-bottom: 3px;
+}
+
+.nav-links a:hover, 
+.nav-links a.active {
+    color: var(--primary-blue);
+    font-weight: 700; /* Bold active state */
+    border-bottom: 2px solid var(--primary-blue);
+}
+
+.links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.logout {
+    color: white;
+    background-color: red;
+    border: none;
+    height: 40px;
+    width: 80px;
+    border-radius: 50px;
+    font-family: "Poppins", sans-serif;
+}
+
+.logout:hover {
+    opacity: 0.8;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--primary-blue);
+}
+
+/* 3. Timeline & Content Styling */
+.page-title {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.history-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+}
+
+.timeline {
+    border-left: 3px solid #ddd;
+    padding-left: 30px;
+    margin-left: 20px;
+}
+
+.history-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: 0.3s;
+}
+
+.history-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-blue);
+}
+
+/* The dot on the timeline */
+.history-card::before {
+    content: '';
+    position: absolute;
+    left: -41px;
+    top: 25px;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    border: 4px solid var(--white);
+    box-shadow: 0 0 0 3px #eee;
+}
+
+.history-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--primary-blue);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.history-card h3 {
+    margin: 5px 0;
+    font-size: 1.4rem;
+}
+
+.history-meta {
+    color: #777;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.history-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-view {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-report-alt {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 4. Modal System (The Fix) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.diagnosis-box {
+    background: #f0f2ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-outline {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* 5. Side Nav (Mobile) */
+.side-nav {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    z-index: 2000;
+    transition: 0.4s;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.side-nav.active {
+    right: 0;
+}
+
+.side-nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.close-btn {
+    font-size: 2rem;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+/* --- New Styles for Profile Section --- */
+.profile-overview {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--primary-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    flex: 1;
+}
+
+.detail-item {
+    min-width: 150px;
+}
+
+.detail-item label {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.detail-item p {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.badge {
+    display: inline-block;
+    background: #f0f2ff;
+    color: var(--primary-blue);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-edit {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.btn-edit:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Form Styles inside Modal */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: "Poppins", sans-serif;
+    font-size: 0.95rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(6, 6, 186, 0.1);
+}
+
+.sub-group {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+}
+
+@media (max-width: 768px) {
+    .profile-overview {
+        flex-direction: column;
+    }
+
+    .btn-edit {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* 6. Mobile Responsiveness */
+@media (max-width: 768px) {
+
+    .nav-links,
+    .nav .logout {
+        display: none;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    .history-container {
+        padding: 0 15px;
+    }
+
+    .timeline {
+        margin-left: 10px;
+        padding-left: 25px;
+    }
+
+    .history-card::before {
+        left: -36px;
+    }
+
+    /* Adjusted for smaller timeline margin */
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}

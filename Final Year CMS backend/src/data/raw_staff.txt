@@ -1,0 +1,10 @@
+Role | ID | Name
+doctor | D001 | Dr. Yusuf
+doctor | D002 | Dr. Sarah Ahmed
+nurse | N001 | Nurse Fatima
+nurse | N002 | Nurse Ibrahim
+principal-doctor | PD001 | Prof. Haruna
+principal-doctor | PD002 | Dr. Kenneth
+pharmacist | PHARM001 | Pharm. Lemo
+pharmacist | PHARM002 | Pharm. Adebayo
+

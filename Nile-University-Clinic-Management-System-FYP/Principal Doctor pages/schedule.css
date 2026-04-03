@@ -1,0 +1,691 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+:root {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --accent: #0606ba;
+  --muted: #666;
+  --radius: 10px;
+  font-family: 'Poppins', sans-serif
+}
+
+* {
+  box-sizing: border-box
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: #222;
+  font-family: var(--font-family, 'Poppins', sans-serif)
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem
+}
+
+
+.top {}
+
+.navbar {
+  padding: 20px 40px
+}
+
+.nav {
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  padding: 20px;
+  border-radius: 50px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  border: 1px solid #d5d5d5
+}
+
+.logo {
+  height: 40px;
+  width: 150px
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: black
+}
+
+.nav-links a:hover {
+  color: var(--accent)
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center
+}
+
+.nav-buttons {
+  display: flex;
+  gap: .5rem
+}
+
+.logout {
+  color: white;
+  background-color: red;
+  border: none;
+  height: 40px;
+  width: 80px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif
+}
+
+.profile {
+  color: black;
+  background-color: white;
+  border: 2px solid #e3e2e2;
+  height: 40px;
+  width: 80px;
+  border-radius: 50px;
+  font-family: 'Poppins', sans-serif
+}
+
+/* Navigation Link Styles */
+.nav-links a {
+    text-decoration: none;
+    color: #333; /* Default color */
+    transition: 0.3s;
+    font-size: 16px;
+    padding-bottom: 5px; /* Space for the underline */
+}
+
+.nav-links a:hover {
+    color: #0606ba; /* Hover color */
+}
+
+/* The Active State */
+.nav-links a.active {
+    color: #0606ba;
+    font-weight: 700;
+    border-bottom: 2px solid #0606ba;
+}
+
+/* header / hero look */
+.header {
+  margin: 10px 20px;
+  padding: 18px;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid #d5d5d5
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: black;
+  font-weight: 700
+}
+
+.controls {
+  display: flex;
+  gap: .5rem;
+  align-items: center
+}
+
+.controls select,
+.controls input[type=date],
+.controls input[type=time] {
+  padding: .45rem .6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08)
+}
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  
+  font-size: 10px;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer
+}
+
+.controls button{
+  font-size: 12px;
+  width: 300px;
+  h
+}
+
+.btn.alt {
+  background: #eeeeee;
+  color: #333333
+}
+
+/* main layout */
+.main {
+  display: grid;
+  /* grid-template-columns: 1fr 300px; */
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem 1rem;
+  width: 100%;
+}
+
+.calendar {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: none;
+  border: 1px solid #d5d5d5
+}
+
+.calendar .toolbar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-bottom: .75rem
+}
+
+.calendar .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: #fafbff;
+  border-radius: 6px;
+  overflow: hidden
+}
+
+.calendar .cell {
+  background: #fff;
+  padding: .6rem;
+  min-height: 80px;
+  border-right: 1px solid rgba(0, 0, 0, 0.04)
+}
+
+.calendar .cell h4 {
+  margin: 0 0 .35rem;
+  font-size: .85rem;
+  color: #333
+}
+
+.appointment {
+  display: block;
+  background: #eef6ff;
+  border-left: 4px solid var(--accent);
+  padding: .3rem .5rem;
+  margin-bottom: .35rem;
+  border-radius: 6px;
+  color: #072a4b;
+  text-decoration: none
+}
+
+.side {
+  background: var(--card);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: none;
+  border: 1px solid #d5d5d5
+}
+
+.side h3 {
+  margin-top: 0
+}
+
+.app-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem
+}
+
+.app-item {
+  padding: .5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: center
+}
+
+.muted {
+  color: var(--muted);
+  font-size: .9rem
+}
+
+/* =========================
+   Modal Overlay & Animation
+   ========================= */
+.modal {
+  position: fixed;
+  inset: 0; /* top:0, right:0, bottom:0, left:0 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.5); /* Slightly darker for better focus */
+  backdrop-filter: blur(2px); /* Optional: nice visual touch */
+  z-index: 1000;
+  
+  /* Hiding/Showing Logic (Do not change) */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.modal[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* =========================
+   Modal Content Box
+   ========================= */
+.modal-content {
+  background: white; /* Fallback if var(--card) isn't defined */
+  background: var(--card, #ffffff);
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px; /* Optimal width for forms */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e0e0e0;
+}
+
+#modalTitle {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.75rem;
+}
+
+/* =========================
+   Form Layout & Inputs
+   ========================= */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Helper to ensure labels take up equal space in a row */
+.form-row label, 
+.form-row .spacer {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 0.35rem;
+}
+
+/* Input Styling */
+input, select, textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box; /* Critical for padding calculation */
+  transition: border-color 0.15s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #0606ba; /* Primary Blue focus */
+  box-shadow: 0 0 0 3px rgba(6, 6, 186, 0.1);
+}
+
+textarea {
+  resize: vertical; /* Allow vertical resizing only */
+}
+
+/* =========================
+   Buttons
+   ========================= */
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.btn {
+  padding: 0.6rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn.primary {
+  background-color: #0606ba; /* Primary Blue */
+  color: white;
+}
+
+.btn.alt {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #d5d5d5;
+}
+
+@media (max-width:900px) {
+  .main {
+    grid-template-columns: 1fr
+  }
+
+  .nav {
+    padding: 12px
+  }
+}
+/* Add these styles to your existing schedule.css */
+
+.calendar .grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cell {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  min-height: 200px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cell h4 {
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  color: #2c3e50;
+}
+
+.cell h4.today {
+  color: #3498db;
+  font-weight: 800;
+}
+
+.appointment {
+  display: block;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+}
+
+.appointment:hover {
+  transform: translateX(2px);
+}
+
+.appointment.scheduled {
+  background-color: #fff3e0;
+  border-left: 3px solid #f39c12;
+  color: #e67e22;
+}
+
+.appointment.completed {
+  background-color: #e8f5e8;
+  border-left: 3px solid #27ae60;
+  color: #27ae60;
+}
+.appointment.cancelled {
+  background-color: #fbeaea;
+  border-left: 3px solid #e74c3c;
+  color: #e74c3c;
+}
+.appointment.admitted {
+  background-color: #f0f0f0;
+  border-left: 3px solid #95a5a6;
+  color: #7f8c8d;
+}
+
+.appointment-time {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.appointment-title {
+  font-weight: 500;
+}
+
+.appointment-type {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-left: 0.5rem;
+}
+
+/* Appointments list styling */
+.app-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.app-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.app-item.empty {
+  justify-content: center;
+  color: #95a5a6;
+  font-style: italic;
+}
+
+.appointment-info {
+  flex: 2;
+}
+
+.appointment-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.appointment-status.scheduled {
+  background: #fff3e0;
+  color: #f39c12;
+}
+
+.appointment-status.completed {
+  background: #e8f5e8;
+  color: #27ae60;
+}
+
+.appointment-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #7f8c8d;
+  transition: color 0.2s;
+}
+
+.btn-icon:hover {
+  color: #3498db;
+}
+
+.btn-icon.del:hover {
+  color: #e74c3c;
+}
+
+/* Modal form updates */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: #34495e;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal[aria-hidden="false"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .calendar .grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .appointment-actions {
+    align-self: flex-end;
+  }
+}
+/* Add this to your schedule.css */
+.appointment.checked-in {
+    border-left: 3px solid #004085;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.appointment.waiting {
+    background-color: #cce5ff;
+    border-left: 3px solid #004085;
+    color: #004085;
+}
+
+/* Make sure these are all defined */
+.appointment.scheduled {
+    background-color: #fff3e0;
+    border-left: 3px solid #f39c12;
+    color: #e67e22;
+}
+
+.appointment.completed {
+    background-color: #e8f5e8;
+    border-left: 3px solid #27ae60;
+    color: #27ae60;
+}
+
+.appointment.cancelled {
+    background-color: #fbeaea;
+    border-left: 3px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.appointment.admitted {
+      background-color: #9428c63c;
+  color: #9428c6;
+  border-left: 3px solid #9428c6;
+}

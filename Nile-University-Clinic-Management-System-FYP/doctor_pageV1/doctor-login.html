@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Login | Nile University</title>
+  <link rel="stylesheet" href="doctor-login.css" />
+</head>
+
+<body>
+
+  <header class="login-header">
+    <img src="image.png" alt="Nile University Logo">
+    <h1>Nile University Clinic</h1>
+  </header>
+
+  <main class="login-container">
+    <div class="login-card">
+      <h2>Doctor Login</h2>
+      <p class="subtitle">Access your dashboard</p>
+
+      <form id="loginForm">
+        <label>Email / Staff ID</label>
+        <input type="text" id="email" placeholder="doctor@nileuniversity.edu.ng" required>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+
+      <a href="../Shared pages/reset-password.html" class="forgot">Forgot password?</a>
+    </div>
+  </main>
+
+  <script src="../Shared pages/api-config.js"></script>
+  <script src="doctor-login.js"></script>
+
+
+</body>
+
+</html>

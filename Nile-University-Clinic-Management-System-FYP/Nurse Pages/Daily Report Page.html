@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Report - Nile University CMS</title>
+  <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =========================================
+       CSS STYLES
+       ========================================= */
+    :root {
+      --primary: #003399;
+      /* Nile Blue */
+      --primary-600: #1A56DB;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --text-dark: #333;
+      --text-muted: #6c757d;
+      --border: #e0e0e0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --danger: #d32f2f;
+      --success: #28a745;
+      --primary-blue: #0606ba;
+      --admitted: #6610f2;
+      --waiting: #ffc107;
+      --completed: #28a745;
+      --checked-in: #17a2b8;
+      --border-color: #d5d5d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 3rem;
+    }
+
+    /* Loading indicator */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-text {
+      margin-top: 10px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* =========================================
+   2. NAVIGATION BAR (FIXED)
+   ========================================= */
+    .top {
+      width: 100%;
+    }
+
+    .navbar {
+      padding: 20px 40px;
+      background-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      height: 70px;
+      /* Slight increase for better spacing */
+      display: flex;
+      flex-direction: row;
+      background-color: var(--white);
+      padding: 0 30px;
+      border-radius: 50px;
+      align-items: center;
+      /* KEY FIX: Use space-between and nowrap to prevent breaking */
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 15px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      max-width: 150px;
+      display: block;
+      flex-shrink: 0;
+      /* Prevents logo squishing */
+    }
+
+    /* Links Container */
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 1;
+      /* Allows links container to shrink if needed */
+    }
+
+    /* Link Styling */
+    .nav-links a {
+      text-decoration: none;
+      color: black;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      /* Prevents text wrap */
+      padding-bottom: 3px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary-blue);
+      font-weight: 700;
+      /* Bold active state */
+      border-bottom: 2px solid var(--primary-blue);
+    }
+
+    .logout {
+      color: white;
+      background-color: red;
+      border: none;
+      height: 40px;
+      padding: 0 25px;
+      /* Use padding instead of fixed width */
+      border-radius: 50px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      /* Prevents button squishing */
+      white-space: nowrap;
+    }
+
+    .logout:hover {
+      opacity: 0.9;
+    }
+
+    /* --- Layout & Hero --- */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .hero .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    /* Date Selector in Hero */
+    .date-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-control input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    /* --- Stats Grid --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+
+    .stat-card i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .stat-card h3 {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 0;
+    }
+
+    .stat-card .count {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 5px 0;
+    }
+
+    .stat-change {
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .positive {
+      color: var(--success);
+    }
+
+    .negative {
+      color: var(--danger);
+    }
+
+    /* --- Panel Styles --- */
+    .panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .panel-header {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --- Breakdown Bars --- */
+    .breakdown-list {
+      margin-top: 1rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .breakdown-label {
+      flex: 1;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .breakdown-value {
+      width: 80px;
+      text-align: right;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .breakdown-bar-bg {
+      flex: 2;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .breakdown-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* --- Table --- */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .report-table th {
+      text-align: left;
+      padding: 1rem;
+      background: #f8f9fa;
+      font-size: 0.85rem;
+      color: #555;
+      border-bottom: 2px solid #eee;
+    }
+
+    .report-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+
+    .status-completed {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .status-waiting {
+      color: #e67e22;
+      font-weight: 600;
+    }
+
+    .status-scheduled {
+      color: #6c757d;
+      font-weight: 600;
+    }
+
+    .status-checked-in {
+      color: #17a2b8;
+      font-weight: 600;
+    }
+
+    .status-waiting {
+      color: #ffc107;
+      font-weight: 600;
+    }
+
+    .status-consultation {
+      color: #fd7e14;
+      font-weight: 600;
+    }
+
+    .status-completed {
+      color: #28a745;
+      font-weight: 600;
+    }
+
+    .status-cancelled {
+      color: #dc3545;
+      font-weight: 600;
+    }
+
+    .status-admitted {
+      color: #6610f2;
+      font-weight: 600;
+    }
+
+    .status-unknown {
+      color: #6c757d;
+      font-weight: 600;
+    }
+
+    /* --- Action Grid --- */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .action-btn {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      background: #f0f7ff;
+      transform: translateY(-2px);
+    }
+
+    .action-btn i {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .action-btn span {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.9rem;
+    }
+
+    /* --- Notes --- */
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--border);
+      color: #555;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    /* --- Modals --- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-lg {
+      max-width: 600px;
+    }
+
+    /* Generated Report Modal Styles */
+    .report-summary-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #f0f0f0;
+      padding: 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .report-summary-item strong {
+      color: var(--primary);
+    }
+
+    /* Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading report data...</div>
+  </div>
+
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Nile University Logo" class="logo">
+        </a>
+        <div class="nav-links">
+          <a href="./homepage-n.html">Home</a>
+          <a href="./Patient List Page.html">Patient List</a>
+          <a href="./Patient Vitals Entry Page.html">Vitals Entry</a>
+          <a href="./Patient Referral Page.html">Referrals</a>
+          <a href="./Daily Report Page.html" class="active">Daily Report</a>
+        </div>
+        <div class="nav-buttons">
+          <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container fade-in">
+
+    <div class="hero">
+      <div>
+        <div class="title"><i class="fas fa-chart-bar"></i> Daily Clinic Report</div>
+        <div class="meta">Overview of clinic activities and metrics</div>
+      </div>
+      <div class="date-control">
+        <button class="btn btn-outline" onclick="changeDate(-1)"><i class="fas fa-chevron-left"></i></button>
+        <input type="date" id="reportDate">
+        <button class="btn btn-outline" onclick="changeDate(1)"><i class="fas fa-chevron-right"></i></button>
+        <button class="btn btn-primary" onclick="showGeneratedReport()">Generate Report</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <i class="fas fa-user-injured"></i>
+        <h3>Total Appointments</h3>
+        <p class="count" id="statTotal"></p>
+        <span class="stat-change" id="totalChange"></span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-clock"></i>
+        <h3>Avg Wait Time</h3>
+        <p class="count" id="avgWaitTime"></p>
+        <span class="stat-change" id="waitComparison">+5 min vs avg</span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-user-md"></i>
+        <h3>Consultations</h3>
+        <p class="count" id="statConsult"></p>
+        <span class="stat-change positive">Completed</span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-file-prescription"></i>
+        <h3>Prescriptions</h3>
+        <p class="count" id="statRx"></p>
+        <span class="stat-change">Issued</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span><i class="fas fa-list-ol"></i> Patient Breakdown</span>
+      </div>
+      <div class="breakdown-list">
+        <div class="breakdown-item">
+          <span class="breakdown-label">Checked In</span>
+          <div class="breakdown-bar-bg">
+            <div class="breakdown-bar-fill" id="barCheckedIn" style="background:#17a2b8;"></div>
+          </div>
+          <span class="breakdown-value" id="valueCheckedIn">0</span>
+        </div>
+
+        <div class="breakdown-item">
+          <span class="breakdown-label">Waiting / Scheduled</span>
+          <div class="breakdown-bar-bg">
+            <div class="breakdown-bar-fill" id="barWaiting" style="background:#ffc107;"></div>
+          </div>
+          <span class="breakdown-value" id="valueWaiting">0</span>
+        </div>
+
+        <div class="breakdown-item">
+          <span class="breakdown-label">Admitted</span>
+          <div class="breakdown-bar-bg">
+            <div class="breakdown-bar-fill" id="barAdmitted" style="background:#6610f2;"></div>
+          </div>
+          <span class="breakdown-value" id="valueAdmitted">0</span>
+        </div>
+
+        <div class="breakdown-item">
+          <span class="breakdown-label">Cancelled</span>
+          <div class="breakdown-bar-bg">
+            <div class="breakdown-bar-fill" id="barCancelled" style="background:#dc3545;"></div>
+          </div>
+          <span class="breakdown-value" id="valueCancelled">0</span>
+        </div>
+
+        <div class="breakdown-item">
+          <span class="breakdown-label">Completed</span>
+          <div class="breakdown-bar-bg">
+            <div class="breakdown-bar-fill" id="barCompleted" style="background:#28a745;"></div>
+          </div>
+          <span class="breakdown-value" id="valueCompleted">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span><i class="fas fa-file-medical-alt"></i> Today's Patient Log</span>
+      </div>
+      <div class="table-responsive">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient Name</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Wait Time</th>
+              <th>Condition</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dailyPatientsTable">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span><i class="fas fa-cogs"></i> Actions</span>
+      </div>
+      <div class="action-grid">
+        <div class="action-btn" onclick="exportDirect('pdf')">
+          <i class="fas fa-file-pdf"></i>
+          <span>Export PDF</span>
+        </div>
+        <div class="action-btn" onclick="exportDirect('excel')">
+          <i class="fas fa-file-excel"></i>
+          <span>Export Excel</span>
+        </div>
+        <div class="action-btn" onclick="openModal('emailModal')">
+          <i class="fas fa-envelope"></i>
+          <span>Email Report</span>
+        </div>
+        <div class="action-btn" onclick="printView()">
+          <i class="fas fa-print"></i>
+          <span>Print View</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <span><i class="fas fa-edit"></i> Report Notes</span>
+      </div>
+      <textarea class="form-control" rows="3" placeholder="Add observations for today's report..."></textarea>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="alert('Notes Saved Successfully!')">Save Notes</button>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="generatedReportModal" class="modal-overlay">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-circle"></i> Report Generated</h3>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 15px;">Summary for <strong id="modalDateDisplay">--</strong></p>
+
+        <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+          <div class="report-summary-item">
+            <span>Total Appointments</span>
+            <strong id="modalTotal">28</strong>
+          </div>
+          <div class="report-summary-item">
+            <span>Completed Consultations</span>
+            <strong id="modalConsult">22</strong>
+          </div>
+          <div class="report-summary-item">
+            <span>Average Wait Time</span>
+            <strong id="modalWaitTime">25 mins</strong>
+          </div>
+          <div class="report-summary-item" style="border-bottom: none;">
+            <span>Prescriptions Issued</span>
+            <strong id="modalRx">18</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions" style="justify-content: flex-end;">
+        <button class="btn btn-outline close-btn">Close</button>
+        <button class="btn btn-primary" onclick="exportDirect('pdf')">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="emailModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Email Report</h3><button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Recipient Email</label>
+          <input type="email" class="form-control" placeholder="admin@nileuniversity.edu.ng">
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" onclick="alert('Email Sent Successfully!')">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal text-center">
+      <h3>Confirm Logout</h3>
+      <p>End your session?</p>
+      <div style="display:flex; justify-content:center; gap:10px; margin-top:15px;">
+        <button class="btn btn-outline close-btn">Cancel</button>
+        <button class="btn btn-danger" onclick="window.location.href='../Shared Pages/login.html'">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Shared pages/api-config.js"></script>
+  <script>
+    // Cache for report data
+    const reportCache = new Map();
+    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+
+    // Track current request to prevent race conditions
+    let currentRequestId = 0;
+
+    // Store previous day's data for comparison
+    let previousDayData = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthStatus();
+
+      // Set today's date
+      const reportDateInput = document.getElementById('reportDate');
+      reportDateInput.valueAsDate = new Date();
+
+      // Load report and breakdown for today
+      loadDailyReport(reportDateInput.value);
+      updatePatientBreakdown(reportDateInput.value);
+
+      reportDateInput.addEventListener('change', function (e) {
+        const selectedDate = e.target.value;
+        loadDailyReport(selectedDate);
+        updatePatientBreakdown(selectedDate);
+      });
+
+      setupModals();
+
+      // Page animation
+      setTimeout(() => document.querySelector('.container').classList.add('visible'), 100);
+    });
+
+    // ====================
+    // LOADING INDICATOR
+    // ====================
+    function showLoading() {
+      document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+
+    function hideLoading() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+    }
+
+    // ====================
+    // AUTH CHECK
+    // ====================
+    function checkAuthStatus() {
+      const token = API_CONFIG.getToken();
+      if (!token) window.location.href = '../Shared pages/login.html';
+    }
+
+    // ====================
+    // CACHE MANAGEMENT
+    // ====================
+    function getCachedReport(date) {
+      const cached = reportCache.get(date);
+      if (cached && (Date.now() - cached.timestamp) < CACHE_DURATION) {
+        return cached.data;
+      }
+      return null;
+    }
+
+    function cacheReport(date, data) {
+      reportCache.set(date, {
+        data: data,
+        timestamp: Date.now()
+      });
+    }
+
+    // ====================
+    // FETCH REPORT WITH CACHE
+    // ====================
+    async function fetchReportWithCache(date) {
+      // Check cache first
+      const cached = getCachedReport(date);
+      if (cached) {
+        return cached;
+      }
+
+      // Fetch from API
+      try {
+        const data = await API_CONFIG.request(`/nurse/report/daily?queryDate=${date}`);
+        if (data.success && data.report) {
+          cacheReport(date, data);
+        }
+        return data;
+      } catch (error) {
+        console.error('Failed to fetch report:', error);
+        throw error;
+      }
+    }
+
+    // ====================
+    // CALCULATE AVERAGE WAIT TIME
+    // ====================
+    function calculateAverageWaitTime(patients) {
+      if (!patients || patients.length === 0) return 0;
+
+      const waitTimes = patients
+        .map(p => {
+          // Parse wait time from string like "25 min" or return null if invalid
+          if (p.waitTime && p.waitTime !== '--' && !p.waitTime.includes('ongoing')) {
+            const minutes = parseInt(p.waitTime);
+            return isNaN(minutes) ? null : minutes;
+          }
+          return null;
+        })
+        .filter(time => time !== null);
+
+      if (waitTimes.length === 0) return 0;
+
+      const total = waitTimes.reduce((sum, time) => sum + time, 0);
+      return Math.round(total / waitTimes.length);
+    }
+
+    // ====================
+    // FETCH PREVIOUS DAY DATA (Parallel)
+    // ====================
+    async function fetchPreviousDayDataParallel(date) {
+      const prevDate = new Date(date);
+      prevDate.setDate(prevDate.getDate() - 1);
+      const prevDateStr = prevDate.toISOString().split('T')[0];
+
+      try {
+        // Use cache for previous day too
+        const data = await fetchReportWithCache(prevDateStr);
+        return data.report || null;
+      } catch (error) {
+        console.error('Failed to fetch previous day data:', error);
+        return null;
+      }
+    }
+
+    // ====================
+    // UPDATE YESTERDAY COMPARISON
+    // ====================
+    function updateYesterdayComparison(currentTotal, previousData) {
+      const totalChangeElem = document.getElementById('totalChange');
+
+      if (previousData && previousData.totalPatientsTriaged !== undefined) {
+        const previousTotal = previousData.totalPatientsTriaged || 0;
+        const difference = currentTotal - previousTotal;
+
+        if (difference > 0) {
+          totalChangeElem.innerHTML = `<span class="positive">+${difference} from yesterday</span>`;
+        } else if (difference < 0) {
+          totalChangeElem.innerHTML = `<span class="negative">${difference} from yesterday</span>`;
+        } else {
+          totalChangeElem.innerHTML = `<span>Same as yesterday</span>`;
+        }
+      } else {
+        totalChangeElem.innerHTML = 'No previous data';
+      }
+    }
+
+    // ====================
+    // UPDATE WAIT TIME COMPARISON
+    // ====================
+    function updateWaitTimeComparison(currentAvgWait, previousData) {
+      const waitComparisonElem = document.getElementById('waitComparison');
+
+      if (previousData && previousData.patients) {
+        const previousAvgWait = calculateAverageWaitTime(previousData.patients);
+        const historicalAvg = 20; // This could be configured or calculated from more historical data
+
+        if (currentAvgWait > 0) {
+          const difference = currentAvgWait - historicalAvg;
+          const comparisonText = difference > 0 ? `+${difference} min vs avg` : `${difference} min vs avg`;
+
+          if (difference > 0) {
+            waitComparisonElem.innerHTML = `<span class="negative">${comparisonText}</span>`;
+          } else if (difference < 0) {
+            waitComparisonElem.innerHTML = `<span class="positive">${comparisonText}</span>`;
+          } else {
+            waitComparisonElem.innerHTML = `<span>Equal to avg</span>`;
+          }
+        } else {
+          waitComparisonElem.innerHTML = 'No wait time data';
+        }
+      } else {
+        waitComparisonElem.innerHTML = 'No comparison data';
+      }
+    }
+
+    // ====================
+    // UPDATE UI WITH REPORT DATA
+    // ====================
+    function updateUIWithReport(report, date) {
+      const tbody = document.getElementById("dailyPatientsTable");
+      const statTotal = document.getElementById("statTotal");
+      const statConsult = document.getElementById("statConsult");
+      const statRx = document.getElementById("statRx");
+      const avgWaitTimeElem = document.getElementById("avgWaitTime");
+      const modalWaitTime = document.getElementById("modalWaitTime");
+
+      // Calculate average wait time (only for completed appointments)
+      const avgWait = calculateAverageWaitTime(report.patients || []);
+
+      // Update summary cards
+      const currentTotal = report.totalPatientsTriaged || 0;
+      statTotal.innerText = currentTotal;
+      statConsult.innerText = report.totalConsults || 0;
+      statRx.innerText = report.totalPrescriptions || 0;
+      avgWaitTimeElem.innerText = avgWait > 0 ? `${avgWait} min` : 'N/A';
+      if (modalWaitTime) modalWaitTime.innerText = avgWait > 0 ? `${avgWait} mins` : 'N/A';
+
+      // Function to get status class and display text
+      function getStatusDisplay(status) {
+        const statusMap = {
+          'scheduled': { class: 'status-scheduled', text: 'Scheduled' },
+          'checked-in': { class: 'status-checked-in', text: 'Checked In' },
+          'waiting': { class: 'status-waiting', text: 'Waiting' },
+          'in-consultation': { class: 'status-consultation', text: 'In Consultation' },
+          'completed': { class: 'status-completed', text: 'Completed' },
+          'cancelled': { class: 'status-cancelled', text: 'Cancelled' },
+          'admitted': { class: 'status-admitted', text: 'Admitted' }
+        };
+        return statusMap[status] || { class: 'status-unknown', text: status || 'Unknown' };
+      }
+
+      // Update table
+      if (report.patients && report.patients.length > 0) {
+        tbody.innerHTML = report.patients.map(p => {
+          const statusDisplay = getStatusDisplay(p.status);
+          return `
+            <tr>
+              <td>${p.id}</td>
+              <td><strong>${p.name}</strong></td>
+              <td>${p.checkInTime || '--'}</td>
+              <td>${p.completionTime || '--'}</td>
+              <td>${p.waitTime || '--'}</td>
+              <td>${p.condition || '--'}</td>
+              <td><span class="${statusDisplay.class}">${statusDisplay.text}</span></td>
+            </tr>
+          `;
+        }).join('');
+      } else {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No records for this date.</td></tr>';
+      }
+
+      // Update patient breakdown
+      updateBreakdownFromReport(report);
+    }
+
+    function updateBreakdownFromReport(report) {
+      const checkedInElem = document.getElementById("valueCheckedIn");
+      const waitingElem = document.getElementById("valueWaiting");
+      const admittedElem = document.getElementById("valueAdmitted");
+      const cancelledElem = document.getElementById("valueCancelled");
+      const completedElem = document.getElementById("valueCompleted");
+
+      const checkedInBar = document.getElementById("barCheckedIn");
+      const waitingBar = document.getElementById("barWaiting");
+      const admittedBar = document.getElementById("barAdmitted");
+      const cancelledBar = document.getElementById("barCancelled");
+      const completedBar = document.getElementById("barCompleted");
+
+      const patients = report.patients || [];
+      const total = patients.length;
+
+      const checkedInCount = patients.filter(p =>
+        p.status === 'checked-in' || p.status === 'in-consultation'
+      ).length;
+
+      const waitingCount = patients.filter(p =>
+        p.status === 'waiting' || p.status === 'scheduled'
+      ).length;
+
+      const admittedCount = patients.filter(p =>
+        p.status === 'admitted'
+      ).length;
+
+      const cancelledCount = patients.filter(p =>
+        p.status === 'cancelled'
+      ).length;
+
+      const completedCount = patients.filter(p =>
+        p.status === 'completed'
+      ).length;
+
+      const safePercent = (num) => total > 0 ? (num / total) * 100 : 0;
+
+      if (checkedInElem) checkedInElem.innerText = checkedInCount;
+      if (waitingElem) waitingElem.innerText = waitingCount;
+      if (admittedElem) admittedElem.innerText = admittedCount;
+      if (cancelledElem) cancelledElem.innerText = cancelledCount;
+      if (completedElem) completedElem.innerText = completedCount;
+
+      if (checkedInBar) checkedInBar.style.width = `${safePercent(checkedInCount)}%`;
+      if (waitingBar) waitingBar.style.width = `${safePercent(waitingCount)}%`;
+      if (admittedBar) admittedBar.style.width = `${safePercent(admittedCount)}%`;
+      if (cancelledBar) cancelledBar.style.width = `${safePercent(cancelledCount)}%`;
+      if (completedBar) completedBar.style.width = `${safePercent(completedCount)}%`;
+    }
+
+    // ====================
+    // LOAD DAILY REPORT (Optimized with parallel requests)
+    // ====================
+    async function loadDailyReport(date) {
+      const requestId = ++currentRequestId;
+      showLoading();
+
+      try {
+        // Fetch current day data (with cache)
+        const currentData = await fetchReportWithCache(date);
+
+        // Check if this is still the current request
+        if (requestId !== currentRequestId) {
+          return;
+        }
+
+        if (currentData.success && currentData.report) {
+          // Update UI with current report
+          updateUIWithReport(currentData.report, date);
+
+          // Fetch previous day data in parallel for comparisons
+          fetchPreviousDayDataParallel(date).then(prevData => {
+            // Check if this is still the current request
+            if (requestId === currentRequestId) {
+              previousDayData = prevData;
+
+              // Update comparisons with previous data
+              const currentTotal = currentData.report.totalPatientsTriaged || 0;
+              const avgWait = calculateAverageWaitTime(currentData.report.patients || []);
+
+              updateYesterdayComparison(currentTotal, prevData);
+              updateWaitTimeComparison(avgWait, prevData);
+            }
+          });
+        } else {
+          // Handle no data case
+          const tbody = document.getElementById("dailyPatientsTable");
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">No report data found.</td></tr>';
+
+          // Reset values
+          document.getElementById("statTotal").innerText = '0';
+          document.getElementById("statConsult").innerText = '0';
+          document.getElementById("statRx").innerText = '0';
+          document.getElementById("avgWaitTime").innerText = 'N/A';
+          document.getElementById('totalChange').innerHTML = 'No data';
+          document.getElementById('waitComparison').innerHTML = 'No data';
+
+          // Reset breakdown
+          const zeros = ['valueCheckedIn', 'valueWaiting', 'valueAdmitted', 'valueCancelled', 'valueCompleted'];
+          zeros.forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem) elem.innerText = '0';
+          });
+
+          const bars = ['barCheckedIn', 'barWaiting', 'barAdmitted', 'barCancelled', 'barCompleted'];
+          bars.forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem) elem.style.width = '0%';
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load daily report:', error);
+        if (requestId === currentRequestId) {
+          const tbody = document.getElementById("dailyPatientsTable");
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:red;">Failed to load report data.</td></tr>';
+        }
+      } finally {
+        if (requestId === currentRequestId) {
+          hideLoading();
+        }
+      }
+    }
+
+    // ====================
+    // UPDATE PATIENT BREAKDOWN (Now uses cached data)
+    // ====================
+    async function updatePatientBreakdown(date) {
+      try {
+        const data = await fetchReportWithCache(date);
+        if (!data.success || !data.report) return;
+
+        updateBreakdownFromReport(data.report);
+      } catch (err) {
+        console.error("Failed to update patient breakdown:", err);
+      }
+    }
+
+    // ====================
+    // CHANGE REPORT DATE (Optimized)
+    // ====================
+    function changeDate(days) {
+      const input = document.getElementById('reportDate');
+      const date = new Date(input.value);
+      date.setDate(date.getDate() + days);
+      input.valueAsDate = date;
+
+      const isoDate = date.toISOString().split('T')[0];
+
+      // Cancel any pending requests for previous date
+      currentRequestId++;
+
+      loadDailyReport(isoDate);
+      updatePatientBreakdown(isoDate);
+    }
+
+    // ====================
+    // MODALS
+    // ====================
+    function setupModals() {
+      document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.onclick = () => document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+      });
+
+      window.onclick = (e) => {
+        if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none';
+      };
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    async function showGeneratedReport() {
+      const date = document.getElementById('reportDate').value;
+      await loadDailyReport(date);
+
+      const report = {
+        total: document.getElementById('statTotal').innerText,
+        consult: document.getElementById('statConsult').innerText,
+        rx: document.getElementById('statRx').innerText,
+        waitTime: document.getElementById('avgWaitTime').innerText,
+        date: date
+      };
+
+      document.getElementById('modalTotal').innerText = report.total;
+      document.getElementById('modalConsult').innerText = report.consult;
+      document.getElementById('modalRx').innerText = report.rx;
+      document.getElementById('modalWaitTime').innerText = report.waitTime;
+      document.getElementById('modalDateDisplay').innerText = report.date;
+
+      openModal('generatedReportModal');
+    }
+
+    // ====================
+    // EXPORT REPORT
+    // ====================
+function exportDirect(type) {
+  if (type === 'pdf') {
+    // This will trigger the browser's print dialog
+    window.print();
+    return;
+  }
+
+  if (type === 'excel') {
+    const table = document.getElementById("dailyPatientsTable");
+    const reportDate = document.getElementById('reportDate')?.value || new Date().toISOString().split('T')[0];
+    const formattedReportDate = reportDate.replace(/-/g, '');
+
+    let csv = [];
+
+    // Add report metadata at the top
+    csv.push(`"Report Date: ${reportDate}"`);
+    csv.push(`"Generated On: ${new Date().toLocaleString()}"`);
+    csv.push(''); // Empty line for spacing
+
+    // Add headers
+    csv.push(["ID", "Patient Name", "Time In", "Time Out", "Wait Time", "Condition", "Status"].join(","));
+
+    // Add table data
+    for (const row of table.rows) {
+      const cols = row.querySelectorAll("td, th");
+      const rowData = [];
+      cols.forEach(col => rowData.push('"' + col.innerText + '"'));
+      csv.push(rowData.join(","));
+    }
+
+    // Add summary at the bottom
+    csv.push(''); // Empty line for spacing
+    csv.push(`"Report Summary for ${reportDate}"`);
+    csv.push(`"Total Patients: ${table.rows.length}"`);
+    csv.push(`"Generated: ${new Date().toLocaleString()}"`);
+
+    const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `Clinic_Report_${formattedReportDate}.csv`;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.remove();
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+}
+
+    // ====================
+    // PRINT VIEW (New function similar to second file)
+    // ====================
+    function printView() {
+      // Get current report data
+      const reportDate = document.getElementById('reportDate')?.value || new Date().toISOString().split('T')[0];
+      const totalPatients = document.getElementById('statTotal')?.innerText || '0';
+      const totalConsult = document.getElementById('statConsult')?.innerText || '0';
+      const totalRx = document.getElementById('statRx')?.innerText || '0';
+      const avgWaitTime = document.getElementById('avgWaitTime')?.innerText || 'N/A';
+
+      // Get patient table data
+      const table = document.getElementById("dailyPatientsTable");
+      let patientsHtml = '';
+
+      if (table && table.rows.length > 0) {
+        for (const row of table.rows) {
+          const cols = row.querySelectorAll("td");
+          if (cols.length > 0) {
+            patientsHtml += '<tr>';
+            cols.forEach(col => {
+              // Preserve status classes for styling
+              const statusSpan = col.querySelector('span');
+              if (statusSpan && statusSpan.className) {
+                patientsHtml += `<td><span class="${statusSpan.className}">${statusSpan.innerText}</span></td>`;
+              } else {
+                patientsHtml += `<td>${col.innerText}</td>`;
+              }
+            });
+            patientsHtml += '</tr>';
+          }
+        }
+      } else {
+        patientsHtml = '<tr><td colspan="7" style="text-align:center;">No patients found</td></tr>';
+      }
+
+      // Get breakdown data
+      const checkedIn = document.getElementById('valueCheckedIn')?.innerText || '0';
+      const waiting = document.getElementById('valueWaiting')?.innerText || '0';
+      const admitted = document.getElementById('valueAdmitted')?.innerText || '0';
+      const cancelled = document.getElementById('valueCancelled')?.innerText || '0';
+      const completed = document.getElementById('valueCompleted')?.innerText || '0';
+
+      // Open new window
+      const printWindow = window.open('', '_blank');
+
+      const summary = `
+    <div class="print-report">
+      <div class="report-header">
+        <img src="image.png" alt="Nile University Logo" style="height: 50px;">
+        <h1>Nile University Clinic</h1>
+        <h2>Daily Report</h2>
+        <p class="report-date">Date: ${new Date(reportDate).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })}</p>
+      </div>
+      
+      <div class="summary-cards">
+        <div class="stat-card">
+          <h3>Total Appointments</h3>
+          <div class="stat-value">${totalPatients}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Consultations</h3>
+          <div class="stat-value">${totalConsult}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Prescriptions</h3>
+          <div class="stat-value">${totalRx}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Avg Wait Time</h3>
+          <div class="stat-value">${avgWaitTime}</div>
+        </div>
+      </div>
+      
+      <h3>Patient Status Breakdown</h3>
+      <table class="breakdown-table">
+        <tr>
+          <th>Status</th>
+          <th>Count</th>
+        </tr>
+        <tr>
+          <td>Checked In</td>
+          <td>${checkedIn}</td>
+        </tr>
+        <tr>
+          <td>Waiting / Scheduled</td>
+          <td>${waiting}</td>
+        </tr>
+        <tr>
+          <td>Admitted</td>
+          <td>${admitted}</td>
+        </tr>
+        <tr>
+          <td>Cancelled</td>
+          <td>${cancelled}</td>
+        </tr>
+        <tr>
+          <td>Completed</td>
+          <td>${completed}</td>
+        </tr>
+      </table>
+      
+      <h3>Patient Log</h3>
+      <table class="patients-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>Time In</th>
+            <th>Time Out</th>
+            <th>Wait Time</th>
+            <th>Condition</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${patientsHtml}
+        </tbody>
+      </table>
+      
+      <div class="report-footer">
+        <p>Report generated on: ${new Date().toLocaleString()}</p>
+        <p>Nile University Clinic Management System</p>
+      </div>
+    </div>
+  `;
+
+      printWindow.document.write(`
+    <html>
+      <head>
+        <title>Nile University Clinic - Daily Report (${reportDate})</title>
+        <style>
+          body { 
+            font-family: 'Poppins', Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: white;
+            color: #333;
+          }
+          .print-report {
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+          .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #003399;
+          }
+          .report-header h1 {
+            color: #003399;
+            margin: 10px 0 5px;
+            font-size: 24px;
+          }
+          .report-header h2 {
+            color: #666;
+            margin: 0 0 10px;
+            font-size: 18px;
+            font-weight: 500;
+          }
+          .report-date {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+          }
+          .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+          }
+          .stat-card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+          }
+          .stat-card h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+          }
+          .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #003399;
+          }
+          h3 {
+            color: #003399;
+            margin: 20px 0 10px;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+          }
+          th {
+            background: #003399;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 500;
+          }
+          td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+          }
+          .breakdown-table {
+            width: 50%;
+            margin: 15px 0;
+          }
+          .breakdown-table th {
+            background: #666;
+          }
+          .patients-table {
+            margin-top: 20px;
+          }
+          .status-completed { color: #28a745; font-weight: 600; }
+          .status-waiting { color: #e67e22; font-weight: 600; }
+          .status-scheduled { color: #6c757d; font-weight: 600; }
+          .status-checked-in { color: #17a2b8; font-weight: 600; }
+          .status-consultation { color: #fd7e14; font-weight: 600; }
+          .status-cancelled { color: #dc3545; font-weight: 600; }
+          .status-admitted { color: #6610f2; font-weight: 600; }
+          .report-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 11px;
+          }
+          @media print {
+            body { padding: 0; }
+            button { display: none; }
+            .summary-cards { break-inside: avoid; }
+            table { break-inside: auto; }
+            tr { break-inside: avoid; }
+          }
+        </style>
+      </head>
+      <body>
+        ${summary}
+        <div style="text-align: center; margin-top: 20px;">
+          <button onclick="window.print()" style="
+            background: #003399;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+          ">Print Report</button>
+          <button onclick="window.close()" style="
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-family: 'Poppins', sans-serif;
+          ">Close</button>
+        </div>
+      </body>
+    </html>
+  `);
+
+      printWindow.document.close();
+    }
+
+    function handleLogout() {
+      if (confirm("Are you sure you want to log out?")) {
+        API_CONFIG.auth.logout();
+      }
+    }
+  </script>
+</body>
+
+</html>

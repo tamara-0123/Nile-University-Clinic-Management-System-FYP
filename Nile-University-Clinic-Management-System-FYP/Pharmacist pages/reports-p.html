@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Reports - Nile CMS</title>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Styles remain exactly as provided, unchanged */
+        :root {
+            --primary: #0606ba;
+            --primary-dark: #05059e;
+            --primary-light: #eef2ff;
+            --success: #10b981;
+            --success-light: #d1fae5;
+            --warning: #f59e0b;
+            --warning-light: #fef3c7;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --info: #3b82f6;
+            --info-light: #dbeafe;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --radius: 16px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            color: var(--gray-800);
+        }
+
+        /* Navigation */
+        .navbar-area {
+            padding: 20px 40px;
+            background: transparent;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 0 30px;
+            border-radius: 50px;
+            border: 1px solid #d5d5d5;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray-600);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 3px;
+        }
+
+        .logout {
+            color: white;
+            background-color: red;
+            border: none;
+            height: 40px;
+            width: 90px;
+            border-radius: 50px;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout:hover {
+            opacity: 0.8;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 40px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            border-radius: var(--radius);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            border: 1px solid #d5d5d5;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header h1 i {
+            color: var(--primary);
+        }
+
+        .page-header p {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid #d5d5d5;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            border: 1px solid #d5d5d5;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 6px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(6, 6, 186, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid #d5d5d5;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            border: 1px solid #d5d5d5;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-header h3 i {
+            color: var(--primary);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid #d5d5d5;
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            background: var(--gray-50);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .report-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .report-table tr:hover td {
+            background: var(--gray-50);
+        }
+
+        .summary-row td {
+            background: var(--gray-100);
+            font-weight: 600;
+            text-align: center;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        /* Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .urgency-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .urgency-emergency {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .urgency-urgent {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .urgency-routine {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: var(--gray-600);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background: var(--gray-50);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background: var(--gray-800);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px 20px;
+            }
+            .navbar-area {
+                padding: 15px 20px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .filter-bar {
+                flex-direction: column;
+            }
+            .filter-group {
+                width: 100%;
+            }
+            .action-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar-area">
+        <nav class="nav">
+            <a href="homepage-p.html">
+                <img src="image.png" alt="Nile Logo" class="logo">
+            </a>
+            <div class="nav-links">
+                <a href="homepage-p.html">Home</a>
+                <a href="prescriptions-p.html">Prescriptions</a>
+                <a href="pharmacy-report.html" class="active">Reports</a>
+            </div>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>
+                <i class="fas fa-chart-line"></i>
+                Pharmacy Reports
+            </h1>
+            <p>Comprehensive analytics and reports for prescription management</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--primary-light); color: var(--primary);">
+                    <i class="fas fa-prescription-bottle"></i>
+                </div>
+                <div class="stat-value" id="statPending">0</div>
+                <div class="stat-label">Pending Prescriptions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--success-light); color: var(--success);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-value" id="statCompleted">0</div>
+                <div class="stat-label">Completed Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--danger-light); color: var(--danger);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-value" id="statTotal">0</div>
+                <div class="stat-label">Total Prescriptions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: var(--warning-light); color: var(--warning);">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="stat-value" id="statCompletionRate">0%</div>
+                <div class="stat-label">Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-line"></i> Prescription Trends</h3>
+                    <i class="fas fa-chart-simple" style="color: var(--primary);"></i>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-pie"></i> Urgency Distribution</h3>
+                    <i class="fas fa-chart-pie" style="color: var(--primary);"></i>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="urgencyChart"></canvas>
+                </div>
+            </div>
+        </div>
+         <!-- Filter Bar (with date and urgency/status filters) -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <input type="date" id="fromDate">
+            </div>
+            <div class="filter-group">
+                <input type="date" id="toDate">
+            </div>
+            <div class="filter-group">
+                <select id="urgencyFilter">
+                    <option value="all">All</option>
+                    <option value="emergency">Emergency</option>
+                    <option value="urgent">Urgent</option>
+                    <option value="routine">Routine</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select id="statusFilter">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-secondary" id="exportBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
+                <button class="btn btn-secondary" id="printBtn"><i class="fas fa-print"></i> Print</button>
+            </div>
+        </div>
+
+        <!-- Top Medications Table -->
+        <div class="table-container" style="margin-bottom: 24px;">
+            <div class="table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Medication Name</th>
+                            <th>Times Prescribed</th>
+                            <th>% of Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topMedicationsBody">
+                        <tr><td colspan="4" style="text-align: center; padding: 40px;">Loading data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+       
+
+        <!-- Detailed Prescriptions Table -->
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Patient</th>
+                            <th>Medication</th>
+                            <th>Doctor</th>
+                            <th>Urgency</th>
+                            <th>Status</th>
+                            <th>Completed By</th>
+                        </tr>
+                    </thead>
+                    <tbody id="prescriptionsBody">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading prescriptions...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prescription Details Modal -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-prescription"></i> Prescription Details</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" onclick="window.print()">Print Details</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        let allPending = [];      // all pending from API (not filtered)
+        let allCompleted = [];    // all completed from API (already date-filtered)
+        let pendingPrescriptions = [];
+        let completedPrescriptions = [];
+        let trendsChart = null;
+        let urgencyChart = null;
+
+        // Set default dates (last 30 days)
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        document.getElementById('fromDate').valueAsDate = thirtyDaysAgo;
+        document.getElementById('toDate').valueAsDate = today;
+
+        // Helper: check if a date falls within range
+        function isDateInRange(dateStr, fromDate, toDate) {
+            if (!dateStr) return false;
+            const d = new Date(dateStr);
+            if (fromDate && d < new Date(fromDate)) return false;
+            if (toDate && d > new Date(toDate)) return false;
+            return true;
+        }
+
+        // Filter pending by creation date
+        function filterPendingByDate(pendingArray, fromDate, toDate) {
+            if (!fromDate && !toDate) return [...pendingArray];
+            return pendingArray.filter(p => isDateInRange(p.createdAt, fromDate, toDate));
+        }
+
+        // Combined filtered prescriptions
+        function getFilteredPrescriptions() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const urgency = document.getElementById('urgencyFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            let pending = [...pendingPrescriptions];
+            let completed = [...completedPrescriptions];
+
+            // Apply date filter to pending (completed already filtered by API)
+            pending = filterPendingByDate(pending, fromDate, toDate);
+
+            let combined = [];
+            if (status === 'all' || status === 'pending') combined.push(...pending);
+            if (status === 'all' || status === 'completed') combined.push(...completed);
+
+            if (urgency !== 'all') {
+                combined = combined.filter(p => p.urgency === urgency);
+            }
+            return combined;
+        }
+
+        // Update stats based on current filters
+        function updateStatsFromData() {
+            const pending = pendingPrescriptions;
+            const completed = completedPrescriptions;
+            const total = pending.length + completed.length;
+            const completionRate = total > 0 ? ((completed.length / total) * 100).toFixed(1) : 0;
+
+            // Completed today: count from completed where completion date is today
+            const todayStr = new Date().toDateString();
+            const completedToday = completed.filter(p => {
+                const compDate = p.completedAt ? new Date(p.completedAt).toDateString() : null;
+                return compDate === todayStr;
+            }).length;
+
+            document.getElementById('statPending').textContent = pending.length;
+            document.getElementById('statCompleted').textContent = completedToday;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statCompletionRate').textContent = `${completionRate}%`;
+        }
+
+        // Get top medications from filtered prescriptions
+        function getTopMedications(filteredPrescriptions) {
+            const medicationCount = {};
+            filteredPrescriptions.forEach(p => {
+                if (p.medications && p.medications.length) {
+                    p.medications.forEach(med => {
+                        const medName = med.name;
+                        medicationCount[medName] = (medicationCount[medName] || 0) + 1;
+                    });
+                }
+            });
+            return Object.entries(medicationCount)
+                .map(([name, count]) => ({ name, count }))
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 10);
+        }
+
+        // Render all tables and charts
+        function renderAll() {
+            const filtered = getFilteredPrescriptions();
+            const urgency = document.getElementById('urgencyFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            // Top medications
+            const topMeds = getTopMedications(filtered);
+            const totalCount = filtered.length;
+            const topMedsBody = document.getElementById('topMedicationsBody');
+            if (topMeds.length === 0) {
+                topMedsBody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px;">No medication data available</td></tr>';
+            } else {
+                topMedsBody.innerHTML = topMeds.map((med, index) => {
+                    const percentage = totalCount > 0 ? ((med.count / totalCount) * 100).toFixed(1) : 0;
+                    return `
+                        <tr>
+                            <td><strong>#${index + 1}</strong></td>
+                            <td><strong>${escapeHtml(med.name)}</strong></td>
+                            <td>${med.count} times</td>
+                            <td>${percentage}%</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Detailed prescriptions table
+            const prescriptionsBody = document.getElementById('prescriptionsBody');
+            if (filtered.length === 0) {
+                prescriptionsBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No prescriptions found</td></tr>';
+                return;
+            }
+
+            prescriptionsBody.innerHTML = filtered.map(p => {
+                const patient = p.consultation?.appointment?.patient?.user;
+                const doctor = p.createdBy?.name || p.consultation?.appointment?.doctor?.name || 'N/A';
+                const urgencyClass = p.urgency === 'emergency' ? 'urgency-emergency' :
+                                    p.urgency === 'urgent' ? 'urgency-urgent' : 'urgency-routine';
+                const statusClass = p.status === 'completed' ? 'status-completed' : 'status-pending';
+                const statusText = p.status === 'completed' ? 'Completed' : 'Pending';
+                const completedBy = p.completedBy?.name || (p.status === 'completed' ? 'Pharmacist' : '—');
+                const medications = p.medications?.map(m => m.name).join(', ') || 'No medications';
+                const date = new Date(p.createdAt).toLocaleDateString();
+
+                return `
+                    <tr onclick="viewDetails('${p._id}')" style="cursor: pointer;">
+                        <td>${date}</td>
+                        <td><strong>${escapeHtml(patient?.name || 'Unknown')}</strong><br><small>ID: ${escapeHtml(patient?.studentID || patient?.staffID || 'N/A')}</small></td>
+                        <td>${escapeHtml(medications)}</td>
+                        <td>${escapeHtml(doctor)}</td>
+                        <td><span class="urgency-badge ${urgencyClass}">${p.urgency || 'routine'}</span></td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${escapeHtml(completedBy)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Load data from APIs
+        async function loadData() {
+            try {
+                const fromDate = document.getElementById('fromDate').value;
+                const toDate = document.getElementById('toDate').value;
+
+                // Load pending (no date filter, we'll filter later)
+                const pendingResponse = await API_CONFIG.request('/pharmacist/prescriptions/pending');
+                if (pendingResponse.success) {
+                    allPending = pendingResponse.prescriptions || [];
+                }
+
+                // Load completed with date filter
+                const params = new URLSearchParams();
+                if (fromDate) params.append('fromDate', fromDate);
+                if (toDate) params.append('toDate', toDate);
+                const completedResponse = await API_CONFIG.request(`/pharmacist/prescriptions/history?${params.toString()}`);
+                if (completedResponse.success) {
+                    allCompleted = completedResponse.prescriptions || [];
+                }
+
+                // Apply date filter to pending
+                pendingPrescriptions = filterPendingByDate(allPending, fromDate, toDate);
+                completedPrescriptions = [...allCompleted]; // already filtered
+
+                updateStatsFromData();
+                renderAll();
+                renderCharts();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showToast('Error loading report data', 'error');
+            }
+        }
+
+        // Render charts (using all prescriptions, not filtered by urgency/status)
+        function renderCharts() {
+            const allPrescriptions = [...pendingPrescriptions, ...completedPrescriptions];
+
+            // Monthly trends
+            const monthlyData = {};
+            allPrescriptions.forEach(p => {
+                const date = new Date(p.createdAt);
+                const monthKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                monthlyData[monthKey] = (monthlyData[monthKey] || 0) + 1;
+            });
+            const sortedMonths = Object.keys(monthlyData).sort();
+            const monthlyLabels = sortedMonths.map(m => {
+                const [year, month] = m.split('-');
+                return `${month}/${year.slice(2)}`;
+            });
+            const monthlyValues = sortedMonths.map(m => monthlyData[m]);
+
+            if (trendsChart) trendsChart.destroy();
+            trendsChart = new Chart(document.getElementById('trendsChart'), {
+                type: 'line',
+                data: {
+                    labels: monthlyLabels,
+                    datasets: [{
+                        label: 'Prescriptions',
+                        data: monthlyValues,
+                        borderColor: '#0606ba',
+                        backgroundColor: 'rgba(6, 6, 186, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#0606ba',
+                        pointBorderColor: 'white',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            // Urgency distribution (based on all filtered prescriptions)
+            const urgencyCounts = { emergency: 0, urgent: 0, routine: 0 };
+            allPrescriptions.forEach(p => {
+                const u = p.urgency || 'routine';
+                urgencyCounts[u] = (urgencyCounts[u] || 0) + 1;
+            });
+            if (urgencyChart) urgencyChart.destroy();
+            urgencyChart = new Chart(document.getElementById('urgencyChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Emergency', 'Urgent', 'Routine'],
+                    datasets: [{
+                        data: [urgencyCounts.emergency, urgencyCounts.urgent, urgencyCounts.routine],
+                        backgroundColor: ['#dc2626', '#f97316', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // View prescription details modal
+        async function viewDetails(prescriptionId) {
+            try {
+                const response = await API_CONFIG.request(`/pharmacist/prescription/${prescriptionId}`);
+                if (response.success) {
+                    const p = response.prescription;
+                    const patient = p.consultation?.appointment?.patient?.user;
+                    const doctor = p.createdBy?.name || p.consultation?.appointment?.doctor?.name;
+                    const modalBody = document.getElementById('modalBody');
+                    modalBody.innerHTML = `
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--primary); margin-bottom: 12px;"><i class="fas fa-user"></i> Patient Information</h4>
+                            <div style="background: var(--gray-50); padding: 16px; border-radius: 12px;">
+                                <p><strong>Name:</strong> ${escapeHtml(patient?.name || 'Unknown')}</p>
+                                <p><strong>ID:</strong> ${escapeHtml(patient?.studentID || patient?.staffID || 'N/A')}</p>
+                                <p><strong>Age:</strong> ${patient?.age || 'N/A'} | <strong>Gender:</strong> ${patient?.gender || 'N/A'}</p>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="color: var(--primary); margin-bottom: 12px;"><i class="fas fa-prescription"></i> Prescription Details</h4>
+                            <div style="background: var(--gray-50); padding: 16px; border-radius: 12px;">
+                                <p><strong>Doctor:</strong> ${escapeHtml(doctor || 'N/A')}</p>
+                                <p><strong>Date:</strong> ${new Date(p.createdAt).toLocaleString()}</p>
+                                <p><strong>Urgency:</strong> <span class="urgency-badge urgency-${p.urgency || 'routine'}">${p.urgency || 'routine'}</span></p>
+                                <p><strong>Status:</strong> <span class="status-badge ${p.status === 'completed' ? 'status-completed' : 'status-pending'}">${p.status === 'completed' ? 'Completed' : 'Pending'}</span></p>
+                                ${p.status === 'completed' ? `<p><strong>Completed By:</strong> ${escapeHtml(p.completedBy?.name || 'Pharmacist')}</p>` : ''}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--primary); margin-bottom: 12px;"><i class="fas fa-pills"></i> Medications</h4>
+                            <div style="background: var(--gray-50); padding: 16px; border-radius: 12px;">
+                                ${p.medications && p.medications.length > 0 ? p.medications.map(med => `
+                                    <div style="padding: 12px; border-bottom: 1px solid var(--gray-200);">
+                                        <strong>${escapeHtml(med.name)}</strong><br>
+                                        <span style="font-size: 0.85rem; color: var(--gray-600);">
+                                            ${med.dosage ? `Dosage: ${escapeHtml(med.dosage)}<br>` : ''}
+                                            ${med.frequency ? `Frequency: ${escapeHtml(med.frequency)}<br>` : ''}
+                                            ${med.duration ? `Duration: ${escapeHtml(med.duration)}<br>` : ''}
+                                            ${med.instructions ? `Instructions: ${escapeHtml(med.instructions)}` : ''}
+                                        </span>
+                                    </div>
+                                `).join('') : '<p>No medications recorded</p>'}
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('detailsModal').classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error loading details:', error);
+                showToast('Error loading prescription details', 'error');
+            }
+        }
+
+        // Export CSV
+        function exportToCSV() {
+            const filtered = getFilteredPrescriptions();
+            const headers = ['Date', 'Patient Name', 'Patient ID', 'Doctor', 'Medications', 'Urgency', 'Status', 'Completed By'];
+            const rows = filtered.map(p => {
+                const patient = p.consultation?.appointment?.patient?.user;
+                const medications = p.medications?.map(m => `${m.name} (${m.dosage || 'N/A'})`).join('; ') || 'None';
+                return [
+                    new Date(p.createdAt).toLocaleDateString(),
+                    patient?.name || 'Unknown',
+                    patient?.studentID || patient?.staffID || 'N/A',
+                    p.createdBy?.name || p.consultation?.appointment?.doctor?.name || 'N/A',
+                    medications,
+                    p.urgency || 'routine',
+                    p.status,
+                    p.completedBy?.name || (p.status === 'completed' ? 'Pharmacist' : '—')
+                ];
+            });
+            const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pharmacy_report_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Report exported successfully', 'success');
+        }
+
+        function printView() {
+    const fromDate = document.getElementById('fromDate').value;
+    const toDate = document.getElementById('toDate').value;
+    const fromDateFormatted = fromDate ? new Date(fromDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'All time';
+    const toDateFormatted = toDate ? new Date(toDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'Present';
+
+    const filtered = getFilteredPrescriptions();
+    const total = filtered.length;
+
+    // Prepare top medications data (already computed)
+    const topMeds = getTopMedications(filtered);
+    const totalMedsCount = filtered.reduce((sum, p) => sum + (p.medications?.length || 0), 0);
+
+    // Build HTML for the print window
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Pharmacy Report</title>
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+            <style>
+                body {
+                    font-family: 'Poppins', sans-serif;
+                    padding: 30px;
+                    margin: 0;
+                    color: #333;
+                }
+                h1 {
+                    color: #0606ba;
+                    margin-bottom: 10px;
+                }
+                .report-info {
+                    background: #f5f5f5;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                }
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                    margin: 20px 0;
+                }
+                .stat-card {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    border: 1px solid #e0e0e0;
+                }
+                .stat-value {
+                    font-size: 1.8rem;
+                    font-weight: 700;
+                    color: #0606ba;
+                }
+                .stat-label {
+                    font-size: 0.8rem;
+                    color: #666;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                    font-size: 0.85rem;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 10px;
+                    text-align: left;
+                }
+                th {
+                    background: #f0f0f0;
+                    font-weight: 600;
+                }
+                .urgency-badge {
+                    display: inline-block;
+                    padding: 3px 8px;
+                    border-radius: 12px;
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+                .urgency-emergency { background: #fee2e2; color: #dc2626; }
+                .urgency-urgent { background: #fff3e0; color: #f97316; }
+                .urgency-routine { background: #e0f2e9; color: #10b981; }
+                .status-badge {
+                    display: inline-block;
+                    padding: 3px 8px;
+                    border-radius: 12px;
+                    font-size: 0.7rem;
+                    font-weight: 600;
+                }
+                .status-completed { background: #d1fae5; color: #10b981; }
+                .status-pending { background: #fef3c7; color: #f59e0b; }
+                @media print {
+                    body { padding: 0; }
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <h1><i class="fas fa-chart-line"></i> Pharmacy Report</h1>
+            <div class="report-info">
+                <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
+                <p><strong>Date Range:</strong> ${fromDateFormatted} to ${toDateFormatted}</p>
+                <p><strong>Total Prescriptions:</strong> ${total}</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">${document.getElementById('statPending').innerText}</div>
+                    <div class="stat-label">Pending Prescriptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${document.getElementById('statCompleted').innerText}</div>
+                    <div class="stat-label">Completed Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${document.getElementById('statTotal').innerText}</div>
+                    <div class="stat-label">Total Prescriptions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${document.getElementById('statCompletionRate').innerText}</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
+            </div>
+
+            <!-- Top Medications Table -->
+            <h3>Top Medications</h3>
+            <table>
+                <thead>
+                    <tr><th>Rank</th><th>Medication Name</th><th>Times Prescribed</th><th>% of Total</th></tr>
+                </thead>
+                <tbody>
+                    ${topMeds.map((med, i) => {
+                        const pct = total > 0 ? ((med.count / total) * 100).toFixed(1) : 0;
+                        return `<tr><td>${i+1}</td><td>${escapeHtml(med.name)}</td><td>${med.count}</td><td>${pct}%</td></tr>`;
+                    }).join('')}
+                    ${topMeds.length === 0 ? '<tr><td colspan="4">No medication data available</td></tr>' : ''}
+                </tbody>
+            </table>
+
+            <!-- Detailed Prescriptions Table -->
+            <h3>Prescription Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient</th>
+                        <th>Medication</th>
+                        <th>Doctor</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                        <th>Completed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filtered.map(p => {
+                        const patient = p.consultation?.appointment?.patient?.user;
+                        const doctor = p.createdBy?.name || p.consultation?.appointment?.doctor?.name || 'N/A';
+                        const urgency = p.urgency || 'routine';
+                        const urgencyClass = urgency === 'emergency' ? 'urgency-emergency' : urgency === 'urgent' ? 'urgency-urgent' : 'urgency-routine';
+                        const statusClass = p.status === 'completed' ? 'status-completed' : 'status-pending';
+                        const statusText = p.status === 'completed' ? 'Completed' : 'Pending';
+                        const completedBy = p.completedBy?.name || (p.status === 'completed' ? 'Pharmacist' : '—');
+                        const medications = p.medications?.map(m => m.name).join(', ') || 'No medications';
+                        const date = new Date(p.createdAt).toLocaleDateString();
+                        return `
+                            <tr>
+                                <td>${date}</td>
+                                <td><strong>${escapeHtml(patient?.name || 'Unknown')}</strong><br><small>ID: ${escapeHtml(patient?.studentID || patient?.staffID || 'N/A')}</small></td>
+                                <td>${escapeHtml(medications)}</td>
+                                <td>${escapeHtml(doctor)}</td>
+                                <td><span class="urgency-badge ${urgencyClass}">${urgency}</span></td>
+                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                                <td>${escapeHtml(completedBy)}</td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+            <div class="report-info">
+                <p><strong>Summary:</strong> Showing ${total} prescriptions from ${fromDateFormatted} to ${toDateFormatted}</p>
+            </div>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+}
+        function showToast(message, type = 'info') {
+            const toastWrap = document.getElementById('toastWrap');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#333';
+            toast.textContent = message;
+            toastWrap.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+        }
+        function closeModal() { document.getElementById('detailsModal').classList.remove('active'); }
+        function handleLogout() { if (confirm('Are you sure you want to logout?')) API_CONFIG.auth.logout(); }
+
+        // Event listeners
+        document.getElementById('fromDate').addEventListener('change', loadData);
+        document.getElementById('toDate').addEventListener('change', loadData);
+        document.getElementById('urgencyFilter').addEventListener('change', () => { renderAll(); renderCharts(); });
+        document.getElementById('statusFilter').addEventListener('change', () => { renderAll(); renderCharts(); });
+        document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+        document.getElementById('printBtn').addEventListener('click', printView);
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!API_CONFIG.getToken()) {
+                window.location.href = '../Shared pages/login.html';
+                return;
+            }
+            loadData();
+        });
+
+        window.viewDetails = viewDetails;
+        window.closeModal = closeModal;
+        window.handleLogout = handleLogout;
+    </script>
+</body>
+
+</html>

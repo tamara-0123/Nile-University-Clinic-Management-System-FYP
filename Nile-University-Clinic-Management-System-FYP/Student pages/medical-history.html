@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Medical History - Nile CMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="medical-history.css">
+      <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+
+</head>
+
+<body class="auth-page">
+    <header class="navbar">
+        <nav class="nav">
+            <a href="#"><img src="./image.png" alt="Nile Logo" class="logo"></a>
+            <ul class="nav-links">
+                <li><a href="homepage-s.html">Home</a></li>
+                <li><a href="appointments-s.html">Appointments</a></li>
+                <li><a href="prescriptions-s.html">Prescriptions</a></li>
+                <li><a href="medical-history.html" class="active">Medical History</a></li>
+            </ul>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+        </nav>
+    </header>
+
+    <h1 class="page-title">Medical History</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">A secure record of your past visits and clinical
+        findings.</p>
+
+    <div class="history-container">
+
+        <div class="profile-overview">
+            <div class="profile-details">
+                <div class="detail-item">
+                    <label>Blood Group</label>
+                    <p id="viewBloodGroup">--</p>
+                </div>
+                <div class="detail-item">
+                    <label>Allergies</label>
+                    <div id="viewAllergies">--</div>
+                </div>
+                <div class="detail-item">
+                    <label>Chronic Conditions</label>
+                    <div id="viewConditions">--</div>
+                </div>
+                <div class="detail-item">
+                    <label>Emergency Contact</label>
+                    <p id="viewEmergencyName">--</p>
+                    <small style="color:#666" id="viewEmergencyPhone">--</small>
+                </div>
+            </div>
+            <button class="btn-edit" onclick="openProfileModal()">
+                <i class="fas fa-pen"></i> Update Profile
+            </button>
+        </div>
+        <div class="timeline" id="history-list"></div>
+    </div>
+
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-content">
+            <h3>Consultation Summary</h3>
+            <hr style="margin: 15px 0; opacity: 0.2;">
+            <div class="info-grid">
+                <div><strong>Doctor:</strong> <span id="detDoctor"></span></div>
+                <div><strong>Date:</strong> <span id="detDate"></span></div>
+            </div>
+            <div class="diagnosis-box">
+                <small>PRIMARY DIAGNOSIS</small>
+                <h2 id="detDiagnosis"></h2>
+            </div>
+            <div class="notes-section">
+                <strong>Clinical Notes:</strong>
+                <p id="detNotes"></p>
+            </div>
+            <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn-outline" onclick="closeModal('historyModal')">Close</button>
+                <button class="btn-primary" onclick="alert('Downloading...')">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="margin:0;">Update Medical Profile</h3>
+                <span style="cursor:pointer; font-size:1.5rem;" onclick="closeModal('profileModal')">&times;</span>
+            </div>
+
+            <form id="profileForm" onsubmit="saveProfile(event)">
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <select id="editBloodGroup" class="form-control">
+                        <option value="">Select...</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Allergies <small style="font-weight:400; color:#888;">(Separate with commas)</small></label>
+                    <input type="text" id="editAllergies" class="form-control" placeholder="e.g. Peanuts, Penicillin">
+                </div>
+
+                <div class="form-group">
+                    <label>Chronic Conditions <small style="font-weight:400; color:#888;">(Separate with
+                            commas)</small></label>
+                    <input type="text" id="editConditions" class="form-control" placeholder="e.g. Asthma, Diabetes">
+                </div>
+
+                <div class="form-group">
+                    <label>Emergency Contact</label>
+                    <div class="sub-group">
+                        <input type="text" id="editEmName" class="form-control" placeholder="Contact Name"
+                            style="margin-bottom:10px;">
+                        <input type="tel" id="editEmPhone" class="form-control" placeholder="Phone Number">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top:20px;">
+                    <button type="button" class="btn-outline" onclick="closeModal('profileModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="side-nav" id="mobileMenu">
+        <div class="close-btn" onclick="toggleMenu()">&times;</div>
+        <a href="homepage-s.html">Home</a>
+        <a href="appointments-s.html">Appointments</a>
+        <a href="prescriptions-s.html">Prescriptions</a>
+        <a href="medical-history.html">History</a>
+        <button class="logout" onclick="handleLogout()" style="width: 100%; margin-top: 20px;">Logout</button>
+    </div>
+    <div id="menuOverlay" onclick="toggleMenu()"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
+    </div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        // --- JAVASCRIPT LOGIC (API INTEGRATED) ---
+        let patientProfile = null;
+        let historyData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            checkAuthStatus();
+            initPage();
+                        const currentPath = decodeURIComponent(window.location.pathname);
+            const currentPage = currentPath.split("/").pop();
+
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            navLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+
+                const linkPage = linkHref.split("/").pop();
+
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+                else if (currentPage === "" && linkPage === "medical-history.html") {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function checkAuthStatus() {
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+            }
+        }
+
+        async function initPage() {
+            await loadProfile();
+            await loadHistory();
+
+        }
+
+        async function loadProfile() {
+            try {
+                const data = await API_CONFIG.request('/patient/medical-history'); 
+                if (data.success) {
+                    patientProfile = data.profile; 
+                    renderProfile();
+                }
+            } catch (error) {
+                console.error('Failed to load profile:', error);
+            }
+        }
+
+        async function loadHistory() {
+            try {
+                const data = await API_CONFIG.request('/patient/medical-history');
+                if (data.success) {
+                    historyData = data.history; // Array of consultations/records
+                    renderHistory();
+                }
+            } catch (error) {
+                console.error('Failed to load history:', error);
+            }
+        }
+
+        function renderProfile() {
+            if (!patientProfile) return;
+            document.getElementById('viewBloodGroup').innerText = patientProfile.bloodGroup || "Not Set";
+
+            const allergyContainer = document.getElementById('viewAllergies');
+            if (patientProfile.allergies && patientProfile.allergies.length > 0) {
+                allergyContainer.innerHTML = patientProfile.allergies.map(a => `<span class="badge">${a.trim()}</span>`).join('');
+            } else {
+                allergyContainer.innerHTML = "None";
+            }
+
+            const condContainer = document.getElementById('viewConditions');
+            if (patientProfile.chronicConditions && patientProfile.chronicConditions.length > 0) {
+                condContainer.innerHTML = patientProfile.chronicConditions.map(c => `<span class="badge">${c.trim()}</span>`).join('');
+            } else {
+                condContainer.innerHTML = "None";
+            }
+
+            document.getElementById('viewEmergencyName').innerText = patientProfile.emergencyContact?.name || "Not Set";
+            document.getElementById('viewEmergencyPhone').innerText = patientProfile.emergencyContact?.phone || "";
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            if (historyData.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#999;">No medical records found.</p>';
+                return;
+            }
+
+            list.innerHTML = historyData.map(item => `
+                <div class="history-card">
+                    <span class="history-tag">Consultation</span>
+                    <h3>${item.diagnosis || 'Undiagnosed'}</h3>
+                    <div class="history-meta">
+                        <span><i class="fas fa-user-md"></i> ${item.appointment?.doctor?.name || 'Assigned Doctor'}</span> | 
+                        <span><i class="fas fa-calendar-alt"></i> ${new Date(item.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn-view" onclick="showHistoryDetail('${item._id}')">View Summary</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- 3. MODAL LOGIC ---
+
+        function openProfileModal() {
+            if (!patientProfile) return;
+            document.getElementById('editBloodGroup').value = patientProfile.bloodGroup || "";
+            document.getElementById('editAllergies').value = (patientProfile.allergies || []).join(', ');
+            document.getElementById('editConditions').value = (patientProfile.chronicConditions || []).join(', ');
+            document.getElementById('editEmName').value = patientProfile.emergencyContact?.name || "";
+            document.getElementById('editEmPhone').value = patientProfile.emergencyContact?.phone || "";
+
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        async function saveProfile(event) {
+            event.preventDefault();
+            const newBlood = document.getElementById('editBloodGroup').value;
+            const newAllergies = document.getElementById('editAllergies').value.split(',').map(s => s.trim()).filter(s => s !== "");
+            const newConditions = document.getElementById('editConditions').value.split(',').map(s => s.trim()).filter(s => s !== "");
+            const newName = document.getElementById('editEmName').value;
+            const newPhone = document.getElementById('editEmPhone').value;
+
+            try {
+                const response = await API_CONFIG.request('/patient/update-medical-profile', {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        bloodGroup: newBlood,
+                        allergies: newAllergies,
+                        chronicConditions: newConditions,
+                        emergencyContact: { name: newName, phone: newPhone }
+                    })
+                });
+
+                if (response.success) {
+                    alert("Profile updated successfully!");
+                    await initPage(); // Refresh everything
+                    closeModal('profileModal');
+                }
+            } catch (error) {
+                alert(error.message || "Failed to update profile.");
+            }
+        }
+
+        function showHistoryDetail(id) {
+            const record = historyData.find(h => h._id === id);
+            if (record) {
+                document.getElementById('detDoctor').innerText = record.appointment?.doctor?.name || 'N/A';
+                document.getElementById('detDate').innerText = new Date(record.createdAt).toLocaleDateString();
+                document.getElementById('detDiagnosis').innerText = record.diagnosis || 'N/A';
+                document.getElementById('detNotes').innerText = record.notes || 'No notes available.';
+                document.getElementById('historyModal').style.display = 'flex';
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            if (menu.classList.contains('active')) {
+                menu.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                menu.classList.add('active');
+                overlay.style.display = 'block';
+            }
+        }
+
+        function handleLogout() {
+            if (confirm("Are you sure you want to log out?")) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        window.onclick = function (event) {
+            if (event.target.className === 'modal-overlay') {
+                event.target.style.display = 'none';
+            }
+        }
+
+        window.onresize = function () {
+            if (window.innerWidth > 768) {
+                if (document.getElementById('mobileMenu')) {
+                    document.getElementById('mobileMenu').classList.remove('active');
+                    document.getElementById('menuOverlay').style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

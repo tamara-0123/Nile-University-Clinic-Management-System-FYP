@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nile University Clinic Management System</title>
+    <link rel="stylesheet" href="homepage-n.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../../images/nile logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!--NavBar-->
+    <div class="top">
+        <div class="navbar">
+            <nav class="nav">
+                <a>
+                    <img src="image.png" alt="Nile University Logo" class="logo">
+                </a>
+                <div class="nav-links">
+                    <a href="./homepage-n.html" class="active">Home</a>
+                    <a href="./Patient List Page.html">Patient List</a>
+                    <a href="./Patient Vitals Entry Page.html">Vitals Entry</a>
+                    <a href="./Patient Referral Page.html">Referrals</a>
+                    <a href="./Daily Report Page.html">Daily Report</a>
+                </div>
+                <div class="nav-buttons">
+                    <button class="logout" onclick="handleLogout()">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Hero Section-->
+    <div class="hero">
+        <div class="user-name">
+            <p class="welcome">Welcome <br> <span class="user">Aisha Bello</span></p>
+        </div>
+        <div class="user-class">
+            <div class="left">
+                <p class="header">USER</p>
+                <p class="content">Nurse</p>
+            </div>
+            <div class="right">
+                <i class="fa-solid fa-user-nurse"></i>
+            </div>
+        </div>
+        <div class="id-num-box">
+            <div class="left">
+                <p class="header">STAFF ID</p>
+                <p class="content">20220000</p>
+            </div>
+            <div class="right">
+                <i class="fa-regular fa-id-badge"></i>
+            </div>
+
+        </div>
+        <div class="quick-book">
+            <button class="book" onclick="window.location.href='./Patient Vitals Entry Page.html'">+ Record Patient
+                Vitals</button>
+        </div>
+    </div>
+
+    <!--Dashboard Cards-->
+    <div class='cards'>
+        <div class='card next'>
+            <p class="card-title">Next Patient</p>
+            <div class="card-nurse" id="nextPatientContainer">
+                <p class="card-content" id="nextPatientTime">Loading...</p>
+                <p class="card-content" id="nextPatientName"></p>
+                <p class="card-content" id="nextPatientDoc"></p>
+            </div>
+            <a href="./Patient List Page.html">
+                <p class="card-link">View details</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Patients Booked</p>
+            <p class="card-number" id="todayPatientCount">0</p>
+            <a href="./Patient List Page.html">
+                <p class="card-link">View patient list</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Pending Referrals</p>
+            <p class="card-number" id="pendingReferralCount">0</p>
+            <a href="./Patient Referral Page.html">
+                <p class="card-link">View referrals</p>
+            </a>
+        </div>
+        <div class='card'>
+            <p class="card-title">Notifications</p>
+            <p class="card-number"><span id="unreadNotifCount">0</span> <span class="card-content">unread</span></p>
+            <a href="#notifications">
+                <p class="card-link">View notifications</p>
+            </a>
+        </div>
+    </div>
+
+    <!--More Details section-->
+    <div class="more-details">
+        <div class="rec-patients">
+            <div class="more-header">
+                <h2>Recent Patients</h2>
+                <i class="fa-solid fa-bed"></i>
+            </div>
+            <div id="recentPatientList">
+                <p style="padding:10px; color:#666;">Loading patients...</p>
+            </div>
+        </div>
+
+        <div class="rec-vitals">
+            <div class="more-header">
+                <h2>Recent Vitals</h2>
+                <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+            <div id="recentVitalsList">
+                <p style="padding:10px; color:#666;">No recent vitals</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications" id="notifications">
+        <div class="more-header">
+            <h2>Notifications</h2>
+            <i class="fa-solid fa-bell"></i>
+        </div>
+        <div id="notificationList">
+            <p style="padding:10px; color:#666;">No new notifications</p>
+        </div>
+    </div>
+
+    <!--Feedback and FAQ-->
+    <div class="container">
+
+        <!--Feedback Form -->
+        <div class="feedback-section">
+            <div class="more-header">
+                <h2>Feedback Form</h2>
+                <i class="fa-solid fa-comment-medical"></i>
+            </div>
+            <form>
+                <label for="reason">Reason for Feedback</label>
+                <select id="reason">
+                    <option>Patient Queue Delay</option>
+                    <option>Vitals Recording Issue</option>
+                    <option>Doctor Availability</option>
+                    <option>System Performance</option>
+                    <option>Equipment Issue</option>
+                    <option>Workflow Challenge</option>
+                    <option>Other</option>
+                </select>
+
+                <label for="details">Details</label>
+                <textarea id="details" rows="7" placeholder="Please provide more information..."></textarea>
+
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!--FAQ Section -->
+        <div class="faq-section">
+            <div class="more-header">
+                <h2>Frequently Asked Questions</h2>
+                <i class="fa-solid fa-clipboard-question"></i>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I record patient vitals?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Select a patient from the queue and enter vitals such as BP, temperature, and pulse.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view vitals after saving?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, vitals can be viewed in the patient's record section.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I check in a patient?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Update the patient status to “Checked-in” once they arrive at the clinic.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How do I refer a patient to a doctor?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        After recording vitals, assign the patient to an available doctor in the system.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Can I view patient medical history?
+                        <span class="arrow">&#9662;</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes, nurses have read-only access to basic patient history for triage purposes.
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+    <!--Copyright-->
+    <div class="copyright">
+        <p>Nile University Clinic Management System &copy; 2026 Nile Uinversity of Nigeria - All Rights Reserved</p>
+    </div>
+
+    <script src="../../Shared pages/api-config.js"></script>
+<script>
+    // AUTHENTICATION AND DATA POPULATION
+    document.addEventListener('DOMContentLoaded', async () => {
+        // 1. Check Auth
+        const token = API_CONFIG.getToken();
+        if (!token) {
+            window.location.href = '../../Shared pages/login.html';
+            return;
+        }
+
+        // 2. Populate User Data
+        const user = API_CONFIG.getUser();
+        if (user) {
+            const userElements = document.querySelectorAll('.user');
+            userElements.forEach(el => el.textContent = user.name || user.staffID);
+
+            const idElements = document.querySelectorAll('.id-num-box .content');
+            idElements.forEach(el => el.textContent = user.staffID || user.idNumber);
+
+            const roleElements = document.querySelectorAll('.user-class .content');
+            roleElements.forEach(el => el.textContent = user.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Nurse');
+        }
+
+        // 3. FETCH DASHBOARD DATA
+        try {
+            // Notifications
+            try {
+                const notifResponse = await API_CONFIG.request('/notifications');
+                
+                if (notifResponse && notifResponse.notifications) {
+                    const notifs = notifResponse.notifications;
+                    const list = document.getElementById('notificationList');
+
+                    
+                    const visibleNotifs = notifs.slice(0, 5);
+
+                    const badge = document.getElementById('unreadNotifCount');
+                    if (badge) badge.innerText = visibleNotifs.length;
+
+                    if (visibleNotifs.length === 0) {
+                        list.innerHTML = '<p style="padding:10px; color:#666;">No new notifications</p>';
+                    } else {
+                        list.innerHTML = visibleNotifs.map(n => `
+                            <div class="notification">
+                                <p class="notif-content">${n.message || 'New notification'}</p>
+                                <div class="notif-active">
+                                    <div class="green-flash"></div>
+                                    <p class="notif-date">New</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error("Notifications Error:", error);
+
+            }
+
+            // Patient Queue
+            try {
+                const queueResponse = await API_CONFIG.request('/nurse/queue');
+                
+                if (queueResponse.success) {
+                    const queue = queueResponse.appointments || [];
+
+                    // Next Patient - MODIFIED to show only scheduled (non-completed) appointments
+                    const nextPatientTimeEl = document.getElementById('nextPatientTime');
+                    if (nextPatientTimeEl) {
+                        // Filter out completed appointments based on status
+                        const scheduledQueue = queue.filter(appointment => 
+                            appointment.status !== 'completed' && 
+                            appointment.status !== 'done' && 
+                            appointment.status !== 'finished'
+                        );
+                        
+                        if (scheduledQueue.length > 0) {
+                            const next = scheduledQueue[0];
+                            const date = new Date(next.date);
+                            const hours = date.getHours();
+                            const minutes = date.getMinutes().toString().padStart(2, '0');
+                            const ampm = hours >= 12 ? 'PM' : 'AM';
+                            const displayHours = hours % 12 || 12;
+                            nextPatientTimeEl.innerHTML = `${displayHours}:${minutes}<span style="font-size:0.8rem; font-weight:normal;">${ampm}</span>`;
+                        } else {
+                            nextPatientTimeEl.innerHTML = "No patients scheduled";
+                        }
+                    }
+
+                    // Counts - UNCHANGED
+                    const todayPatientCountEl = document.getElementById('todayPatientCount');
+                    if (todayPatientCountEl) todayPatientCountEl.innerText = queue.length;
+
+                    // Filter for referred (waiting for doctor) - UNCHANGED
+                    const referred = queue.filter(a => a.status === 'waiting' || a.status === 'in-consultation');
+                    const pendingReferralCountEl = document.getElementById('pendingReferralCount');
+                    if (pendingReferralCountEl) pendingReferralCountEl.innerText = referred.length;
+
+                    // Recent Patients List - COMPLETELY UNCHANGED (still shows all patients including completed)
+                    const recentList = document.getElementById('recentPatientList');
+                    if (recentList) {
+                        if (queue.length === 0) {
+                            recentList.innerHTML = '<p style="padding:10px; color:#666;">No patients in queue</p>';
+                        } else {
+                            recentList.innerHTML = queue.slice(0, 4).map(a => `
+                                <li class="appt-item">
+                                    <div class="appt-left">
+                                        <div class="appt-name">
+                                            ${a.patient?.user?.name || 'Unknown Patient'}
+                                        </div>
+                                        <div class="appt-status ${a.status?.toLowerCase() || ''}">
+                                            ${a.status || 'Unknown'}
+                                        </div>
+                                    </div>
+                                    <div class="appt-time">
+                                        ${new Date(a.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                </li>
+                            `).join('');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Queue Error:", error);
+                // Show error in queue section
+                const recentList = document.getElementById('recentPatientList');
+                if (recentList) {
+                    recentList.innerHTML = '<p style="padding:10px; color:#dc3545;">Error loading queue</p>';
+                }
+            }
+
+            // Recent Vitals - Using dedicated vitals endpoint
+            try {
+                // First try the dashboard endpoint, fallback to recent if needed
+                let vitalsResponse;
+                try {
+                    vitalsResponse = await API_CONFIG.request('/nurse/vitals/dashboard');
+                } catch (e) {
+                    // If dashboard endpoint doesn't exist, try recent
+                    console.log('Dashboard endpoint not found, trying recent vitals...');
+                    vitalsResponse = await API_CONFIG.request('/nurse/vitals/recent');
+                }
+
+                const vitalsList = document.getElementById('recentVitalsList');
+                if (vitalsList) {
+                    if (vitalsResponse.success) {
+                        const vitals = vitalsResponse.vitals || [];
+
+                        if (vitals.length === 0) {
+                            vitalsList.innerHTML = '<p style="padding:10px; color:#666;">No recent vitals recorded</p>';
+                        } else {
+                            vitalsList.innerHTML = vitals.slice(0, 4).map(v => {
+                                const patientName = v.patient?.user?.name || 'Unknown Patient';
+                                const bp = v.bp || '--';
+                                const temp = v.temperature ? (v.temperature + '°C') : '--';
+                                const time = v.createdAt ? new Date(v.createdAt).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }) : '--';
+
+                                return `
+                                    <li class="vitals-item">
+                                        <div class="vitals-left">
+                                            <div class="vitals-name">
+                                                ${patientName}
+                                            </div>
+                                            <div class="vitals-meta">
+                                                <span class="vital-pill">BP: ${bp}</span>
+                                                <span class="vital-pill">Temp: ${temp}</span>
+                                            </div>
+                                        </div>
+                                        <div class="vitals-time">
+                                            ${time}
+                                        </div>
+                                    </li>
+                                `;
+                            }).join('');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Vitals Load Error:", error);
+                const vitalsList = document.getElementById('recentVitalsList');
+                if (vitalsList) {
+                    vitalsList.innerHTML = '<p style="padding:10px; color:#dc3545;">Error loading vitals</p>';
+                }
+            }
+
+        } catch (error) {
+            console.error("Dashboard Load Error:", error);
+        }
+
+        // FAQ expand/collapse logic
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                if (answer) {
+                    answer.classList.toggle('open');
+                    const arrow = btn.querySelector('.arrow');
+                    if (arrow) arrow.classList.toggle('rotated');
+                }
+            });
+        });
+
+    }); // End of DOMContentLoaded
+
+    // Logout function - moved outside DOMContentLoaded so it's globally available
+    function handleLogout() {
+        const confirmLogout = confirm("Are you sure you want to log out?");
+        if (confirmLogout) {
+            API_CONFIG.auth.logout();
+        }
+    }
+</script>
+</body>
+
+</html>

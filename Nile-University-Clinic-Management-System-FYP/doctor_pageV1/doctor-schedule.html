@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>My Schedule - Nile University CMS</title>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* Navigation */
+        .navbar-area {
+            padding: 20px 40px;
+            background-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            height: 60px;
+            display: flex;
+            flex-direction: row;
+            background-color: white;
+            padding: 0 30px;
+            border-radius: 50px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #d5d5d5;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #0606ba;
+            font-weight: 700;
+            border-bottom: 2px solid #0606ba;
+            padding-bottom: 3px;
+        }
+
+        .logout {
+            color: white;
+            background-color: red;
+            border: none;
+            height: 40px;
+            width: 90px;
+            border-radius: 50px;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout:hover {
+            opacity: 0.8;
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #0606ba;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 40px;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .meta {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: "Poppins", sans-serif;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #0606ba;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .btn-outline:hover {
+            background: #f5f5f5;
+        }
+
+        /* Summary Stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: #fff;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #f0f4ff;
+            color: #0606ba;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Schedule Grid */
+        .schedule-container {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            overflow-x: auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            min-width: 900px;
+        }
+
+        .grid-header {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            font-weight: 700;
+            text-align: center;
+            padding: 12px;
+            border-bottom: 2px solid #ddd;
+            border-right: 1px solid #e5e7eb;
+            z-index: 10;
+        }
+
+        .time-slot {
+            background: #fafafa;
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+            border-right: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.85rem;
+            position: sticky;
+            left: 0;
+            background: #fafafa;
+            z-index: 5;
+        }
+
+        .day-slot {
+            padding: 8px;
+            min-height: 70px;
+            border-right: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .day-slot:hover {
+            background: #fafafa;
+        }
+
+        .day-slot.past {
+            background: #f5f5f5;
+            opacity: 0.9;
+        }
+
+        .event {
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+            cursor: pointer;
+            border-left: 3px solid #0606ba;
+            transition: transform 0.2s;
+            word-break: break-word;
+        }
+
+        .event:hover {
+            transform: translateX(2px);
+        }
+
+        .event.completed {
+            background: #e8f5e9;
+            border-left-color: #2e7d32;
+        }
+
+        .event.past {
+            background: #eeeeee;
+            border-left-color: #999;
+        }
+
+        .event.scheduled,
+        .event.waiting {
+            background: #fff3e0;
+            border-left-color: #f59e0b;
+        }
+
+        .event.admitted {
+            background: #f3e5f5;
+            border-left-color: #7b1fa2;
+        }
+
+        .event.cancelled {
+            background: #ffebee;
+            border-left-color: #c62828;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .event-urgency {
+            font-size: 0.6rem;
+            padding: 2px 4px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .urgency-emergency {
+            background: #dc2626;
+            color: white;
+        }
+
+        .urgency-urgent {
+            background: #f97316;
+            color: white;
+        }
+
+        .urgency-routine {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            margin-bottom: 20px;
+            color: #0606ba;
+        }
+
+        .modal label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .modal input,
+        .modal select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 3000;
+        }
+
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            animation: slideIn 0.3s ease;
+            transition: opacity 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 992px) {
+            .navbar-area {
+                padding: 15px 20px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .container {
+                padding: 0 20px 20px;
+            }
+            .summary-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar-area">
+        <nav class="nav">
+            <a href="homepage-d.html">
+                <img src="image.png" alt="Nile University Logo" class="logo">
+            </a>
+            <div class="nav-links">
+                <a href="homepage-d.html">Home</a>
+                <a href="doctor.html">Dashboard</a>
+                <a href="doctor-schedule.html" class="active">My Schedule</a>
+                <a href="doctor-profile.html">Records</a>
+            </div>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container fade-in">
+        <div class="hero">
+            <div>
+                <div class="title">Weekly Schedule Overview</div>
+                <div class="meta" id="weekRangeLabel">Loading dates...</div>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-outline" id="prevWeekBtn"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+                <button class="btn btn-outline" id="todayBtn">Today</button>
+                <button class="btn btn-outline" id="nextWeekBtn">Next <i class="fa-solid fa-chevron-right"></i></button>
+                <button class="btn btn-primary" id="manageSlotsBtn"><i class="fa-solid fa-pen-to-square"></i> Manage Slots</button>
+            </div>
+        </div>
+
+        <div class="summary-stats">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-regular fa-clock"></i></div>
+                <div>
+                    <h3 id="statTotal" style="margin:0; font-size:1.5rem;">0</h3>
+                    <span style="color:var(--muted); font-size:0.9rem;">Total Appointments</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#e8f5e9; color:#2e7d32;"><i class="fa-regular fa-calendar-check"></i></div>
+                <div>
+                    <h3 id="statCompleted" style="margin:0; font-size:1.5rem;">0</h3>
+                    <span style="color:var(--muted); font-size:0.9rem;">Completed</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:#fff3e0; color:#ef6c00;"><i class="fa-solid fa-user-clock"></i></div>
+                <div>
+                    <h3 id="statUpcoming" style="margin:0; font-size:1.5rem;">0</h3>
+                    <span style="color:var(--muted); font-size:0.9rem;">Upcoming</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="schedule-container">
+            <div class="schedule-grid" id="gridContainer">
+                <!-- Header will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="manageModal">
+        <div class="modal">
+            <h3>Add New Availability</h3>
+            <label>Select Date</label>
+            <input type="date" id="slotDate" required>
+            <label>Start Time</label>
+            <input type="time" id="slotStartTime" required>
+            <label>End Time</label>
+            <input type="time" id="slotEndTime" required>
+            <label>Note (Optional)</label>
+            <input type="text" id="slotNote" placeholder="e.g., Walk-ins allowed">
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="closeManageModal">Cancel</button>
+                <button class="btn btn-primary" id="saveNewSlot">Add Slot</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script src="../Shared pages/api-config.js"></script>
+    <script>
+        let allAppointments = [];
+        let weekStart = null;
+        const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Get Monday of current week
+        function getMonday(date) {
+            const d = new Date(date);
+            const day = d.getDay();
+            const diff = (day === 0 ? -6 : 1) - day;
+            d.setDate(d.getDate() + diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            return date.toLocaleDateString('en-GB', { month: 'short', day: 'numeric' });
+        }
+
+        // Format time
+        function formatTime(date) {
+            return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        }
+
+        // Get urgency badge class
+        function getUrgencyClass(urgency) {
+            if (urgency === 'emergency') return 'urgency-emergency';
+            if (urgency === 'urgent') return 'urgency-urgent';
+            return 'urgency-routine';
+        }
+
+        // Get event class based on status and date
+        function getEventClass(appointment) {
+            const now = new Date();
+            const apptDate = new Date(appointment.date);
+            const isPast = apptDate < now;
+            
+            if (appointment.status === 'completed') return 'completed';
+            if (appointment.status === 'cancelled') return 'cancelled';
+            if (appointment.status === 'admitted') return 'admitted';
+           // if (isPast && appointment.status !== 'completed') return 'past';
+            if (appointment.status === 'scheduled' || appointment.status === 'waiting') return 'scheduled';
+            return '';
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const statusMap = {
+                'scheduled': 'Scheduled',
+                'waiting': 'Waiting',
+                'checked-in': 'Checked In',
+                'in-consultation': 'In Consultation',
+                'admitted': 'Admitted',
+                'completed': 'Completed',
+                'cancelled': 'Cancelled'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Load ALL appointments from API
+        async function loadAppointments() {
+            try {
+                const response = await API_CONFIG.request('/doctor/all-appointments');
+                if (response.success) {
+                    allAppointments = response.appointments || [];
+                    renderSchedule();
+                    updateStats();
+                } else {
+                    showToast("Failed to load appointments");
+                }
+            } catch (error) {
+                console.error('Failed to load appointments:', error);
+                showToast("Failed to load schedule data");
+                // Fallback: try the regular endpoint
+                try {
+                    const fallbackResponse = await API_CONFIG.request('/doctor/appointments');
+                    if (fallbackResponse.success) {
+                        allAppointments = fallbackResponse.appointments || [];
+                        renderSchedule();
+                        updateStats();
+                    }
+                } catch (e) {
+                    console.error('Fallback also failed:', e);
+                }
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = allAppointments.length;
+            const completed = allAppointments.filter(a => a.status === 'completed').length;
+            const now = new Date();
+            const upcoming = allAppointments.filter(a => new Date(a.date) > now && a.status !== 'completed' && a.status !== 'cancelled').length;
+            
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statCompleted').textContent = completed;
+            document.getElementById('statUpcoming').textContent = upcoming;
+        }
+
+        // Render the schedule grid
+        function renderSchedule() {
+            const container = document.getElementById('gridContainer');
+            if (!container) return;
+
+            // Generate time slots from 00:00 to 23:00 (24 hours)
+            const timeSlots = [];
+            for (let hour = 0; hour < 24; hour++) {
+                timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
+            }
+
+            // Get dates for the week (Monday to Sunday)
+            const weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(weekStart.getDate() + i);
+                weekDates.push(date);
+            }
+
+            // Build the grid HTML
+            let html = '<div class="grid-header">Time</div>';
+            
+            // Day headers
+            for (let i = 0; i < 7; i++) {
+                const date = weekDates[i];
+                const isToday = new Date().toDateString() === date.toDateString();
+                html += `<div class="grid-header" style="${isToday ? 'background: #e3f2fd;' : ''}">
+                    ${dayNamesShort[i]}<br>
+                    <span style="font-size:0.7rem; font-weight:normal;">${formatDate(date)}</span>
+                </div>`;
+            }
+
+            // Time slots
+            for (const timeSlot of timeSlots) {
+                const hour = parseInt(timeSlot.split(':')[0]);
+                html += `<div class="time-slot">${timeSlot}</div>`;
+                
+                for (let dayIdx = 0; dayIdx < 7; dayIdx++) {
+                    const currentDate = weekDates[dayIdx];
+                    const now = new Date();
+                    const isPast = currentDate < new Date(now.setHours(0, 0, 0, 0));
+                    
+                    // Find appointments for this time slot
+                    const appointmentsAtTime = allAppointments.filter(appt => {
+                        const apptDate = new Date(appt.date);
+                        return apptDate.toDateString() === currentDate.toDateString() && 
+                               apptDate.getHours() === hour;
+                    });
+                    
+                    html += `<div class="day-slot ${isPast ? 'past' : ''}" data-date="${currentDate.toISOString()}" data-time="${timeSlot}">`;
+                    
+                    if (appointmentsAtTime.length > 0) {
+                        appointmentsAtTime.forEach(appt => {
+                            const apptDate = new Date(appt.date);
+                            const displayTime = formatTime(apptDate);
+                            const eventClass = getEventClass(appt);
+                            const urgencyClass = getUrgencyClass(appt.urgency || 'routine');
+                            const patientName = appt.patient?.user?.name || 'Unknown';
+                            
+                            html += `
+                                <div class="event ${eventClass}" onclick="viewAppointmentDetails('${appt._id}')">
+                                    <strong>${displayTime}</strong><br>
+                                    ${patientName}<br>
+                                    <span class="event-urgency ${urgencyClass}">${appt.urgency || 'routine'}</span>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        html += `<div style="font-size:0.7rem; color:#ccc; text-align:center; padding:15px 0;">—</div>`;
+                    }
+                    
+                    html += `</div>`;
+                }
+            }
+
+            container.innerHTML = html;
+            
+            // Update week range label
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            document.getElementById('weekRangeLabel').textContent = 
+                `${formatDate(weekStart)} - ${formatDate(weekEnd)}, ${weekStart.getFullYear()}`;
+        }
+
+        // View appointment details in modal
+        function viewAppointmentDetails(appointmentId) {
+            const appointment = allAppointments.find(a => a._id === appointmentId);
+            if (!appointment) return;
+            
+            const apptDate = new Date(appointment.date);
+            const user = appointment.patient?.user;
+            const statusText = getStatusText(appointment.status);
+            const urgency = appointment.urgency || 'routine';
+            const urgencyClass = urgency === 'emergency' ? 'urgency-emergency' : 
+                                urgency === 'urgent' ? 'urgency-urgent' : 'urgency-routine';
+            
+            // Create modal if it doesn't exist
+            let modal = document.getElementById('appointmentDetailsModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'appointmentDetailsModal';
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+                    <div class="modal">
+                        <div class="modal-header">
+                            <h3><i class="fas fa-calendar-alt"></i> Appointment Details</h3>
+                            <span class="close-modal" onclick="closeAppointmentModal()">&times;</span>
+                        </div>
+                        <div class="modal-body" id="appointmentModalBody"></div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" onclick="closeAppointmentModal()">Close</button>
+                            <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                
+                // Add styles if not already present
+                if (!document.getElementById('appointmentModalStyles')) {
+                    const styles = document.createElement('style');
+                    styles.id = 'appointmentModalStyles';
+                    styles.textContent = `
+                        .modal-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background: rgba(0, 0, 0, 0.5);
+                            display: none;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 2000;
+                            padding: 40px 20px;
+                        }
+                        .modal-overlay.active {
+                            display: flex;
+                        }
+                        .modal {
+                            background: white;
+                            border-radius: 24px;
+                            width: 90%;
+                            max-width: 700px;
+                            max-height: calc(100vh - 80px);
+                            overflow-y: auto;
+                            animation: modalSlideIn 0.3s ease;
+                            margin: auto;
+                            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                        }
+                        .modal-header {
+                            padding: 24px 28px;
+                            border-bottom: 1px solid #e5e7eb;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            position: sticky;
+                            top: 0;
+                            background: white;
+                            border-radius: 24px 24px 0 0;
+                        }
+                        .modal-header h3 {
+                            margin: 0;
+                            color: #0606ba;
+                            font-size: 1.35rem;
+                            font-weight: 700;
+                        }
+                        .close-modal {
+                            font-size: 1.8rem;
+                            cursor: pointer;
+                            color: #9ca3af;
+                            transition: color 0.2s;
+                            line-height: 1;
+                        }
+                        .close-modal:hover {
+                            color: #374151;
+                        }
+                        .modal-body {
+                            padding: 28px;
+                        }
+                        .detail-section {
+                            margin-bottom: 28px;
+                        }
+                        .detail-section:last-child {
+                            margin-bottom: 0;
+                        }
+                        .detail-section h4 {
+                            font-size: 1rem;
+                            font-weight: 600;
+                            color: #374151;
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            margin-bottom: 16px;
+                            display: flex;
+                            align-items: center;
+                            gap: 8px;
+                        }
+                        .detail-section h4 i {
+                            color: #0606ba;
+                            font-size: 1rem;
+                        }
+                        .detail-grid {
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 16px;
+                            background: #f9fafb;
+                            padding: 20px;
+                            border-radius: 16px;
+                        }
+                        .detail-item {
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .detail-label {
+                            font-size: 0.75rem;
+                            font-weight: 500;
+                            color: #6b7280;
+                            margin-bottom: 6px;
+                            text-transform: uppercase;
+                            letter-spacing: 0.3px;
+                        }
+                        .detail-value {
+                            font-size: 1rem;
+                            font-weight: 500;
+                            color: #1f2937;
+                        }
+                        .detail-value.na {
+                            color: #9ca3af;
+                            font-style: italic;
+                            font-weight: 400;
+                        }
+                        .urgency-badge {
+                            display: inline-block;
+                            padding: 5px 12px;
+                            border-radius: 20px;
+                            font-size: 0.75rem;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                        }
+                        .status-badge {
+                            display: inline-block;
+                            padding: 5px 12px;
+                            border-radius: 20px;
+                            font-size: 0.75rem;
+                            font-weight: 600;
+                        }
+                        .status-completed {
+                            background: #d1fae5;
+                            color: #10b981;
+                        }
+                        .status-scheduled {
+                            background: #dbeafe;
+                            color: #3b82f6;
+                        }
+                        .status-waiting {
+                            background: #fef3c7;
+                            color: #f59e0b;
+                        }
+                        .modal-footer {
+                            padding: 20px 28px;
+                            border-top: 1px solid #e5e7eb;
+                            display: flex;
+                            justify-content: flex-end;
+                            gap: 12px;
+                            background: #f9fafb;
+                            border-radius: 0 0 24px 24px;
+                        }
+                        .btn {
+                            padding: 10px 20px;
+                            border-radius: 10px;
+                            font-weight: 600;
+                            font-size: 0.875rem;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                            border: none;
+                            font-family: 'Poppins', sans-serif;
+                        }
+                        .btn-primary {
+                            background: #0606ba;
+                            color: white;
+                        }
+                        .btn-primary:hover {
+                            background: #05059e;
+                            transform: translateY(-1px);
+                        }
+                        .btn-secondary {
+                            background: #f3f4f6;
+                            color: #374151;
+                            border: 1px solid #e5e7eb;
+                        }
+                        .btn-secondary:hover {
+                            background: #e5e7eb;
+                        }
+                        @keyframes modalSlideIn {
+                            from {
+                                opacity: 0;
+                                transform: translateY(-20px);
+                            }
+                            to {
+                                opacity: 1;
+                                transform: translateY(0);
+                            }
+                        }
+                        @media (max-width: 768px) {
+                            .modal-overlay {
+                                padding: 20px 16px;
+                            }
+                            .modal {
+                                max-width: 100%;
+                                max-height: calc(100vh - 40px);
+                            }
+                            .modal-header {
+                                padding: 20px;
+                            }
+                            .modal-body {
+                                padding: 20px;
+                            }
+                            .detail-grid {
+                                grid-template-columns: 1fr;
+                                gap: 12px;
+                                padding: 16px;
+                            }
+                            .modal-footer {
+                                padding: 16px 20px;
+                            }
+                        }
+                    `;
+                    document.head.appendChild(styles);
+                }
+            }
+            
+            // Helper function to format value with fallback
+            function formatValue(value, fallback = 'Not recorded') {
+                if (!value || value === '' || value === 'N/A') {
+                    return `<span class="detail-value na">${fallback}</span>`;
+                }
+                return `<span class="detail-value">${escapeHtml(String(value))}</span>`;
+            }
+            
+            // Helper function to format age with years
+            function formatAge(age) {
+                if (!age || age === '' || age === 'N/A') {
+                    return `<span class="detail-value na">Not recorded</span>`;
+                }
+                const ageNum = parseInt(age);
+                if (!isNaN(ageNum)) {
+                    return `<span class="detail-value">${ageNum} years</span>`;
+                }
+                return `<span class="detail-value">${escapeHtml(String(age))}</span>`;
+            }
+            
+            // Helper function to format gender with icon
+            function formatGender(gender) {
+                if (!gender || gender === '' || gender === 'N/A') {
+                    return `<span class="detail-value na">Not recorded</span>`;
+                }
+                const genderMap = {
+                    'male': '♂ Male',
+                    'female': '♀ Female',
+                    'other': '⚧ Other'
+                };
+                const displayGender = genderMap[gender.toLowerCase()] || gender;
+                return `<span class="detail-value">${escapeHtml(displayGender)}</span>`;
+            }
+            
+            // Get ID from user
+            const idNumber = user?.studentID || user?.staffID || 'N/A';
+            
+            // Populate modal content
+            const modalBody = document.getElementById('appointmentModalBody');
+            modalBody.innerHTML = `
+                <div class="detail-section">
+                    <h4><i class="fas fa-user-circle"></i> Patient Information</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Full Name</span>
+                            ${formatValue(user?.name, 'Unknown')}
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">ID Number</span>
+                            ${formatValue(idNumber, 'Not assigned')}
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Age</span>
+                            ${formatAge(user?.age)}
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Gender</span>
+                            ${formatGender(user?.gender)}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h4><i class="fas fa-calendar-check"></i> Appointment Details</h4>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <span class="detail-value">${apptDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Time</span>
+                            <span class="detail-value">${formatTime(apptDate)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value"><span class="status-badge status-${appointment.status}">${statusText}</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Priority Level</span>
+                            <span class="detail-value"><span class="urgency-badge ${urgencyClass}">${urgency.toUpperCase()}</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Reason for Visit</span>
+                            ${formatValue(appointment.reason, 'Not specified')}
+                        </div>
+                        ${appointment.condition ? `
+                        <div class="detail-item">
+                            <span class="detail-label">Medical Condition</span>
+                            <span class="detail-value">${escapeHtml(appointment.condition)}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Show modal
+            modal.classList.add('active');
+        }
+
+        // Close appointment modal
+        function closeAppointmentModal() {
+            const modal = document.getElementById('appointmentDetailsModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, m => {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Add availability slot
+        async function addAvailability() {
+            const date = document.getElementById('slotDate').value;
+            const startTime = document.getElementById('slotStartTime').value;
+            const endTime = document.getElementById('slotEndTime').value;
+            const note = document.getElementById('slotNote').value;
+            
+            if (!date || !startTime || !endTime) {
+                showToast("Please select date, start time, and end time");
+                return;
+            }
+            
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayOfWeek = dayNames[new Date(date).getDay()];
+            
+            try {
+                const response = await API_CONFIG.request('/doctor/availability', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        date,
+                        dayOfWeek,
+                        startTime,
+                        endTime,
+                        note
+                    })
+                });
+                
+                if (response.success) {
+                    showToast("Availability slot added successfully!");
+                    document.getElementById('manageModal').classList.remove('active');
+                    document.getElementById('slotDate').value = '';
+                    document.getElementById('slotStartTime').value = '';
+                    document.getElementById('slotEndTime').value = '';
+                    document.getElementById('slotNote').value = '';
+                } else {
+                    showToast("Failed to add slot: " + (response.message || "Unknown error"));
+                }
+            } catch (error) {
+                showToast("Error: " + error.message);
+            }
+        }
+
+        // Navigate to previous week
+        function prevWeek() {
+            weekStart.setDate(weekStart.getDate() - 7);
+            renderSchedule();
+        }
+
+        // Navigate to next week
+        function nextWeek() {
+            weekStart.setDate(weekStart.getDate() + 7);
+            renderSchedule();
+        }
+
+        // Go to today's week
+        function todayWeek() {
+            weekStart = getMonday(new Date());
+            renderSchedule();
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toastWrap = document.getElementById('toastWrap');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toastWrap.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Toggle mobile menu
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks) {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                API_CONFIG.auth.logout();
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            const token = API_CONFIG.getToken();
+            if (!token) {
+                window.location.href = '../Shared pages/login.html';
+                return;
+            }
+            
+            // Set active nav link
+            const currentPath = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // Initialize week start
+            weekStart = getMonday(new Date());
+            
+            // Load appointments
+            loadAppointments();
+            
+            // Set up event listeners
+            document.getElementById('prevWeekBtn').addEventListener('click', prevWeek);
+            document.getElementById('nextWeekBtn').addEventListener('click', nextWeek);
+            document.getElementById('todayBtn').addEventListener('click', todayWeek);
+            
+            const manageSlotsBtn = document.getElementById('manageSlotsBtn');
+            const manageModal = document.getElementById('manageModal');
+            const closeManageModal = document.getElementById('closeManageModal');
+            const saveNewSlot = document.getElementById('saveNewSlot');
+            
+            if (manageSlotsBtn) {
+                manageSlotsBtn.onclick = () => manageModal.classList.add('active');
+            }
+            if (closeManageModal) {
+                closeManageModal.onclick = () => manageModal.classList.remove('active');
+            }
+            if (saveNewSlot) {
+                saveNewSlot.onclick = addAvailability;
+            }
+            
+            // Fade-in animation
+            document.querySelectorAll('.fade-in').forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), 100);
+            });
+        });
+        
+        // Make functions globally accessible
+        window.viewAppointmentDetails = viewAppointmentDetails;
+        window.closeAppointmentModal = closeAppointmentModal;
+        window.toggleMenu = toggleMenu;
+        window.handleLogout = handleLogout;
+    </script>
+</body>
+
+</html>

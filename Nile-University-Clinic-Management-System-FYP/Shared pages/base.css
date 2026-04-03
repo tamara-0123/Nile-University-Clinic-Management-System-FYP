@@ -1,0 +1,123 @@
+/* base.css */
+:root {
+    --nile-blue: #003366;    
+    --nile-red: #ff0000;     
+    --bg-light: #f5f5f5;     
+    --white: #ffffff;
+    --border-color: #d5d5d5;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Poppins", sans-serif; 
+    background-color: var(--bg-light);
+    height: 100vh; 
+    overflow-x: hidden;
+}
+
+
+.navbar {
+    padding: 20px 40px;
+}
+
+
+.nav {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--white);
+    padding: 0 30px;
+    border-radius: 50px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+    height: 45px;
+    width: auto;
+    background-color: transparent; 
+    display: block;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+
+.logout {
+    color: var(--white);
+    background-color: var(--nile-red);
+    border: none;
+    height: 40px;
+    width: 90px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.logout:hover {
+    opacity: 0.8;
+}
+
+
+
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 120px); 
+    padding: 20px;
+}
+
+.auth-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #eee;
+}
+
+.input-group, .form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--nile-blue);
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+
+.cms-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.cms-toast-error { background-color: var(--nile-red); }
+.cms-toast-success { background-color: #28a745; }

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Schedule Management - Nile University CMS</title>
+  <link rel="stylesheet" href="schedule.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+      <link rel="icon" type="image/png" href="../../images/nile logo.png">
+
+</head>
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Clinic Logo" class="logo">
+        </a>
+        <div class="links">
+          <ul class="nav-links">
+            <li><a href="./homepage-p.html">Home</a></li>
+            <li><a href="./User management page.html">Staff Management</a></li>
+            <li><a href="./Reports Overview Page.html">Reports</a></li>
+            <li><a href="./Schedule Management page.html" class="active">Schedule</a></li>
+            <li><a href="./Full Patients Record Page.html">Appointment Records</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+            <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <h1>Schedule Management</h1>
+      <div class="controls">
+        <label class="sr-only">Select view</label>
+        <select id="viewToggle" aria-label="Toggle view">
+          <option value="week">Week</option>
+          <option value="day">Day</option>
+        </select>
+        <label class="sr-only">Date</label>
+        <input id="datePicker" type="date" aria-label="Select date">
+        <button id="screenshotBtn" class="btn" title="Save Schedule as PDF">
+        <i class="fas fa-camera"></i> Save as PDF
+      </button>
+        <!-- <button id="addAppt" class="btn">Add Appointment</button> -->
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="calendar" aria-label="Calendar">
+      <div class="toolbar">
+        <button id="prev" class="btn alt">Prev</button>
+        <button id="next" class="btn alt">Next</button>
+        <div class="muted">Showing <span id="rangeLabel">this week</span></div>
+      </div>
+      <div id="calendarGrid" class="grid" aria-hidden="false">
+        <!-- generated cells -->
+      </div>
+    </section>
+
+    <!-- <aside class="side" aria-label="Appointments list">
+      <h3>Appointments</h3>
+      <div class="muted">Tap an appointment to view or edit</div>
+      <ul id="appointmentsList" class="app-list">
+\
+      </ul>
+      
+    </aside> -->
+  </main>
+
+<!-- modal -->
+<div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-content">
+    <h3 id="modalTitle">Add Appointment</h3>
+    <form id="apptForm">
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="patientId">Patient ID *</label>
+          <input id="patientId" name="patientId" type="text" required placeholder="e.g. 20212345">
+        </div>
+        <div class="form-group">
+          <label for="patientName">Patient Name *</label>
+          <input id="patientName" name="patientName" type="text" required placeholder="Full Name">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="doctor">Assign Doctor</label>
+          <select id="doctor" name="doctor">
+            <option value="">Select Doctor (Optional)</option>
+            <!-- Will be populated by JS -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="apptDate">Date *</label>
+          <input id="apptDate" name="date" type="date" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="apptTime">Time *</label>
+          <input id="apptTime" name="time" type="time" required>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="scheduled">Scheduled</option>
+            <option value="waiting">Waiting</option>
+            <option value="checked-in">Checked In</option>
+            <option value="admitted">Admitted</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason for Appointment *</label>
+        <textarea id="reason" name="reason" rows="3" required placeholder="e.g., Follow-up, Headache, Check-up..."></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="cancelBtn" class="btn alt">Cancel</button>
+        <button type="submit" class="btn primary">Save Appointment</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="../Shared Pages/api-config.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Get the current page filename (e.g., "Schedule Management page.html")
+        // decodeURIComponent is used to handle spaces in filenames (e.g., "%20")
+        const currentPath = decodeURIComponent(window.location.pathname);
+        const currentPage = currentPath.split("/").pop();
+
+        // 2. Select all navigation links
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        navLinks.forEach(link => {
+            // 3. Get the link's href attribute (e.g., "../User Management Page/User management page.html")
+            const linkHref = link.getAttribute('href');
+            
+            // 4. Extract the filename from the href
+            const linkPage = linkHref.split("/").pop();
+
+            // 5. Compare. If they match, add the 'active' class
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            } 
+            // Optional: Handle the "Home" case if the URL is just "/" or empty
+            else if (currentPage === "" && linkPage === "Schedule Management page.html") {
+                link.classList.add('active');
+            }
+        });
+    });
+      function handleLogout() {
+        const confirmLogout = confirm("Are you sure you want to log out?");
+        if (confirmLogout) {
+          
+            window.location.href = '../Shared Pages/login.html'; 
+        }
+    }
+    // Add screenshot/PDF functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const screenshotBtn = document.getElementById('screenshotBtn');
+  
+  screenshotBtn.addEventListener('click', function() {
+    // Show loading indicator
+    const originalText = screenshotBtn.innerHTML;
+    screenshotBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+    screenshotBtn.disabled = true;
+    
+    // Use html2canvas to capture the page
+    // First, load the html2canvas library dynamically
+    if (typeof html2canvas === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      script.onload = function() {
+        captureAndSavePDF(screenshotBtn, originalText);
+      };
+      document.head.appendChild(script);
+    } else {
+      captureAndSavePDF(screenshotBtn, originalText);
+    }
+  });
+});
+
+function captureAndSavePDF(button, originalText) {
+  // Capture the main content (excluding header and navbar if desired)
+  const elementToCapture = document.querySelector('main') || document.body;
+  
+  html2canvas(elementToCapture, {
+    scale: 2, // Higher quality
+    backgroundColor: '#ffffff',
+    logging: false,
+    allowTaint: false,
+    useCORS: true
+  }).then(canvas => {
+    // Convert to PDF
+    if (typeof jspdf === 'undefined') {
+      // Load jsPDF if not available
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      script.onload = function() {
+        createPDFFromCanvas(canvas, button, originalText);
+      };
+      document.head.appendChild(script);
+    } else {
+      createPDFFromCanvas(canvas, button, originalText);
+    }
+  }).catch(error => {
+    console.error('Screenshot failed:', error);
+    alert('Failed to generate PDF. Please try again.');
+    button.innerHTML = originalText;
+    button.disabled = false;
+  });
+}
+
+function createPDFFromCanvas(canvas, button, originalText) {
+  const { jsPDF } = window.jspdf;
+  
+  // Get current date for filename
+  const date = new Date();
+  const dateStr = date.toISOString().split('T')[0];
+  
+  // Create PDF
+  const pdf = new jsPDF({
+    orientation: 'landscape',
+    unit: 'px',
+    format: [canvas.width, canvas.height]
+  });
+  
+  const imgData = canvas.toDataURL('image/png');
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  
+  // Save PDF
+  pdf.save(`schedule-${dateStr}.pdf`);
+  
+  // Reset button
+  button.innerHTML = originalText;
+  button.disabled = false;
+}
+  </script>
+
+  <script src="schedule.js" defer></script>
+</body>
+</html>

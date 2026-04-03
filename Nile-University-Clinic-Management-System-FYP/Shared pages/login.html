@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Nile University CMS</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="api-config.js"></script>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+    <style>
+        /* Additional styles for pharmacist role */
+        .role-badge {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .pharmacist-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .role-option {
+            transition: all 0.3s ease;
+        }
+        
+        .role-option:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body class="auth-page">
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <img src="../Student pages/image.png" alt="Nile Logo" class="auth-logo">
+            <h1>Welcome Back</h1>
+            <p>Login to Nile University Clinic Management System</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label>User Role</label>
+                    <select id="role" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="student">Student / Patient</option>
+                        <option value="nurse">Nurse</option>
+                        <option value="doctor">Medical Doctor</option>
+                        <option value="pharmacist">Pharmacist</option>
+                        <option value="principal-doctor">Principal Doctor</option>
+                        
+                    </select>
+                    <div class="role-badge" id="roleBadge"></div>
+                </div>
+                <div class="input-group">
+                    <label>ID Number</label>
+                    <input type="text" id="idNumber" placeholder="Enter Matric or Staff ID" required>
+                    <small id="idHint" style="display: none; color: #666; font-size: 12px;"></small>
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-submit">Sign In</button>
+            </form>
+            <div class="login-footer">
+                <a href="reset-password.html" class="forgot-link">Forgot Password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role-specific hints and validation
+        const roleHints = {
+            'student': {
+                hint: 'Enter your Student ID',
+                placeholder: 'e.g., 020230001'
+            },
+            'nurse': {
+                hint: 'Enter your Staff ID',
+                placeholder: 'e.g., N001'
+            },
+            'doctor': {
+                hint: 'Enter your Staff ID',
+                placeholder: 'e.g., D001'
+            },
+            'principal-doctor': {
+                hint: 'Enter your Staff ID',
+                placeholder: 'e.g., PD001'
+            },
+            'pharmacist': {
+                hint: 'Enter your Staff ID',
+                placeholder: 'e.g., PHARM001'
+            }
+        };
+
+        // Update input placeholder based on selected role
+        document.getElementById('role').addEventListener('change', (e) => {
+            const role = e.target.value;
+            const idInput = document.getElementById('idNumber');
+            const idHint = document.getElementById('idHint');
+            const roleBadge = document.getElementById('roleBadge');
+            
+            if (role && roleHints[role]) {
+                idInput.placeholder = roleHints[role].placeholder;
+                idHint.textContent = roleHints[role].hint;
+                idHint.style.display = 'block';
+                
+                // Show role-specific badge
+                if (role === 'pharmacist') {
+                    roleBadge.innerHTML = '<i class="fas fa-prescription-bottle"></i> Access to prescription management system';
+                    roleBadge.style.color = '#764ba2';
+                } else if (role === 'doctor') {
+                    roleBadge.innerHTML = '<i class="fas fa-stethoscope"></i> Access to doctor dashboard';
+                    roleBadge.style.color = '#0606ba';
+                } else if (role === 'nurse') {
+                    roleBadge.innerHTML = '<i class="fas fa-heartbeat"></i> Access to nurse station';
+                    roleBadge.style.color = '#10b981';
+                } else if (role === 'student') {
+                    roleBadge.innerHTML = '<i class="fas fa-user-graduate"></i> Access to patient portal';
+                    roleBadge.style.color = '#f59e0b';
+                } else if (role === 'principal-doctor') {
+                    roleBadge.innerHTML = '<i class="fas fa-user-md"></i> Access to admin panel';
+                    roleBadge.style.color = '#ef4444';
+                }
+            } else {
+                idHint.style.display = 'none';
+                roleBadge.innerHTML = '';
+            }
+        });
+
+        // Updated login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const role = document.getElementById('role').value;
+            const id = document.getElementById('idNumber').value;
+            const password = document.getElementById('password').value;
+
+            const submitBtn = e.target.querySelector('.btn-submit');
+            const originalText = submitBtn.textContent;
+
+            // Validate input
+            if (!role || !id || !password) {
+                CMS_UI.showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                // Show loading state
+                submitBtn.textContent = 'Signing in...';
+                submitBtn.disabled = true;
+
+                // Call backend API
+                const response = await API_CONFIG.auth.login({
+                    role,
+                    id,
+                    password
+                });
+
+                // Store authentication data
+                localStorage.setItem('authToken', response.token);
+                localStorage.setItem('user', JSON.stringify(response.user));
+
+                // Redirect based on role
+                const roleRoutes = {
+                    'student': '../Student pages/homepage-s.html',
+                    'nurse': '../Nurse Pages/homepage-n.html',
+                    'doctor': '../doctor_pageV1/homepage-d.html',
+                    'principal-doctor': '../Principal Doctor pages/homepage-p.html',
+                    'pharmacist': '../Pharmacist pages/homepage-p.html', 
+                };
+
+                const destination = roleRoutes[role] || roleRoutes[response.user.role];
+
+                if (destination) {
+                    console.log(`✅ Login successful! Redirecting ${role} to ${destination}`);
+                    
+                    // Show success message before redirect
+                    CMS_UI.showToast(`Welcome ${response.user.name || 'User'}! Redirecting...`, 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = destination;
+                    }, 500);
+                } else {
+                    throw new Error('Invalid role detected. No redirect path configured.');
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Display user-friendly error message
+                let errorMessage = 'Login failed. ';
+                if (error.message.includes('Invalid')) {
+                    errorMessage += 'Invalid credentials. Please check your ID and password.';
+                } else if (error.message.includes('role')) {
+                    errorMessage += 'Invalid role selected. Please contact administrator.';
+                } else if (error.message.includes('network')) {
+                    errorMessage += 'Network error. Please check your connection.';
+                } else {
+                    errorMessage += error.message || 'Please check your credentials.';
+                }
+                
+                CMS_UI.showToast(errorMessage, 'error');
+
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // UI UTILITIES
+        const CMS_UI = {
+            showToast: function (message, type = 'error') {
+                const existingToast = document.querySelector('.cms-toast');
+                if (existingToast) existingToast.remove();
+
+                const toast = document.createElement('div');
+                toast.className = `cms-toast cms-toast-${type}`;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: ${type === 'error' ? '#ff4d4d' : type === 'success' ? '#4CAF50' : '#2196F3'};
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    z-index: 1000;
+                    font-family: 'Poppins', sans-serif;
+                    animation: slideIn 0.3s ease-out;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                `;
+                
+                // Add icon based on type
+                const icon = type === 'error' ? '❌' : type === 'success' ? '✓' : 'ℹ️';
+                toast.innerHTML = `<span style="font-size: 18px;">${icon}</span><span>${message}</span>`;
+                
+                document.body.appendChild(toast);
+                
+                // Add animation styles if not present
+                if (!document.querySelector('#toast-styles')) {
+                    const style = document.createElement('style');
+                    style.id = 'toast-styles';
+                    style.textContent = `
+                        @keyframes slideIn {
+                            from {
+                                transform: translateX(100%);
+                                opacity: 0;
+                            }
+                            to {
+                                transform: translateX(0);
+                                opacity: 1;
+                            }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                setTimeout(() => toast.remove(), 3000);
+            }
+        };
+
+        // Check if already logged in and redirect
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = API_CONFIG.getToken();
+            const user = API_CONFIG.getUser();
+            
+            if (token && user) {
+                // Already logged in, redirect to appropriate dashboard
+                const roleRoutes = {
+                    'student': '../Student pages/homepage-s.html',
+                    'nurse': '../Nurse Pages/homepage-n.html',
+                    'doctor': '../doctor_pageV1/homepage-d.html',
+                    'principal-doctor': '../Principal Doctor pages/homepage-p.html',
+                    'pharmacist': '../Pharmacist pages/homepage-p.html',
+                };
+                
+                const destination = roleRoutes[user.role];
+                if (destination && window.location.pathname.includes('login.html')) {
+                    window.location.href = destination;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

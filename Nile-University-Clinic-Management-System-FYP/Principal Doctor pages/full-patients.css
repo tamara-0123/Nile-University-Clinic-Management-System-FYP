@@ -1,0 +1,527 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+:root{--bg:#f5f5f5;--card:#ffffff;--accent:#0606ba;--muted:#6b6b6b;--radius:10px;font-family:'Poppins',sans-serif}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:#222;font-family:var(--font-family, 'Poppins', sans-serif); margin-bottom: 20px;}
+.container{max-width:1100px;margin:0 auto;padding:1rem}
+
+/* Nav */
+.top{ }
+.navbar{padding:20px 40px}
+.nav{height:60px;display:flex;flex-direction:row;background-color:white;padding:20px;border-radius:50px;align-items:center;justify-content:space-between;gap:40px;border:1px solid #d5d5d5}
+.logo{height:40px;width:150px}
+.nav-links{display:flex;gap:1.5rem;list-style:none;margin:0;padding:0}
+.nav-links a{text-decoration:none;color:black}
+.nav-links a:hover{color:var(--accent)}
+.nav-links a.active {
+    color: #0606ba;
+    font-weight: 700;
+    border-bottom: 2px solid #0606ba;
+}
+.links{display:flex;flex-direction:row;justify-content:center}
+.nav-buttons{display:flex;gap:.5rem}
+.logout{color:white;background-color:red;border:none;height:40px;width:80px;border-radius:50px;font-family:'Poppins',sans-serif}
+.profile{color:black;background-color:white;border:2px solid #e3e2e2;height:40px;width:80px;border-radius:50px;font-family:'Poppins',sans-serif}
+
+.fp-header{margin:10px 20px;padding:18px;border-radius:10px;background:white;border:1px solid #d5d5d5}
+.fp-header .container{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fp-header h1{margin:0;font-size:1.1rem;color:black;font-weight:700}
+.fp-header .container{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.fp-header h1{margin:0;font-size:1.25rem;color:black;font-weight:600}
+.actions{display:flex;align-items:center;gap:.5rem}
+.actions input[type=search],.actions select,.actions input[type=date]{padding:.45rem .6rem;border-radius:6px;border:1px solid rgba(0,0,0,0.08)}
+.btn{background:var(--accent);color:#fff;padding:.5rem .7rem;border-radius:6px;border:0;cursor:pointer}
+.btn.alt{background:#eee;color:#333}
+.table-wrap{margin-top:1rem}
+.patients-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden}
+.patients-table th,.patients-table td{padding:.6rem;border-bottom:1px solid rgba(0,0,0,0.06);text-align:left}
+.patients-table thead{background:linear-gradient(90deg,#fafafa,#fff)}
+.patients-table tbody tr:hover{background:rgba(0,0,0,0.02)}
+.action-btn{background:transparent;border:0;color:var(--accent);cursor:pointer;padding:.25rem}
+.action-btn.delete{color:#d9534f}
+main{
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+/* =========================
+   1. Modal Overlay & Animation
+   ========================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  
+  /* REMOVED: backdrop-filter: blur(4px); */
+  
+  background: rgba(0, 0, 0, 0.5); /* Just the dark overlay */
+  z-index: 1000;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s;
+}
+
+.modal[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* =========================
+   2. Modal Card Styling (Scrollable)
+   ========================= */
+.modal-content {
+  background: var(--card, #ffffff);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  width: 100%;
+  min-width: 320px;
+  max-width: 500px;
+  box-sizing: border-box;
+
+  /* --- NEW: Scroll Logic --- */
+  max-height: 85vh; /* Limits height to 85% of the screen */
+  overflow-y: auto; /* Adds scrollbar if content exceeds max-height */
+}
+
+/* Optional: Style the scrollbar to look nicer (Webkit browsers) */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 4px;
+}
+.modal-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1; 
+  border-radius: 4px;
+}
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8; 
+}
+
+/* Title Styling */
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+  
+  /* Optional: Keep title sticky at top while scrolling */
+  position: sticky;
+  top: -2rem; /* Matches padding negative offset */
+  background: white;
+  z-index: 10;
+  padding-top: 10px; /* Adjust for sticky overlap */
+}
+
+/* =========================
+   3. Form Typography & Inputs
+   ========================= */
+.modal-content label {
+  display: block;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modal-content input, 
+.modal-content select {
+  box-sizing: border-box; 
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: #111;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-content input:focus, 
+.modal-content select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* =========================
+   4. Actions
+   ========================= */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.form-actions button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+}
+.btn-primary:hover { background-color: #1d4ed8; }
+
+.btn-secondary {
+  background-color: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.btn-secondary:hover { background-color: #f9fafb; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+@media (max-width:900px){
+  .fp-header .container{flex-direction:column;align-items:flex-start}
+  .actions{flex-wrap:wrap}
+}
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+}
+
+.status-badge.discharged {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.action-btn.view {
+    background-color: #003399;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-btn.view:hover {
+    background-color: #002277;
+}
+/* Scrollable table container */
+.table-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    position: relative;
+    background: white;
+    margin-bottom: 20px;
+}
+
+/* Sticky header */
+.table-container table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-container thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+}
+
+.table-container th {
+    background: #f8f9fa;
+    padding: 1rem;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.table-container td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    background: white;
+}
+
+.table-container tbody tr:hover td {
+    background-color: #f5f5f5;
+}
+
+/* Custom scrollbar */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+}
+
+.status-badge.discharged {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Action buttons */
+.action-btn.view {
+    background-color: #003399;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.action-btn.view:hover {
+    background-color: #002277;
+}
+
+.action-btn.edit {
+    background-color: #0606ba;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-btn.edit:hover {
+    background-color: #040499;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-container {
+        max-height: 400px;
+    }
+    
+    .table-container table {
+        min-width: 600px;
+    }
+}
+/* Doctor info section - consistent with form labels */
+#doctorInfoSection {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #003399;
+}
+
+#doctorInfoSection label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #333;
+}
+
+#doctorInfoSection input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+#doctorInfoSection input[readonly]:focus {
+    outline: none;
+    border-color: #ddd;
+    box-shadow: none;
+}
+/* Doctor info section - consistent with form */
+#doctorInfoSection {
+    margin: 15px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #003399;
+}
+
+#doctorInfoSection label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #333;
+}
+
+#doctorInfoSection input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+#doctorInfoSection input[readonly]:focus {
+    outline: none;
+    border-color: #ddd;
+    box-shadow: none;
+}
+.status-badge.completed {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-badge.active {
+    background-color: #e6f7e6;
+    color: #2e7d32;
+}
+
+.status-badge.discharged {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.status-badge.completed {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+}
+/* Chart Section Styles */
+.chart-section {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid #d5d5d5;
+  margin-bottom: 30px;
+  padding: 10px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.chart-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-header h2 i {
+  color: var(--primary);
+}
+
+.chart-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chart-limit-select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+}
+
+.chart-limit-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#diagnosisChart {
+  max-height: 300px;
+  width: 100%;
+}
+
+.no-data-message {
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .chart-wrapper {
+    height: 250px;
+  }
+}

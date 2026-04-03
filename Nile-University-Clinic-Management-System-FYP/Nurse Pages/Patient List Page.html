@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient List - Nile University CMS</title>
+  <link rel="icon" type="image/png" href="../images/nile logo.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =========================================
+       CSS VARIABLES & RESET
+       ========================================= */
+    :root {
+      --primary: #003399;
+      --primary-600: #1A56DB;
+      --bg-light: #f5f5f5;
+      --white: #ffffff;
+      --text-dark: #333;
+      --text-muted: #6c757d;
+      --border: #e0e0e0;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --success: #28a745;
+      --danger: #d32f2f;
+      --warning: #ff9800;
+      --primary-blue: #0606ba;
+      --border-color: #d5d5d5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 2rem;
+    }
+
+    /* =========================================
+       2. NAVIGATION BAR (FIXED - DO NOT TOUCH)
+       ========================================= */
+    .top {
+      width: 100%;
+    }
+
+    .navbar {
+      padding: 20px 40px;
+      background-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .nav {
+      height: 70px;
+      display: flex;
+      flex-direction: row;
+      background-color: var(--white);
+      padding: 0 30px;
+      border-radius: 50px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 15px;
+      border: 1px solid var(--border-color);
+      width: 100%;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      max-width: 150px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 1;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: black;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+      padding-bottom: 3px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary-blue);
+      font-weight: 700;
+      border-bottom: 2px solid var(--primary-blue);
+    }
+
+    .logout {
+      color: white;
+      background-color: red;
+      border: none;
+      height: 40px;
+      padding: 0 25px;
+      border-radius: 50px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .logout:hover {
+      opacity: 0.9;
+    }
+
+    /* =========================================
+       3. LAYOUT & HERO
+       ========================================= */
+    .container {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    .hero {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .hero .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .search-wrapper i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .search-wrapper input {
+      padding: 0.6rem 1rem 0.6rem 2.2rem;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 250px;
+      outline: none;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+
+    .search-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 51, 153, 0.1);
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-outline {
+      background: white;
+      border-color: var(--border);
+      color: var(--text-dark);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+      border: none;
+    }
+
+    .btn-warning:hover {
+      background: #f57c00;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: #b71c1c;
+    }
+
+    /* =========================================
+       4. TABLE & TABLE ACTIONS
+       ========================================= */
+    .panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .patient-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    .patient-table th {
+      text-align: left;
+      padding: 1rem;
+      background: #f8f9fa;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .patient-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .patient-table tr:hover {
+      background-color: #fafcff;
+    }
+
+    /* Status Pills */
+    .status-pill {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .pill-waiting {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .pill-checked-in {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .pill-completed {
+      background: #e2e3e5;
+      color: #383d41;
+      border: 1px solid #d6d8db;
+    }
+
+    .pill-referred {
+      background: #cce5ff;
+      color: #004085;
+      border: 1px solid #b8daff;
+    }
+
+    .pill-cancelled {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .pill-admitted {
+      background: #6710f267;
+      color: #6610f2;
+      border: 1px solid #bee5eb;
+    }
+
+    /* Table Buttons */
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      margin-right: 5px;
+    }
+
+    .view-btn {
+      background-color: #e3f2fd;
+      color: #1976d2;
+      border: 1px solid #bbdefb;
+    }
+
+    .view-btn:hover {
+      background-color: #1976d2;
+      color: white;
+      border-color: #1976d2;
+    }
+
+    .checkin-btn {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .checkin-btn:hover {
+      background-color: #2e7d32;
+      color: white;
+      border-color: #2e7d32;
+    }
+
+    .checkin-btn:disabled {
+      background-color: #f0f0f0;
+      color: #999;
+      border-color: #eee;
+      cursor: not-allowed;
+    }
+
+    .reschedule-btn {
+      background-color: #fff3e0;
+      color: #f57c00;
+      border: 1px solid #ffe0b2;
+      margin-left: 5px;
+    }
+
+    .reschedule-btn:hover {
+      background-color: #f57c00;
+      color: white;
+      border-color: #f57c00;
+    }
+
+    .cancel-btn {
+      background-color: #ffebee;
+      color: #d32f2f;
+      border: 1px solid #ffcdd2;
+      margin-left: 5px;
+    }
+
+    .cancel-btn:hover {
+      background-color: #d32f2f;
+      color: white;
+      border-color: #d32f2f;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+
+    .pagination-btn {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .pagination-btn:hover {
+      background: #f0f4ff;
+    }
+
+    .pagination-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #f9f9f9;
+      color: #999;
+      border-color: #e0e0e0;
+    }
+
+    .page-info {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* =========================================
+       5. MODALS
+       ========================================= */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-lg {
+      max-width: 800px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Form elements in modals */
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 51, 153, 0.1);
+    }
+
+    /* --- RECORD MODAL STYLES --- */
+    .patient-header-modal {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .ph-avatar {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .ph-info h4 {
+      margin: 0;
+      color: var(--primary);
+    }
+
+    .ph-info p {
+      margin: 2px 0 0;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+      margin: 1.5rem 0 10px;
+    }
+
+    .vitals-grid-modal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
+
+    .vital-box {
+      background: #fff;
+      border: 1px solid #eee;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .vital-box small {
+      display: block;
+      color: #777;
+      font-size: 0.75rem;
+      margin-bottom: 4px;
+    }
+
+    .vital-box strong {
+      font-size: 1.1rem;
+      color: var(--text-dark);
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .tag-allergy {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .tag-condition {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .notif-item {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .notif-item.unread {
+      background: #f0f7ff;
+    }
+
+    .notif-desc {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    /* Action button group */
+    .action-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .search-wrapper input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Nile University Logo" class="logo">
+        </a>
+        <div class="nav-links">
+          <a href="./homepage-n.html">Home</a>
+          <a href="./Patient List Page.html" class="active">Patient List</a>
+          <a href="./Patient Vitals Entry Page.html">Vitals Entry</a>
+          <a href="./Patient Referral Page.html">Referrals</a>
+          <a href="./Daily Report Page.html">Daily Report</a>
+        </div>
+        <div class="nav-buttons">
+          <button class="logout" onclick="handleLogout()">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <main class="container fade-in">
+    <div class="hero">
+      <div>
+        <div class="title"><i class="fas fa-users"></i> Patient List</div>
+        <div class="meta">Manage and view all registered patients</div>
+      </div>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="patientSearch" placeholder="Search name or ID..." />
+        </div>
+        <div class="filter-group">
+          <button class="btn btn-outline active" id="filterAll">All Patients</button>
+          <button class="btn btn-outline" id="filterWaiting">Waiting Room</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="table-responsive">
+        <table class="patient-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient Name</th>
+              <th>Date</th>
+              <th>Student/Staff ID</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="patientTable">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <button class="pagination-btn disabled" id="prevBtn">
+          <i class="fas fa-chevron-left"></i> Prev
+        </button>
+        <span class="page-info">Page 1 of 1</span>
+        <button class="pagination-btn disabled" id="nextBtn">
+          Next <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Patient Record Modal -->
+  <div id="recordModal" class="modal-overlay">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-medical"></i> Patient Record</h3>
+        <button class="close-btn" id="closeRecordX">&times;</button>
+      </div>
+      <div class="modal-body" id="recordContent">
+      </div>
+      
+      <!-- Appointment Actions Section -->
+      <div id="appointmentActions" style="display: none; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #eee;">
+        <div class="section-title"><i class="fas fa-calendar-alt"></i> Appointment Management</div>
+        <div class="action-group">
+          <button class="btn btn-warning" id="rescheduleBtn" style="flex: 1;">
+            <i class="fas fa-calendar-plus"></i> Reschedule Appointment
+          </button>
+          <button class="btn btn-danger" id="cancelBtn" style="flex: 1;">
+            <i class="fas fa-times-circle"></i> Cancel Appointment
+          </button>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="closeRecordBtn">Close</button>
+        <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reschedule Modal -->
+  <div id="rescheduleModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-plus" style="color: #f57c00;"></i> Reschedule Appointment</h3>
+        <button class="close-btn" id="closeRescheduleX">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="reschedulePatientInfo" style="background: #f5f5f5; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+        </div>
+        <div class="form-group">
+          <label>New Date and Time</label>
+          <input type="datetime-local" id="newAppointmentDate" required>
+        </div>
+        <div class="form-group">
+          <label>Reason for Rescheduling</label>
+          <textarea id="rescheduleReason" rows="3" placeholder="e.g., Doctor unavailable, clinic schedule change..."></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelRescheduleBtn">Cancel</button>
+        <button class="btn btn-warning" id="confirmRescheduleBtn">Confirm Reschedule</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Modal -->
+  <div id="cancelModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-times-circle" style="color: #d32f2f;"></i> Cancel Appointment</h3>
+        <button class="close-btn" id="closeCancelX">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="cancelPatientInfo" style="background: #f5f5f5; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+        </div>
+        <div class="form-group">
+          <label>Cancellation Reason</label>
+          <select id="cancelReasonSelect">
+            <option value="">-- Select a reason --</option>
+            <option value="Patient requested">Patient requested</option>
+            <option value="Doctor unavailable">Doctor unavailable</option>
+            <option value="Clinic closed">Clinic closed</option>
+            <option value="Emergency">Emergency situation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="otherReasonGroup" style="display: none;">
+          <label>Please specify</label>
+          <input type="text" id="otherReason" placeholder="Enter reason...">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelCancelBtn">Back</button>
+        <button class="btn btn-danger" id="confirmCancelBtn">Confirm Cancellation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="modal-overlay">
+    <div class="modal" style="text-align:center;">
+      <div class="modal-header" style="justify-content:center;">
+        <h3 style="color:#d32f2f"><i class="fas fa-sign-out-alt"></i> Confirm Logout</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to end your session?</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline close-btn">Cancel</button>
+        <button class="btn btn-danger" onclick="window.location.href='../Shared Pages/login.html'">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../Shared pages/api-config.js"></script>
+  <script>
+    // =========================================
+    // HELPER: Format time with AM/PM
+    // =========================================
+    function formatTimeWithAmPm(date) {
+      if (!date) return 'N/A';
+      const d = new Date(date);
+      let hours = d.getHours();
+      const minutes = d.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // the hour '0' should be '12'
+      const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+      return `${hours}:${minutesStr} ${ampm}`;
+    }
+
+    function formatDateWithAmPm(date) {
+      if (!date) return 'N/A';
+      const d = new Date(date);
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      const dateStr = d.toLocaleDateString('en-US', options);
+      const timeStr = formatTimeWithAmPm(d);
+      return `${dateStr} at ${timeStr}`;
+    }
+
+    function formatTimeOnlyAmPm(date) {
+      if (!date) return 'N/A';
+      return formatTimeWithAmPm(date);
+    }
+
+    let currentQueue = [];
+    let currentAppointment = null;
+
+    // 1. Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      checkAuthStatus();
+      const container = document.querySelector('.container');
+      if (container) container.classList.add('visible');
+      initPage();
+    });
+
+    function checkAuthStatus() {
+      const token = API_CONFIG.getToken();
+      if (!token) {
+        window.location.href = '../Shared pages/login.html';
+      }
+    }
+
+    async function initPage() {
+      await loadPatientTable();
+      setupSearch();
+      setupFilters();
+      setupPagination();
+      setupTableActions();
+      setupModals();
+      setupRescheduleModal();
+      setupCancelModal();
+    }
+
+    function handleLogout() {
+      document.getElementById('logoutModal').style.display = 'flex';
+    }
+
+    async function loadPatientTable(filter = "all") {
+      const tableBody = document.getElementById("patientTable");
+      if (!tableBody) return;
+
+      try {
+        const data = await API_CONFIG.request('/nurse/queue');
+        if (data.success && data.appointments) {
+          currentQueue = data.appointments;
+          tableBody.innerHTML = "";
+
+          let filteredData = currentQueue;
+          if (filter === "waiting") {
+            filteredData = currentQueue.filter(app => app.status === "scheduled" || app.status === "waiting");
+          }
+
+          if (filteredData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No patients found in queue.</td></tr>';
+            return;
+          }
+
+          filteredData.forEach(app => {
+            const patient = app.patient?.user;
+            const name = patient?.name || 'Unknown';
+            const studentStaffId = patient?.studentID || patient?.staffID || 'N/A';
+            const appointmentDateObj = new Date(app.date);
+            const formattedDate = appointmentDateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const formattedTime = formatTimeOnlyAmPm(appointmentDateObj);
+
+            const row = document.createElement("tr");
+
+            let pillClass = "pill-waiting";
+            if (app.status === "checked-in") pillClass = "pill-checked-in";
+            if (app.status === "completed") pillClass = "pill-completed";
+            if (app.status === "referred") pillClass = "pill-referred";
+            if (app.status === "cancelled") pillClass = "pill-cancelled";
+            if (app.status === "admitted") pillClass = "pill-admitted";
+
+            const isCheckedIn = app.status !== "scheduled" && app.status !== "waiting";
+            const btnDisabled = isCheckedIn ? "disabled" : "";
+            const btnText = isCheckedIn ? "Checked" : `<i class="fas fa-check-square"></i> Check-in`;
+
+            row.innerHTML = `
+               <td>${studentStaffId}</td>
+               <td><strong>${escapeHtml(name)}</strong></td>
+               <td>${formattedDate}</td>
+               <td>${studentStaffId}</td>
+               <td>${formattedTime}</td>
+               <td><span class="status-pill ${pillClass}">${app.status}</span></td>
+               <td>
+                <button class="btn-small view-btn" data-id="${app._id}">
+                  <i class="fas fa-eye"></i> View
+                </button>
+                <button class="btn-small checkin-btn" data-id="${app._id}" ${btnDisabled}>
+                  ${btnText}
+                </button>
+               </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load patient table:', error);
+        tableBody.innerHTML = '<tr><td colspan="9" style="text-align:center; color:red;">Failed to load data from server.</td></tr>';
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function setupTableActions() {
+      const tableBody = document.getElementById("patientTable");
+      if (!tableBody) return;
+
+      tableBody.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+
+        const id = btn.dataset.id;
+
+        if (btn.classList.contains('view-btn')) {
+          openRecordModal(id);
+        }
+        else if (btn.classList.contains('checkin-btn')) {
+          if (!btn.disabled) checkInPatient(id);
+        }
+      });
+    }
+
+    function openRecordModal(id) {
+      const appointment = currentQueue.find(app => app._id === id);
+      if (!appointment) return;
+      
+      currentAppointment = appointment;
+
+      const modal = document.getElementById('recordModal');
+      const content = document.getElementById('recordContent');
+      const actionsDiv = document.getElementById('appointmentActions');
+
+      const patient = appointment.patient?.user;
+      const patientDetails = appointment.patient;
+      const name = patient?.name || 'Unknown';
+      const studentStaffId = patient?.studentID || patient?.staffID || 'N/A';
+      
+      const age = patient?.age || patientDetails?.age || 'N/A';
+      const gender = patient?.gender || patientDetails?.gender || 'Not specified';
+      const department = patient?.department || patientDetails?.department || 'Not specified';
+      
+      const genderIcon = gender === 'male' ? '♂' : gender === 'female' ? '♀' : '';
+      const genderDisplay = genderIcon ? `${genderIcon} ${gender}` : gender;
+
+      const appointmentDate = new Date(appointment.date);
+      const formattedDateFull = appointmentDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      const formattedTimeAmPm = formatTimeOnlyAmPm(appointmentDate);
+
+      content.innerHTML = `
+        <div class="patient-header-modal">
+          <div class="ph-avatar"><i class="fas fa-user"></i></div>
+          <div class="ph-info">
+            <h4>${escapeHtml(name)} (${escapeHtml(studentStaffId)})</h4>
+            <p>Status: <span class="status-pill ${getPillClass(appointment.status)}">${appointment.status.toUpperCase()}</span></p>
+          </div>
+        </div>
+
+        <div class="section-title">Patient Demographics</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;">
+          <div style="background: #f9f9f9; padding: 10px; border-radius: 6px; text-align: center;">
+            <div style="color: #666; font-size: 0.75rem; margin-bottom: 4px;">Age</div>
+            <div style="font-size: 1.2rem; font-weight: 600;">${age} years</div>
+          </div>
+          <div style="background: #f9f9f9; padding: 10px; border-radius: 6px; text-align: center;">
+            <div style="color: #666; font-size: 0.75rem; margin-bottom: 4px;">Gender</div>
+            <div style="font-size: 1.2rem; font-weight: 600; text-transform: capitalize;">${escapeHtml(genderDisplay)}</div>
+          </div>
+          <div style="background: #f9f9f9; padding: 10px; border-radius: 6px; text-align: center;">
+            <div style="color: #666; font-size: 0.75rem; margin-bottom: 4px;">Department</div>
+            <div style="font-size: 1.2rem; font-weight: 600;">${escapeHtml(department)}</div>
+          </div>
+        </div>
+
+        <div class="section-title">Appointment Details</div>
+        <div class="vitals-grid-modal">
+          <div class="vital-box"><small>Date</small><strong>${formattedDateFull}</strong></div>
+          <div class="vital-box"><small>Time</small><strong>${formattedTimeAmPm}</strong></div>
+          <div class="vital-box"><small>Doctor</small><strong>${appointment.doctor?.name || 'Assigned soon'}</strong></div>
+        </div>
+
+        <div class="section-title">Reason for Visit</div>
+        <div style="padding: 10px; background: #f9f9f9; border-radius: 6px; margin-top: 10px;">
+          ${appointment.reason || 'No specific reason provided.'}
+        </div>
+      `;
+
+      if (appointment.status !== 'completed' && appointment.status !== 'cancelled') {
+        actionsDiv.style.display = 'block';
+      } else {
+        actionsDiv.style.display = 'none';
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function getPillClass(status) {
+      const map = {
+        'scheduled': 'pill-waiting',
+        'waiting': 'pill-waiting',
+        'checked-in': 'pill-checked-in',
+        'in-consultation': 'pill-checked-in',
+        'completed': 'pill-completed',
+        'referred': 'pill-referred',
+        'cancelled': 'pill-cancelled',
+        'admitted': 'pill-admitted'
+      };
+      return map[status] || 'pill-waiting';
+    }
+
+    async function checkInPatient(id) {
+      const appointment = currentQueue.find(app => app._id === id);
+      if (appointment && confirm(`Confirm check-in for ${appointment.patient?.user?.name}?`)) {
+        try {
+          const response = await API_CONFIG.request(`/nurse/status/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ status: 'checked-in' })
+          });
+
+          if (response.success) {
+            alert("Patient checked in successfully!");
+            loadPatientTable();
+          }
+        } catch (error) {
+          alert(error.message || "Failed to update status.");
+        }
+      }
+    }
+
+    function setupRescheduleModal() {
+      const rescheduleBtn = document.getElementById('rescheduleBtn');
+      const rescheduleModal = document.getElementById('rescheduleModal');
+      const closeRescheduleX = document.getElementById('closeRescheduleX');
+      const cancelRescheduleBtn = document.getElementById('cancelRescheduleBtn');
+      const confirmRescheduleBtn = document.getElementById('confirmRescheduleBtn');
+
+      if (rescheduleBtn) {
+        rescheduleBtn.addEventListener('click', () => {
+          if (!currentAppointment) return;
+          
+          const patient = currentAppointment.patient?.user;
+          const infoDiv = document.getElementById('reschedulePatientInfo');
+          const currentTimeFormatted = formatDateWithAmPm(currentAppointment.date);
+          infoDiv.innerHTML = `
+            <strong>${patient?.name}</strong><br>
+            <small>Current Appointment: ${currentTimeFormatted}</small>
+          `;
+          
+          const now = new Date();
+          now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+          document.getElementById('newAppointmentDate').min = now.toISOString().slice(0, 16);
+          
+          rescheduleModal.style.display = 'flex';
+        });
+      }
+
+      if (closeRescheduleX) closeRescheduleX.addEventListener('click', () => rescheduleModal.style.display = 'none');
+      if (cancelRescheduleBtn) cancelRescheduleBtn.addEventListener('click', () => rescheduleModal.style.display = 'none');
+
+      if (confirmRescheduleBtn) {
+        confirmRescheduleBtn.addEventListener('click', async () => {
+          const newDate = document.getElementById('newAppointmentDate').value;
+          const reason = document.getElementById('rescheduleReason').value;
+
+          if (!newDate) {
+            alert('Please select a new date and time');
+            return;
+          }
+
+          try {
+            confirmRescheduleBtn.disabled = true;
+            confirmRescheduleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            const response = await API_CONFIG.request(`/nurse/reschedule/${currentAppointment._id}`, {
+              method: 'PUT',
+              body: JSON.stringify({ 
+                newDate, 
+                reasonForChange: reason || 'Schedule adjustment by clinic'
+              })
+            });
+
+            if (response.success) {
+              alert('Appointment rescheduled successfully!');
+              rescheduleModal.style.display = 'none';
+              document.getElementById('recordModal').style.display = 'none';
+              loadPatientTable();
+              document.getElementById('newAppointmentDate').value = '';
+              document.getElementById('rescheduleReason').value = '';
+            } else {
+              throw new Error(response.message || 'Failed to reschedule appointment');
+            }
+          } catch (error) {
+            console.error('Reschedule error:', error);
+            alert(error.message || 'Failed to reschedule appointment');
+          } finally {
+            confirmRescheduleBtn.disabled = false;
+            confirmRescheduleBtn.innerHTML = 'Confirm Reschedule';
+          }
+        });
+      }
+    }
+
+    function setupCancelModal() {
+      const cancelBtn = document.getElementById('cancelBtn');
+      const cancelModal = document.getElementById('cancelModal');
+      const closeCancelX = document.getElementById('closeCancelX');
+      const cancelCancelBtn = document.getElementById('cancelCancelBtn');
+      const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+      const cancelReasonSelect = document.getElementById('cancelReasonSelect');
+      const otherReasonGroup = document.getElementById('otherReasonGroup');
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          if (!currentAppointment) return;
+          const patient = currentAppointment.patient?.user;
+          const infoDiv = document.getElementById('cancelPatientInfo');
+          const currentTimeFormatted = formatDateWithAmPm(currentAppointment.date);
+          infoDiv.innerHTML = `
+            <strong>${patient?.name}</strong><br>
+            <small>Appointment: ${currentTimeFormatted}</small>
+          `;
+          cancelModal.style.display = 'flex';
+        });
+      }
+
+      if (cancelReasonSelect) {
+        cancelReasonSelect.addEventListener('change', () => {
+          if (cancelReasonSelect.value === 'Other') {
+            otherReasonGroup.style.display = 'block';
+          } else {
+            otherReasonGroup.style.display = 'none';
+          }
+        });
+      }
+
+      if (closeCancelX) closeCancelX.addEventListener('click', () => cancelModal.style.display = 'none');
+      if (cancelCancelBtn) cancelCancelBtn.addEventListener('click', () => cancelModal.style.display = 'none');
+
+      if (confirmCancelBtn) {
+        confirmCancelBtn.addEventListener('click', async () => {
+          let reason = cancelReasonSelect.value;
+          
+          if (!reason) {
+            alert('Please select a cancellation reason');
+            return;
+          }
+
+          if (reason === 'Other') {
+            reason = document.getElementById('otherReason').value;
+            if (!reason) {
+              alert('Please specify the cancellation reason');
+              return;
+            }
+          }
+
+          if (!confirm('Are you sure you want to cancel this appointment? This action cannot be undone.')) return;
+
+          try {
+            confirmCancelBtn.disabled = true;
+            confirmCancelBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            const response = await API_CONFIG.request(`/nurse/cancel/${currentAppointment._id}`, {
+              method: 'PUT',
+              body: JSON.stringify({ cancellationReason: reason })
+            });
+
+            if (response.success) {
+              alert('Appointment cancelled successfully!');
+              cancelModal.style.display = 'none';
+              document.getElementById('recordModal').style.display = 'none';
+              loadPatientTable();
+              cancelReasonSelect.value = '';
+              document.getElementById('otherReason').value = '';
+              otherReasonGroup.style.display = 'none';
+            } else {
+              throw new Error(response.message || 'Failed to cancel appointment');
+            }
+          } catch (error) {
+            console.error('Cancel error:', error);
+            alert(error.message || 'Failed to cancel appointment');
+          } finally {
+            confirmCancelBtn.disabled = false;
+            confirmCancelBtn.innerHTML = 'Confirm Cancellation';
+          }
+        });
+      }
+    }
+
+    function setupSearch() {
+      const searchInput = document.getElementById("patientSearch");
+      if (searchInput) {
+        searchInput.addEventListener("input", function (e) {
+          const term = e.target.value.toLowerCase();
+          const rows = document.querySelectorAll("#patientTable tr");
+          rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(term) ? "" : "none";
+          });
+        });
+      }
+    }
+
+    function setupFilters() {
+      const btnAll = document.getElementById("filterAll");
+      const btnWait = document.getElementById("filterWaiting");
+
+      if (btnAll && btnWait) {
+        btnAll.addEventListener("click", () => {
+          btnAll.classList.add("active");
+          btnWait.classList.remove("active");
+          loadPatientTable("all");
+        });
+
+        btnWait.addEventListener("click", () => {
+          btnWait.classList.add("active");
+          btnAll.classList.remove("active");
+          loadPatientTable("waiting");
+        });
+      }
+    }
+
+    function setupPagination() { }
+
+    function setupModals() {
+      const logoutModal = document.getElementById('logoutModal');
+      const recordModal = document.getElementById('recordModal');
+      const closeRecordBtn = document.getElementById('closeRecordBtn');
+      const closeRecordX = document.getElementById('closeRecordX');
+
+      if (closeRecordBtn) closeRecordBtn.onclick = () => recordModal.style.display = 'none';
+      if (closeRecordX) closeRecordX.onclick = () => recordModal.style.display = 'none';
+
+      const logoutCancel = logoutModal.querySelector('.close-btn');
+      if (logoutCancel) logoutCancel.onclick = () => logoutModal.style.display = 'none';
+
+      window.onclick = (e) => {
+        if (e.target == logoutModal) logoutModal.style.display = "none";
+        if (e.target == recordModal) recordModal.style.display = "none";
+        if (e.target == document.getElementById('rescheduleModal')) 
+          document.getElementById('rescheduleModal').style.display = "none";
+        if (e.target == document.getElementById('cancelModal')) 
+          document.getElementById('cancelModal').style.display = "none";
+      };
+    }
+  </script>
+</body>
+
+</html>

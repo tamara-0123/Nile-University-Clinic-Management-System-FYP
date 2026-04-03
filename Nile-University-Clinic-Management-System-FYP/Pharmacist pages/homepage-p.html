@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacist Dashboard - Nile CMS</title>
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Same styles as before */
+        :root {
+            --primary-blue: #0606ba;
+            --primary-green: #10b981;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --emergency-red: #dc2626;
+            --urgent-orange: #f97316;
+            --routine-green: #10b981;
+        }
+        
+:root {
+            --primary-blue: #0606ba;
+            --primary-green: #10b981;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --warning-red: #ef4444;
+            --warning-yellow: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* =========================================
+           2. NAVIGATION (DESKTOP)
+           ========================================= */
+        .navbar-area {
+            padding: 20px 40px;
+            background-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            height: 60px;
+            display: flex;
+            flex-direction: row;
+            background-color: var(--white);
+            padding: 0 30px;
+            border-radius: 50px;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #d5d5d5;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 3px;
+        }
+
+        .logout {
+            color: var(--white);
+            background-color: red;
+            border: none;
+            height: 40px;
+            width: 90px;
+            border-radius: 50px;
+            font-family: "Poppins", sans-serif;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout:hover {
+            opacity: 0.8;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--primary-blue);
+        }
+
+        /* =========================================
+           3. SIDE NAV (MOBILE)
+           ========================================= */
+        .side-nav {
+            position: fixed;
+            top: 0;
+            right: -360px;
+            width: 280px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 4000;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 40px 30px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .side-nav.active {
+            right: 0;
+        }
+
+        .side-nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .side-nav .close-btn {
+            font-size: 2.5rem;
+            align-self: flex-end;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        /* =========================================
+           4. PHARMACIST HOMEPAGE CONTENT
+           ========================================= */
+        .main-content {
+            padding-bottom: 40px;
+        }
+
+        /* Hero Section - Pharmacist Profile */
+        .hero {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            margin: 0 40px;
+            border: 1px solid #d5d5d5;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: var(--white);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .user-name {
+            font-size: 30px;
+            width: 25%;
+        }
+
+        .user {
+            font-weight: 600;
+        }
+
+        .staff-id-box,
+        .department-box {
+            border: 2px solid var(--primary-blue);
+            border-radius: 10px;
+            width: 20%;
+            min-width: 150px;
+            padding: 10px;
+            background-color: hsla(240, 94%, 38%, 0.2);
+            color: black;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .right i {
+            font-size: 40px;
+        }
+
+        .header {
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .content {
+            font-weight: 600;
+            margin-top: 0px;
+        }
+
+        .quick-action {
+            width: 15%;
+            min-width: 120px;
+        }
+
+        .action-btn {
+            height: 100%;
+            min-height: 80px;
+            border-radius: 20px;
+            background-color: hsla(142, 76%, 36%, 0.2);
+            border: 2px solid hsl(142, 76%, 36%);
+            color: black;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background-color: hsl(142, 76%, 36%);
+            color: white;
+        }
+
+        /* Pharmacist Summary Cards - Only 2 */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px;
+        }
+
+        .card {
+            background-color: #ffffffd7;
+            border: 1px solid #d5d5d5;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 18px;
+            margin: 0 0 10px 0;
+        }
+
+        .card-number {
+            font-size: 40px;
+            font-weight: 700;
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .card-content {
+            font-size: 14px;
+            margin: 2px 0;
+            color: gray;
+        }
+
+        .card-link {
+            font-size: 12px;
+            font-style: italic;
+            margin-top: 15px;
+            text-decoration: underline;
+            color: var(--primary-blue);
+            cursor: pointer;
+        }
+
+        /* Priority Queue Section */
+        .queue-section {
+            margin: 0 40px 30px 40px;
+            background: var(--white);
+            border: 1px solid #d5d5d5;
+            border-radius: 10px;
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-header i {
+            font-size: 24px;
+            color: var(--primary-blue);
+        }
+
+        .queue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fafafa;
+            transition: all 0.2s;
+        }
+
+        .queue-item.priority-emergency {
+            border-left: 5px solid #dc2626;
+            background: #fff5f5;
+        }
+
+        .queue-item.priority-urgent {
+            border-left: 5px solid #f97316;
+            background: #fff7ed;
+        }
+
+        .queue-item.priority-routine {
+            border-left: 5px solid #10b981;
+            background: #f0fdf4;
+        }
+
+        .patient-info h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .patient-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .patient-info i {
+            margin-right: 5px;
+            color: var(--primary-blue);
+            width: 16px;
+        }
+
+        .queue-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-process {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .btn-process:hover {
+            opacity: 0.9;
+        }
+
+        /* Recent Activity Section */
+        .recent-activity {
+            margin: 0 40px 30px 40px;
+            background: var(--white);
+            border: 1px solid #d5d5d5;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #e6f0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Container for Feedback and FAQ - Same as original reference */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 0 40px 20px 40px;
+        }
+
+        /* Feedback Section - Identical to original reference */
+        .feedback-section {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .more-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .more-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .more-header i {
+            font-size: 24px;
+            color: var(--primary-blue);
+        }
+
+        .feedback-section select,
+        .feedback-section textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .feedback-section button {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+        }
+
+        .feedback-section button:hover {
+            opacity: 0.9;
+        }
+
+        /* FAQ Section - Identical to original reference */
+        .faq-section {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            padding: 0;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 5px;
+            color: gray;
+            font-size: 14px;
+        }
+
+        .faq-answer.open {
+            max-height: 200px;
+        }
+
+        .arrow {
+            transition: 0.3s;
+        }
+
+        .arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            color: #888;
+            font-size: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .nav-links,
+            .nav .logout {
+                display: none !important;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar-area {
+                padding: 15px 20px;
+            }
+
+            .nav {
+                padding: 0 20px;
+            }
+
+            .side-nav {
+                display: flex;
+            }
+
+            .hero,
+            .cards,
+            .queue-section,
+            .recent-activity,
+            .container {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .user-name,
+            .staff-id-box,
+            .department-box,
+            .quick-action {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .queue-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .queue-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feedback-section,
+            .faq-section {
+                height: auto;
+                max-height: 400px;
+            }
+        }        
+        .prescription-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 6px solid var(--primary-blue);
+            transition: transform 0.2s;
+        }
+        
+        .prescription-card.completed {
+            opacity: 0.7;
+            border-left-color: var(--primary-green);
+        }
+        
+        .urgency-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .emergency-badge {
+            background: #fee2e2;
+            color: var(--emergency-red);
+        }
+        
+        .urgent-badge {
+            background: #fff3e0;
+            color: var(--urgent-orange);
+        }
+        
+        .routine-badge {
+            background: #e0f2e9;
+            color: var(--routine-green);
+        }
+        
+        .btn-complete {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn-complete:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar-area">
+        <nav class="nav">
+            <a href="#">
+                <img src="image.png" alt="Nile Logo" class="logo">
+            </a>
+            <div class="nav-links">
+                <a href="homepage-p.html" class="active">Home</a>
+                <a href="prescriptions-p.html">Prescriptions</a>
+                <a href="reports-p.html">Reports</a>
+            </div>
+            <button class="logout" onclick="handleLogout()">Logout</button>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="user-name">
+                <p>Welcome <br> <span class="user" id="pharmacistName">Loading...</span></p>
+            </div>
+            <div class="staff-id-box">
+                <div class="left">
+                    <p class="header">STAFF ID</p>
+                    <p class="content" id="staffId">Loading...</p>
+                </div>
+                <div class="right">
+                    <i class="fa-regular fa-id-card"></i>
+                </div>
+            </div>
+            <div class="department-box">
+                <div class="left">
+                    <p class="header">DEPARTMENT</p>
+                    <p class="content">Pharmacy</p>
+                </div>
+                <div class="right">
+                    <i class="fa-solid fa-prescription-bottle"></i>
+                </div>
+            </div>
+            <div class="quick-action">
+                <button class="action-btn" onclick="window.location.href='pharmacist-prescriptions.html'">
+                    + Process Prescriptions
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class='cards'>
+            <div class='card'>
+                <p class="card-title">Pending Prescriptions</p>
+                <p class="card-number" id="pendingCount">0</p>
+                <p class="card-content" id="priorityBreakdown">Loading...</p>
+                <a href="pharmacist-prescriptions.html">
+                    <p class="card-link">View queue →</p>
+                </a>
+            </div>
+            <div class='card'>
+                <p class="card-title">Processed Today</p>
+                <p class="card-number" id="completedCount">0</p>
+                <p class="card-content">Dispensed</p>
+                
+            </div>
+        </div>
+
+        <!-- Recent Prescriptions Queue -->
+        <div class="queue-section">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-list"></i> Recent Prescriptions</h2>
+                <i class="fa-solid fa-people-arrows"></i>
+            </div>
+            <div class="queue-list" id="recentPrescriptions">
+                <p style="padding: 20px; text-align: center; color: #666;">Loading prescriptions...</p>
+            </div>
+        </div>
+
+        <!-- Feedback and FAQ Section -->
+        <div class="container">
+            <div class="feedback-section">
+                <div class="more-header">
+                    <h2>Feedback Form</h2>
+                    <i class="fa-solid fa-comment-medical"></i>
+                </div>
+                <form id="feedbackForm">
+                    <label for="feedbackReason">Reason for Feedback</label>
+                    <select id="feedbackReason">
+                        <option>System Issue</option>
+                        <option>Prescription Error</option>
+                        <option>Inventory Question</option>
+                        <option>Other</option>
+                    </select>
+                    <label for="feedbackDetails">Details</label>
+                    <textarea id="feedbackDetails" rows="7" placeholder="Please provide more information..."></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+
+            <div class="faq-section">
+                <div class="more-header">
+                    <h2>Frequently Asked Questions</h2>
+                    <i class="fa-solid fa-clipboard-question"></i>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How to verify a prescription?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Verify patient ID, check doctor's details, and confirm medication dosage against diagnosis.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+    <button class="faq-question">
+        How do I process a new prescription?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Go to the Prescriptions tab, select the pending prescription, add dosage, frequency, duration, and instructions, then click "Complete Prescription".
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        How do I edit a completed prescription?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Navigate to the Prescriptions tab, filter by "Completed" status, click the Edit button on the prescription, make your changes, and save.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        What do the urgency levels mean?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Emergency (red) - process immediately, Urgent (orange) - process within 30 minutes, Routine (green) - process within normal workflow.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        How do I view a patient's medical history?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Click the "View Full Record" button on any prescription card to see patient vitals, allergies, chronic conditions, and prescription history.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        What should I do if a prescribed drug is out of stock?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Contact the prescribing doctor for an alternative medication or advise the patient to check back when stock is available.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        How do I generate a pharmacy report?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Go to the Reports tab, select date range, and click "Export CSV" or use the print function to generate a report.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        What is the clinic's pharmacy hours?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        The pharmacy is open Monday to Friday from 8:00 AM to 6:00 PM. Emergency prescriptions are available 24/7 through the on-call pharmacist.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        How do I report a medication error?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Immediately contact the supervising pharmacist, document the error, and fill out the medication incident report form. Do not dispense until verified.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        Can students collect medications for others?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        No, patients must collect their own medications. A valid student ID and written authorization are required for proxy collection.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question">
+        How long are prescription records kept?
+        <span class="arrow">&#9662;</span>
+    </button>
+    <div class="faq-answer">
+        Prescription records are maintained for 7 years as per regulatory requirements and can be accessed through the patient's history.
+    </div>
+</div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            How to handle emergency prescriptions?
+                            <span class="arrow">&#9662;</span>
+                        </button>
+                        <div class="faq-answer">
+                            Contact attending doctor for verbal confirmation, document within 24 hours.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>Nile University Clinic Management System &copy; 2026 Nile University of Nigeria - All Rights Reserved</p>
+        </div>
+    </div>
+
+<script src="../Shared pages/api-config.js"></script>
+<script>
+    let pendingPrescriptions = [];
+
+    // Load dashboard data
+    async function loadDashboard() {
+        try {
+            // Get pharmacist stats
+            const statsResponse = await API_CONFIG.request('/pharmacist/stats');
+            if (statsResponse.success) {
+                document.getElementById('pendingCount').innerText = statsResponse.stats.pending;
+                document.getElementById('completedCount').innerText = statsResponse.stats.completedToday;
+                document.getElementById('priorityBreakdown').innerHTML = 
+                    `${statsResponse.stats.emergency} Emergency, ${statsResponse.stats.urgent} Urgent, ${statsResponse.stats.routine} Routine`;
+            }
+
+            // Get recent prescriptions (pending only for the queue)
+            const prescriptionsResponse = await API_CONFIG.request('/pharmacist/prescriptions/pending');
+            if (prescriptionsResponse.success) {
+                pendingPrescriptions = prescriptionsResponse.prescriptions;
+                renderRecentPrescriptions(pendingPrescriptions.slice(0, 5));
+            }
+
+            // Set user info
+            const user = API_CONFIG.getUser();
+            if (user) {
+                document.getElementById('pharmacistName').innerText = user.name || 'Pharmacist';
+                document.getElementById('staffId').innerText = user.staffID || 'PHARM2024';
+            }
+        } catch (error) {
+            console.error('Error loading dashboard:', error);
+            showToast('Error loading dashboard data');
+            document.getElementById('recentPrescriptions').innerHTML = '<p style="padding: 20px; text-align: center; color: #666;"><i class="fas fa-exclamation-circle"></i> Error loading prescriptions</p>';
+        }
+    }
+
+    function renderRecentPrescriptions(prescriptions) {
+        const container = document.getElementById('recentPrescriptions');
+        if (!prescriptions || prescriptions.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-prescription-bottle" style="font-size: 3rem; opacity: 0.5; margin-bottom: 15px; display: block;"></i>
+                    <p style="color: #666;">No pending prescriptions</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = prescriptions.map(p => {
+            // Get urgency from the prescription or from appointment
+            let urgency = p.urgency || 'routine';
+            
+            // If urgency is not set on prescription, try to get from consultation's appointment
+            if (!p.urgency && p.consultation?.appointment?.urgency) {
+                urgency = p.consultation.appointment.urgency;
+            }
+            
+            const urgencyClass = urgency === 'emergency' ? 'emergency-badge' : 
+                                urgency === 'urgent' ? 'urgent-badge' : 'routine-badge';
+            const urgencyDisplay = urgency.toUpperCase();
+            
+            return `
+                <div class="queue-item priority-${urgency}">
+                    <div class="patient-info">
+                        <h4>${escapeHtml(p.consultation?.appointment?.patient?.user?.name || 'Unknown')}</h4>
+                        <p><i class="fa-solid fa-id-card"></i> ID: ${escapeHtml(p.consultation?.appointment?.patient?.user?.studentID || p.consultation?.appointment?.patient?.user?.staffID || 'N/A')}</p>
+                        <p><i class="fa-solid fa-stethoscope"></i> Diagnosis: ${escapeHtml(p.consultation?.diagnosis || 'Pending')}</p>
+                        <p><i class="fa-solid fa-user-doctor"></i> Doctor: ${escapeHtml(p.createdBy?.name || 'Unknown')}</p>
+                        <div style="margin-top: 5px;">
+                            <span class="urgency-badge ${urgencyClass}">${urgencyDisplay}</span>
+                        </div>
+                    </div>
+                    <div class="queue-actions">
+                        <button class="btn-process" onclick="processPrescription('${p._id}')">
+                            <i class="fa-solid fa-pen"></i> Complete
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function processPrescription(prescriptionId) {
+        window.location.href = `prescriptions-p.html`;
+    }
+
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            animation: fadeInOut 3s ease;
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('menuOverlay');
+        if (menu && menu.classList.contains('active')) {
+            menu.classList.remove('active');
+            if (overlay) overlay.style.display = 'none';
+        } else if (menu) {
+            menu.classList.add('active');
+            if (overlay) overlay.style.display = 'block';
+        }
+    }
+
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            API_CONFIG.auth.logout();
+        }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check authentication
+        if (!API_CONFIG.getToken()) {
+            window.location.href = '../Shared pages/login.html';
+            return;
+        }
+
+        loadDashboard();
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const answer = btn.nextElementSibling;
+                answer.classList.toggle('open');
+                btn.querySelector('.arrow').classList.toggle('rotated');
+            });
+        });
+
+        // Feedback form
+        const feedbackForm = document.getElementById('feedbackForm');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const reason = document.getElementById('feedbackReason').value;
+                const details = document.getElementById('feedbackDetails').value;
+                
+                if (!reason || !details) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                try {
+                    await API_CONFIG.request('/feedback', {
+                        method: 'POST',
+                        body: JSON.stringify({ reason, details, role: 'pharmacist' })
+                    });
+                    alert('Feedback submitted successfully!');
+                    feedbackForm.reset();
+                } catch (error) {
+                    alert('Failed to submit feedback: ' + error.message);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
