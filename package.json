@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "mongodb-client-encryption": "^7.0.0"
-  }
-}
