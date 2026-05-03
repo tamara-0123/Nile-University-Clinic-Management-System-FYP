@@ -286,33 +286,29 @@ export const completeAppointment = async (req, res, next) => {
 
 export const getPatientVitals = async (req, res, next) => {
   try {
-    const { patientId, appointmentId } = req.query; // doctor can filter by patient or appointment
+    const { patientId, appointmentId } = req.query; 
 
     if (!patientId) {
       return res.status(400).json({ success: false, message: "patientId is required" });
     }
 
-    // Verify patient exists
     const patient = await Patient.findById(patientId).populate("user", "name email");
     if (!patient) {
       return res.status(404).json({ success: false, message: "Patient not found" });
     }
 
-    // Build query
     const query = { patient: patientId };
     if (appointmentId) query.appointment = appointmentId;
 
-    // Fetch vitals, latest first
     const vitalsRecords = await Vitals.find(query)
       .populate("appointment", "date status reason")
-      .populate("recordedBy", "name role") // who recorded
+      .populate("recordedBy", "name role") 
       .sort({ createdAt: -1 });
 
     if (!vitalsRecords.length) {
       return res.json({ success: true, vitals: [] });
     }
 
-    // Optionally, only send the latest vitals
     const latestVitals = vitalsRecords[0];
 
     res.json({
@@ -323,7 +319,7 @@ export const getPatientVitals = async (req, res, next) => {
         studentID: patient.studentID,
         staffID: patient.staffID,
       },
-      vitals: vitalsRecords, // send all or just [latestVitals] for only latest
+      vitals: vitalsRecords, 
       latest: latestVitals,
     });
   } catch (err) {
@@ -340,19 +336,16 @@ export const updatePatientVitals = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Vitals ID is required" });
     }
 
-    // Find the vitals record
     const vitals = await Vitals.findById(vitalsId);
     if (!vitals) {
       return res.status(404).json({ success: false, message: "Vitals record not found" });
     }
 
-    // Optional: ensure doctor has access to patient
     const patient = await Patient.findById(vitals.patient);
     if (!patient) {
       return res.status(404).json({ success: false, message: "Patient not found" });
     }
 
-    // Update only provided fields
     if (bp !== undefined) vitals.bp = bp;
     if (temperature !== undefined) vitals.temperature = temperature;
     if (pulse !== undefined) vitals.pulse = pulse;
@@ -371,17 +364,11 @@ export const updatePatientVitals = async (req, res, next) => {
 };
 
 
-/**
- * Admit a patient
- * POST /api/doctor/admit
- * Body: { patientId, appointmentId, reason }
- */
 export const admitPatient = async (req, res) => {
   try {
     const { patientId, appointmentId, reason } = req.body;
-    const doctorId = req.user._id; // Assuming user is attached by auth middleware
+    const doctorId = req.user._id; 
 
-    // Validate required fields
     if (!patientId || !appointmentId || !reason) {
       return res.status(400).json({
         success: false,
@@ -389,7 +376,6 @@ export const admitPatient = async (req, res) => {
       });
     }
 
-    // Check if patient exists
     const patient = await Patient.findById(patientId);
     if (!patient) {
       return res.status(404).json({
@@ -398,7 +384,6 @@ export const admitPatient = async (req, res) => {
       });
     }
 
-    // Check if there's already an active admission for this patient
     const existingAdmission = await Admission.findOne({
       patient: patientId,
       isActive: true
@@ -411,7 +396,6 @@ export const admitPatient = async (req, res) => {
       });
     }
 
-    // Create new admission record
     const admission = new Admission({
       patient: patientId,
       admittedBy: doctorId, // Doctor admitting the patient
@@ -422,12 +406,10 @@ export const admitPatient = async (req, res) => {
 
     await admission.save();
 
-    // Update the appointment status to 'admitted'
     await Appointment.findByIdAndUpdate(appointmentId, {
       status: 'admitted'
     });
 
-    // Populate the admission with patient and doctor details for response
     await admission.populate([
       { path: 'patient', populate: { path: 'user' } },
       { path: 'admittedBy', select: 'name email' }
@@ -449,10 +431,7 @@ export const admitPatient = async (req, res) => {
   }
 };
 
-/**
- * Discharge a patient
- * PUT /api/doctor/discharge/:admissionId
- */
+
 export const dischargePatient = async (req, res) => {
   try {
     const { admissionId } = req.params;
@@ -478,8 +457,7 @@ export const dischargePatient = async (req, res) => {
     
     await admission.save();
 
-    // Find and update the associated appointment to 'completed'
-    // You might need to link admission to appointment or find by patient
+    
     await Appointment.findOneAndUpdate(
       { 
         patient: admission.patient,
@@ -489,7 +467,7 @@ export const dischargePatient = async (req, res) => {
         status: 'completed',
         dischargeDate: new Date()
       },
-      { sort: { date: -1 } } // Get the most recent appointment
+      { sort: { date: -1 } } 
     );
 
     await admission.populate([
@@ -514,11 +492,7 @@ export const dischargePatient = async (req, res) => {
   }
 };
 
-/**
- * Get admission status for a patient/appointment
- * GET /api/doctor/admission/status
- * Query params: ?appointmentId=&patientId=
- */
+
 export const getAdmissionStatus = async (req, res) => {
   try {
     const { appointmentId, patientId } = req.query;
@@ -562,29 +536,22 @@ export const getAdmissionStatus = async (req, res) => {
   }
 };
 
-/**
- * Get all admissions (with filters)
- * GET /api/doctor/admissions
- * Query params: ?status=active|discharged&patientId=&date=
- */
+
 export const getAdmissions = async (req, res) => {
   try {
     const { status, patientId, startDate, endDate } = req.query;
     let query = {};
 
-    // Filter by status
     if (status === 'active') {
       query.isActive = true;
     } else if (status === 'discharged') {
       query.isActive = false;
     }
 
-    // Filter by patient
     if (patientId) {
       query.patient = patientId;
     }
 
-    // Filter by date range
     if (startDate || endDate) {
       query.admissionDate = {};
       if (startDate) {
@@ -619,10 +586,7 @@ export const getAdmissions = async (req, res) => {
   }
 };
 
-/**
- * Get a single admission by ID
- * GET /api/doctor/admission/:admissionId
- */
+
 export const getAdmissionById = async (req, res) => {
   try {
     const { admissionId } = req.params;
@@ -729,7 +693,6 @@ export const createSimplifiedPrescription = async (req, res, next) => {
       return res.status(400).json({ message: "Drug name is required" });
     }
 
-    // Create a simplified prescription with only drug name
     const prescription = await Prescription.create({
       consultation: consultation._id,
       patient: consultation.appointment.patient._id,
@@ -746,25 +709,24 @@ export const createSimplifiedPrescription = async (req, res, next) => {
       status: 'pending-pharmacist'
     });
 
-    // Send notification to all pharmacists (using role field)
-    try {
-      await Notification.create({
-        role: "pharmacist",
-        title: "New Prescription Pending",
-        message: `Prescription for ${consultation.appointment.patient.user.name} needs pharmacist review. Drug: ${drugName}`,
-        type: "prescription",
-        metadata: {
-          prescriptionId: prescription._id,
-          patientName: consultation.appointment.patient.user.name,
-          patientId: consultation.appointment.patient.user.studentID || consultation.appointment.patient.user.staffID,
-          drugName: drugName,
-          doctorName: req.user.name
-        }
-      });
-    } catch (notifError) {
-      console.error("Failed to create notification:", notifError);
-      // Don't fail the prescription creation if notification fails
-    }
+    // try {
+    //   await Notification.create({
+    //     role: "pharmacist",
+    //     title: "New Prescription Pending",
+    //     message: `Prescription for ${consultation.appointment.patient.user.name} needs pharmacist review. Drug: ${drugName}`,
+    //     type: "prescription",
+    //     metadata: {
+    //       prescriptionId: prescription._id,
+    //       patientName: consultation.appointment.patient.user.name,
+    //       patientId: consultation.appointment.patient.user.studentID || consultation.appointment.patient.user.staffID,
+    //       drugName: drugName,
+    //       doctorName: req.user.name
+    //     }
+    //   });
+    // } catch (notifError) {
+    //   console.error("Failed to create notification:", notifError);
+    //   // Don't fail the prescription creation if notification fails
+    // }
 
     res.status(201).json({ 
       success: true, 
@@ -809,12 +771,11 @@ export const getAllAppointments = async (req, res, next) => {
         path: "patient",
         populate: {
           path: "user",
-          select: "name studentID staffID age gender department" // Include age and gender
+          select: "name studentID staffID age gender department" 
         }
       })
       .sort({ date: 1 });
 
-    // Format appointments to ensure age and gender are accessible
     const formattedAppointments = appointments.map(appt => {
       const patientData = appt.patient || {};
       const userData = patientData.user || {};
@@ -908,7 +869,7 @@ export const getCompletedAppointments = async (req, res, next) => {
 export const getPatientRecords = async (req, res, next) => {
   try {
     const patient = await Patient.findById(req.params.patientId)
-      .populate("user", "name studentID staffID age gender department"); // Make sure age and gender are selected
+      .populate("user", "name studentID staffID age gender department"); 
 
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
@@ -960,7 +921,6 @@ export const getPatientRecords = async (req, res, next) => {
       };
     }));
 
-    // Format patient data for response
     const userData = patient.user || {};
     
     res.json({
@@ -996,7 +956,6 @@ export const getRecordsStats = async (req, res, next) => {
       status: 'completed'
     });
 
-    // Count by month
     const monthlyStats = {};
     const dailyStats = {};
     const conditionStats = {};
@@ -1020,7 +979,6 @@ export const getRecordsStats = async (req, res, next) => {
       }
     });
 
-    // Get top conditions
     const topConditions = Object.entries(conditionStats)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5);
