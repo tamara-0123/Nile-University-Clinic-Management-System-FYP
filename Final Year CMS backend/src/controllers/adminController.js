@@ -175,7 +175,7 @@ export const getAppointmentById = async (req, res) => {
 // Get all staff users
 export const getAllStaff = async (req, res, next) => {
   try {
-    const users = await User.find({ role: { $in: ["doctor", "nurse", "staff", "pharmacist"] } }).select("-password");
+    const users = await User.find({ role: { $in: ["doctor", "nurse", "pharmacist"] } }).select("-password");
     res.json({ success: true, users });
   } catch (error) {
     next(error);

@@ -22,6 +22,7 @@ height: 80px;
     align-items: center; 
     margin-top: 40px;
     margin-bottom: 40px;
+    height: 700px;
 }
 
 .auth-card {
@@ -59,7 +60,9 @@ input, select {
     border-radius: 8px;
     box-sizing: border-box;
 }
-
+.input-group label .required {
+            color: #ef4444;
+        }
 /* Blue primary button for Sign In */
 .btn-submit {
     background: #0606ba;

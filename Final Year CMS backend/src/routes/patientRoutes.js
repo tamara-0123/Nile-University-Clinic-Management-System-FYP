@@ -16,7 +16,7 @@ import { getUserProfile } from "../controllers/patientController.js";
 
 const router = express.Router();
 
-router.use(protect, authorize("student" || "staff"));
+router.use(protect, authorize("student", "staff"));
 
 router.get("/profile", getUserProfile);
 router.post("/appointments", bookAppointment);

@@ -7,7 +7,6 @@
     <title>Nile University Clinic Management System</title>
     <link rel="stylesheet" href="homepage-s.css">
     <link rel="icon" type="image/png" href="../images/nile logo.png">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -39,12 +38,12 @@
 
         <div class="hero">
             <div class="user-name">
-                <p class="welcome">Welcome <br> <span class="user">Cynthia George</span></p>
+                <p class="welcome">Welcome <br> <span class="user">Loading...</span></p>
             </div>
             <div class="user-class">
                 <div class="left">
                     <p class="header">USER</p>
-                    <p class="content">Student</p>
+                    <p class="content">Loading...</p>
                 </div>
                 <div class="right">
                     <i class="fa-solid fa-school"></i>
@@ -52,8 +51,8 @@
             </div>
             <div class="id-num-box">
                 <div class="left">
-                    <p class="header">STUDENT ID</p>
-                    <p class="content">20220000</p>
+                    <p class="header">ID NUMBER</p>
+                    <p class="content">Loading...</p>
                 </div>
                 <div class="right">
                     <i class="fa-regular fa-id-badge"></i>
@@ -157,7 +156,6 @@
                 </div>
 
                 <div class="faq-list">
-
                     <div class="faq-item">
                         <button class="faq-question">
                             What are the clinic working hours?
@@ -208,8 +206,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="faq-item">
                         <button class="faq-question">
                             Are emergency services available?
@@ -219,7 +215,6 @@
                             The clinic handles minor emergencies; severe cases are referred.
                         </div>
                     </div>
-
 
                     <div class="faq-item">
                         <button class="faq-question">
@@ -240,13 +235,12 @@
                             Medical records are maintained throughout your study duration.
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
 
         <div class="copyright">
-            <p>Nile University Clinic Management System &copy; 2026 Nile Uinversity of Nigeria - All Rights Reserved</p>
+            <p>Nile University Clinic Management System &copy; 2026 Nile University of Nigeria - All Rights Reserved</p>
         </div>
     </div>
     <div class="side-nav" id="mobileMenu">
@@ -255,12 +249,10 @@
         <a href="appointments-s.html">Appointments</a>
         <a href="prescriptions-s.html">Prescriptions</a>
         <a href="medical-history.html">History</a>
-        <button class="logout" onclick="handleLogout()"
-            style="width: 80%; margin: 20px auto; display:block;">Logout</button>
+        <button class="logout" onclick="handleLogout()" style="width: 80%; margin: 20px auto; display:block;">Logout</button>
     </div>
 
-    <div id="menuOverlay" onclick="toggleMenu()"
-        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
+    <div id="menuOverlay" onclick="toggleMenu()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
     </div>
 
     <script src="../Shared pages/api-config.js"></script>
@@ -274,34 +266,55 @@
                 return;
             }
 
-            // 2. Populate User Data
-            const user = API_CONFIG.getUser();
+            // 2. Get and validate user data
+            let user = API_CONFIG.getUser();
+            
+            // Debug: Log what we have
+            console.log('User from localStorage:', user);
+            
+            // If user is null or missing _id, try to fetch fresh user data
+            if (!user || !user._id) {
+                console.warn('User data incomplete or missing _id, fetching from API...');
+                try {
+                    const meResponse = await API_CONFIG.request('/auth/me', { method: 'GET' });
+                    if (meResponse.success && meResponse.user) {
+                        user = meResponse.user;
+                        localStorage.setItem('user', JSON.stringify(user));
+                        console.log('User data refreshed:', user);
+                    } else {
+                        throw new Error('Failed to fetch user data');
+                    }
+                } catch (error) {
+                    console.error('Failed to refresh user data:', error);
+                    window.location.href = '../Shared pages/login.html';
+                    return;
+                }
+            }
+            
+            // Now populate UI with user data
             if (user) {
                 const userElements = document.querySelectorAll('.user');
-                userElements.forEach(el => el.textContent = user.name || user.studentID);
-
+                userElements.forEach(el => el.textContent = user.name || user.studentID || user.staffID || 'User');
+                
                 const idElements = document.querySelectorAll('.id-num-box .content');
-                idElements.forEach(el => el.textContent = user.studentID || user.idNumber);
-
+                const userId = user.studentID || user.staffID || user.idNumber || 'N/A';
+                idElements.forEach(el => el.textContent = userId);
+                
                 const roleElements = document.querySelectorAll('.user-class .content');
-                roleElements.forEach(el => el.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1));
+                const roleText = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'Patient';
+                roleElements.forEach(el => el.textContent = roleText);
             }
 
+            // Set active nav link
             const currentPath = decodeURIComponent(window.location.pathname);
             const currentPage = currentPath.split("/").pop();
-
-
             const navLinks = document.querySelectorAll('.nav-links a');
-
             navLinks.forEach(link => {
                 const linkHref = link.getAttribute('href');
-
                 const linkPage = linkHref.split("/").pop();
-
                 if (linkPage === currentPage) {
                     link.classList.add('active');
-                }
-                else if (currentPage === "" && linkPage === "homepage-s.html") {
+                } else if (currentPage === "" && linkPage === "homepage-s.html") {
                     link.classList.add('active');
                 }
             });
@@ -311,94 +324,93 @@
                 // A. Appointments
                 const apptResponse = await API_CONFIG.patient.getAppointmentHistory();
                 if (apptResponse.success) {
-                    const appointments = apptResponse.appointments;
-
+                    const appointments = apptResponse.appointments || [];
+                    
                     // Total count
                     document.getElementById('totalApptCount').innerText = appointments.length;
-
+                    
                     // Next Appointment (Future only)
                     const now = new Date();
                     const upcoming = appointments
                         .filter(a => new Date(a.date) > now && a.status !== 'cancelled' && a.status !== 'completed')
                         .sort((a, b) => new Date(a.date) - new Date(b.date));
-
+                    
                     if (upcoming.length > 0) {
                         const next = upcoming[0];
                         const date = new Date(next.date);
                         document.getElementById('nextApptDate').innerText = `Date: ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
                         document.getElementById('nextApptDoc').innerText = `Doctor: ${next.doctor?.name || 'Assigned Doctor'}`;
                     } else {
-                        document.getElementById('nextApptDate').innerText = "No upcoming appointments";
+                        document.getElementById('nextApptDate').innerHTML = "No upcoming appointments";
+                        document.getElementById('nextApptDoc').innerHTML = "";
                     }
                 }
 
                 // B. Prescriptions
                 const rxResponse = await API_CONFIG.patient.getPrescriptions();
                 if (rxResponse.success) {
-                    const prescriptions = rxResponse.prescriptions;
-
+                    const prescriptions = rxResponse.prescriptions || [];
+                    
                     // Flatten medications for counting
                     let medCount = 0;
                     prescriptions.forEach(p => {
                         if (p.medications) medCount += p.medications.length;
                     });
                     document.getElementById('activePrescriptionCount').innerText = medCount;
-
+                    
                     // Render Recent Prescriptions
                     const list = document.getElementById('recentPrescriptionList');
                     if (prescriptions.length === 0) {
                         list.innerHTML = '<p style="padding:10px; color:#666;">No recent prescriptions</p>';
                     } else {
-                        list.innerHTML = prescriptions.slice(0, 2).map(p => { // Show last 2
-                            const meds = p.medications.map(m => m.name).join(', ');
+                        list.innerHTML = prescriptions.slice(0, 2).map(p => {
+                            const meds = p.medications?.map(m => m.name).join(', ') || 'No medications';
                             return `
                                 <div class="prescription-card ${p.isActive ? 'pres-active' : ''}">
-    <div class="pres-left">
-        <div class="pres-date">
-            Date: ${new Date(p.createdAt).toLocaleDateString()}
-        </div>
-        <div class="pres-meds">
-            ${meds}
-        </div>
-    </div>
-
-    <div class="pres-right">
-        <span class="pres-count">
-            ${p.medications.length} item${p.medications.length !== 1 ? 's' : ''}
-        </span>
-    </div>
-</div>
-`;
+                                    <div class="pres-left">
+                                        <div class="pres-date">
+                                            Date: ${new Date(p.createdAt).toLocaleDateString()}
+                                        </div>
+                                        <div class="pres-meds">
+                                            ${meds}
+                                        </div>
+                                    </div>
+                                    <div class="pres-right">
+                                        <span class="pres-count">
+                                            ${p.medications?.length || 0} item${p.medications?.length !== 1 ? 's' : ''}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
                         }).join('');
                     }
                 }
 
                 // C. Notifications
-                const notifResponse = await API_CONFIG.request('/notifications');
-
-                if (notifResponse && notifResponse.notifications) {
-                    const notifs = notifResponse.notifications;
-                    const list = document.getElementById('notificationList');
-
-                    // Only show first 3 notifications
-                    const visibleNotifs = notifs.slice(0, 5);
-
-                    // Set badge count to number displayed
-                    document.getElementById('unreadNotifCount').innerText = visibleNotifs.length;
-
-                    if (visibleNotifs.length === 0) {
-                        list.innerHTML = '<p style="padding:10px; color:#666;">No new notifications</p>';
-                    } else {
-                        list.innerHTML = visibleNotifs.map(n => `
-            <div class="notification">
-                <p class="notif-content">${n.message}</p>
-                <div class="notif-active">
-                    <div class="green-flash"></div>
-                    <p class="notif-date">New</p>
-                </div>
-            </div>
-        `).join('');
+                try {
+                    const notifResponse = await API_CONFIG.request('/patient/notifications');
+                    if (notifResponse && notifResponse.notifications) {
+                        const notifs = notifResponse.notifications;
+                        const list = document.getElementById('notificationList');
+                        const visibleNotifs = notifs.slice(0, 5);
+                        document.getElementById('unreadNotifCount').innerText = visibleNotifs.length;
+                        
+                        if (visibleNotifs.length === 0) {
+                            list.innerHTML = '<p style="padding:10px; color:#666;">No new notifications</p>';
+                        } else {
+                            list.innerHTML = visibleNotifs.map(n => `
+                                <div class="notification">
+                                    <p class="notif-content">${n.message}</p>
+                                    <div class="notif-active">
+                                        <div class="green-flash"></div>
+                                        <p class="notif-date">New</p>
+                                    </div>
+                                </div>
+                            `).join('');
+                        }
                     }
+                } catch (err) {
+                    console.log('Notifications not available yet');
                 }
 
                 // D. Medical History (Consultations)
@@ -406,37 +418,38 @@
                 if (histResponse.success && histResponse.history) {
                     const history = histResponse.history;
                     const list = document.getElementById('recentHistoryList');
-
+                    
                     if (history.length === 0) {
                         list.innerHTML = '<p style="padding:10px; color:#666;">No recent history</p>';
                     } else {
                         list.innerHTML = history.slice(0, 3).map(h => `
                             <div class="visit-card">
-    <div class="visit-info">
-        <div class="visit-date">
-            ${new Date(h.createdAt).toLocaleDateString()}
-        </div>
-        <div class="visit-diagnosis">
-            ${h.diagnosis || 'Pending diagnosis'}
-        </div>
-    </div>
-
-    <a href="medical-history.html" class="visit-link">
-        View Record
-    </a>
-</div>
-
+                                <div class="visit-info">
+                                    <div class="visit-date">
+                                        ${new Date(h.createdAt).toLocaleDateString()}
+                                    </div>
+                                    <div class="visit-diagnosis">
+                                        ${h.diagnosis || 'Pending diagnosis'}
+                                    </div>
+                                </div>
+                                <a href="medical-history.html" class="visit-link">View Record</a>
+                            </div>
                         `).join('');
                     }
                 }
-
-
+                
             } catch (error) {
                 console.error("Dashboard Load Error:", error);
+                // Don't redirect on data fetch errors, just show empty states
+                const errorMsg = document.createElement('div');
+                errorMsg.style.cssText = 'position:fixed; bottom:20px; right:20px; background:#ff4d4d; color:white; padding:10px; border-radius:5px; z-index:9999;';
+                errorMsg.innerHTML = 'Some data failed to load. Please refresh the page.';
+                document.body.appendChild(errorMsg);
+                setTimeout(() => errorMsg.remove(), 5000);
             }
         });
 
-        // Add missing API methods if not in api-config.js yet (Check consistency)
+        // Add missing API methods if not in api-config.js yet
         if (!API_CONFIG.patient.getAppointmentHistory) {
             API_CONFIG.patient.getAppointmentHistory = () => API_CONFIG.request('/patient/appointments');
         }
@@ -446,7 +459,6 @@
         if (!API_CONFIG.patient.getMedicalHistory) {
             API_CONFIG.patient.getMedicalHistory = () => API_CONFIG.request('/patient/medical-record');
         }
-
 
         function toggleMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -467,7 +479,7 @@
             }
         }
 
-
+        // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(btn => {
             btn.addEventListener('click', () => {
                 const answer = btn.nextElementSibling;
@@ -483,18 +495,14 @@
                 e.preventDefault();
                 const reason = document.getElementById('feedbackReason').value;
                 const details = document.getElementById('feedbackDetails').value;
-
+                
                 if (!reason || !details) {
                     alert("Please fill in all fields.");
                     return;
                 }
-
+                
                 try {
-                    const response = await API_CONFIG.request('/patient/feedback', {
-                        method: 'POST',
-                        body: JSON.stringify({ reason, details })
-                    });
-
+                    const response = await API_CONFIG.patient.submitFeedback({ reason, details });
                     if (response.success) {
                         alert("Thank you for your feedback! It has been submitted successfully.");
                         feedbackForm.reset();
@@ -504,7 +512,6 @@
                 }
             });
         }
-
     </script>
 </body>
 

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Nile University CMS</title>
+    <link rel="stylesheet" href="base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/nile logo.png">
+    <style>
+        :root {
+            --nile-blue: #0606ba; 
+            --nile-red: #ff0000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: "Poppins", sans-serif;
+            background-color: #f5f5f5;
+            /* overflow-y: auto;
+            overflow-x: hidden; */
+        }
+
+        img {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            min-height: auto;
+            width: 100%;
+            height: 1200px;
+        }
+
+        .auth-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .auth-card h1 {
+            color: #000000;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .auth-card > p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--nile-blue);
+            font-size: 14px;
+        }
+
+        .input-group label .required {
+            color: #ef4444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--nile-blue);
+        }
+
+        .row-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .role-badge {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Blue primary button */
+        .btn-submit {
+            background: #0606ba;
+            color: white;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #002244;
+        }
+
+        .btn-submit:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .login-footer a {
+            color: var(--nile-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .password-strength {
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .staff-restriction-note,
+        .clinic-staff-note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #92400e;
+            text-align: left;
+        }
+
+        .cms-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff4d4d;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cms-toast-success {
+            background: #4CAF50;
+        }
+
+        .cms-toast-error {
+            background: #ff4d4d;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .auth-card {
+                padding: 25px 20px;
+                max-width: 100%;
+            }
+
+            .auth-card h1 {
+                font-size: 24px;
+            }
+
+            .auth-card > p {
+                font-size: 13px;
+            }
+
+            .row-2col {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            input, select {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .btn-submit {
+                padding: 12px;
+                font-size: 15px;
+            }
+
+            img {
+                height: 60px;
+            }
+
+            .auth-container {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .auth-card {
+                padding: 20px 15px;
+            }
+
+            .auth-card h1 {
+                font-size: 22px;
+            }
+
+            .input-group {
+                margin-bottom: 15px;
+            }
+
+            .input-group label {
+                font-size: 13px;
+            }
+        }
+
+        /* Ensure scrollable content */
+        html {
+            overflow-y: auto;
+        }
+
+        #signupForm {
+            width: 100%;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-card">
+        <img src="../Student pages/image.png" alt="Nile University" class="auth-logo" onerror="this.src='https://placehold.co/80x80?text=Nile'">
+        <h1>Create Account</h1>
+        <p>Join Nile University Clinic Management System — manage health records seamlessly</p>
+
+        <form id="signupForm">
+            <div class="input-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" placeholder="e.g., Ahmed Hassan" autocomplete="name" required>
+            </div>
+
+            <div class="input-group">
+                <label>Role <span class="required">*</span></label>
+                <select id="role" required>
+                    <option value="" disabled selected>– Select your role –</option>
+                    <option value="student">Student</option>
+                    <option value="staff">Staff </option>
+                </select>
+                
+            </div>
+
+            <div class="input-group">
+                <label id="idLabel">Student ID <span class="required">*</span></label>
+                <input type="text" id="identifier" placeholder="e.g., 020230001" autocomplete="off" required>
+                <div id="idFeedback" class="error-message" style="display: none;"></div>
+            </div>
+
+            <div class="row-2col">
+                <div class="input-group">
+                    <label>Department <span class="required">*</span></label>
+                    <input type="text" id="department" placeholder="e.g., Computer Science" required>
+                </div>
+                <div class="input-group">
+                    <label>Age</label>
+                    <input type="number" id="age" placeholder="e.g., 22" min="16" max="100">
+                </div>
+            </div>
+
+            <div class="row-2col">
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select id="gender">
+\                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label> </label>
+                    <div style="visibility: hidden;">spacer</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Password <span class="required">*</span></label>
+                <input type="password" id="password" placeholder="Create a strong password" required>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="input-group">
+                <label>Confirm Password <span class="required">*</span></label>
+                <input type="password" id="confirmPassword" placeholder="Repeat your password" required>
+            </div>
+
+            <button type="submit" class="btn-submit" id="signupBtn">Sign Up</button>
+        </form>
+
+        <div class="login-footer">
+            Already have an account? <a href="login.html">Sign in here</a>
+        </div>
+    </div>
+</div>
+
+<script src="api-config.js"></script>
+<script>
+    const roleSelect = document.getElementById('role');
+    const identifierInput = document.getElementById('identifier');
+    const idLabelSpan = document.getElementById('idLabel');
+    const idFeedbackDiv = document.getElementById('idFeedback');
+    const roleHintSpan = document.getElementById('roleHint');
+    const fullNameInput = document.getElementById('fullName');
+    const departmentInput = document.getElementById('department');
+    const ageInput = document.getElementById('age');
+    const genderSelect = document.getElementById('gender');
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const signupForm = document.getElementById('signupForm');
+    const signupBtn = document.getElementById('signupBtn');
+
+    const CMS_UI = {
+        showToast: function (message, type = 'error') {
+            const existing = document.querySelector('.cms-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = `cms-toast cms-toast-${type}`;
+            const icon = type === 'success' ? '' : type === 'error' ? '❌' : '⚠️';
+            toast.innerHTML = `<span style="font-size: 18px;">${icon}</span><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        },
+
+        showFieldError: function (element, message) {
+            if (!element) return;
+            const existingError = element.parentElement?.querySelector('.field-error-tooltip');
+            if (existingError) existingError.remove();
+            if (!message) return;
+            const errSpan = document.createElement('div');
+            errSpan.className = 'field-error-tooltip';
+            errSpan.style.cssText = 'color:#dc2626; font-size:11px; margin-top:4px;';
+            errSpan.innerText = message;
+            element.parentElement.appendChild(errSpan);
+            setTimeout(() => errSpan.remove(), 3000);
+        }
+    };
+
+    function updateRoleUI() {
+        const role = roleSelect.value;
+        if (role === 'student') {
+            idLabelSpan.innerHTML = 'Student ID <span class="required">*</span>';
+            identifierInput.placeholder = 'e.g., 020230001';
+            roleHintSpan.innerHTML = 'Student: Access to clinic appointments & medical records.';
+            identifierInput.maxLength = 30;
+            identifierInput.disabled = false;
+        } else if (role === 'staff') {
+            idLabelSpan.innerHTML = 'Staff ID <span class="required">*</span>';
+            identifierInput.placeholder = 'e.g., STAFF001, ADM042';
+            roleHintSpan.innerHTML = 'Staff: Access to clinic services as a patient.';
+            identifierInput.maxLength = 30;
+            identifierInput.disabled = false;
+        } else {
+            idLabelSpan.innerHTML = 'ID Number <span class="required">*</span>';
+            identifierInput.placeholder = 'Enter your ID';
+            identifierInput.disabled = false;
+        }
+        idFeedbackDiv.style.display = 'none';
+    }
+
+    roleSelect.addEventListener('change', updateRoleUI);
+    updateRoleUI();
+
+    identifierInput.addEventListener('input', function () {
+        const role = roleSelect.value;
+        const val = identifierInput.value.trim();
+        if (!role) return;
+        
+        if (role === 'student' && val && !/^\d{5,}$/.test(val) && val.length > 3) {
+            idFeedbackDiv.textContent = '💡 Student ID typically contains digits (e.g., 020230001)';
+            idFeedbackDiv.style.display = 'flex';
+        } else if (role === 'staff' && val && val.length < 3) {
+            idFeedbackDiv.textContent = '💡 Staff ID should be unique (e.g., STAFF001, ADM042)';
+            idFeedbackDiv.style.display = 'flex';
+        } else {
+            idFeedbackDiv.style.display = 'none';
+        }
+    });
+
+    passwordInput.addEventListener('input', function () {
+        const pwd = passwordInput.value;
+        const strengthDiv = document.getElementById('passwordStrength');
+        if (!pwd) {
+            strengthDiv.innerHTML = '';
+            return;
+        }
+        let strength = 'Weak';
+        let color = '#ef4444';
+        if (pwd.length >= 8 && /[A-Z]/.test(pwd) && /[0-9]/.test(pwd)) {
+            strength = 'Strong';
+            color = '#10b981';
+        } else if (pwd.length >= 6 && /[a-zA-Z]/.test(pwd) && /[0-9]/.test(pwd)) {
+            strength = 'Medium';
+            color = '#f59e0b';
+        }
+        strengthDiv.innerHTML = `<span style="color:${color};">🔐 Password strength: ${strength}</span>`;
+    });
+
+    async function performSignup(payload) {
+        let apiUrl = '/auth/register';
+        if (typeof API_CONFIG !== 'undefined' && API_CONFIG.BASE_URL) {
+            apiUrl = `${API_CONFIG.BASE_URL}/auth/register`;
+        } else if (typeof API_CONFIG !== 'undefined' && API_CONFIG.auth && API_CONFIG.auth.register) {
+            return await API_CONFIG.auth.register(payload);
+        }
+        
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Registration failed');
+        }
+        return data;
+    }
+
+    signupForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fullName = fullNameInput.value.trim();
+        const role = roleSelect.value;
+        const identifier = identifierInput.value.trim();
+        const department = departmentInput.value.trim();
+        const age = ageInput.value ? parseInt(ageInput.value) : undefined;
+        const gender = genderSelect.value || undefined;
+        const password = passwordInput.value;
+        const confirm = confirmInput.value;
+
+        
+        if (!fullName) {
+            CMS_UI.showToast('Please enter your full name', 'error');
+            fullNameInput.focus();
+            return;
+        }
+        
+        if (!role) {
+            CMS_UI.showToast('Please select Student or Staff (patient)', 'error');
+            roleSelect.focus();
+            return;
+        }
+        
+        if (!identifier) {
+            CMS_UI.showToast(`Please enter your ${role === 'student' ? 'Student ID' : 'Staff ID'}`, 'error');
+            identifierInput.focus();
+            return;
+        }
+        
+        if (!department) {
+            CMS_UI.showToast('Department is required', 'error');
+            departmentInput.focus();
+            return;
+        }
+        
+        if (password !== confirm) {
+            CMS_UI.showToast('Passwords do not match', 'error');
+            confirmInput.focus();
+            return;
+        }
+        
+        if (password.length < 6) {
+            CMS_UI.showToast('Password must be at least 6 characters', 'error');
+            passwordInput.focus();
+            return;
+        }
+        
+        if (age && (isNaN(age) || age < 16 || age > 120)) {
+            CMS_UI.showToast('Please enter a valid age (16-120)', 'error');
+            ageInput.focus();
+            return;
+        }
+        let requestPayload = {
+            name: fullName,
+            role: role, 
+            department,
+            password,
+        };
+        
+        if (age) requestPayload.age = age;
+        if (gender) requestPayload.gender = gender;
+
+        if (role === 'student') {
+            requestPayload.studentID = identifier;
+        } else if (role === 'staff') {
+            requestPayload.staffID = identifier;
+        }
+
+        const originalText = signupBtn.innerText;
+        signupBtn.disabled = true;
+        signupBtn.innerText = 'Creating account ...';
+
+        try {
+            const responseData = await performSignup(requestPayload);
+            
+            if (responseData.token) {
+                localStorage.setItem('authToken', responseData.token);
+                localStorage.setItem('user', JSON.stringify(responseData.user));
+                CMS_UI.showToast(`Welcome ${responseData.user.name || fullName}! Registration successful.`, 'success');
+
+                
+                const patientDashboard = '../Student pages/homepage-s.html';
+                
+                setTimeout(() => {
+                    window.location.href = patientDashboard;
+                }, 1200);
+            } else {
+                throw new Error('Invalid server response: missing token');
+            }
+        } catch (err) {
+            console.error('Signup error:', err);
+            let errorMsg = err.message || 'Registration failed due to server error';
+            if (err.message.includes('duplicate key') || err.message.includes('E11000') || errorMsg.toLowerCase().includes('duplicate')) {
+                errorMsg = 'This ID is already registered. Please use a different ID or try logging in.';
+            } else if (err.message.includes('validation')) {
+                errorMsg = 'Invalid data provided. Check your ID format.';
+            }
+            CMS_UI.showToast(errorMsg, 'error');
+            signupBtn.disabled = false;
+            signupBtn.innerText = originalText;
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        let token = null;
+        let user = null;
+        
+        if (typeof API_CONFIG !== 'undefined' && API_CONFIG.getToken && API_CONFIG.getUser) {
+            token = API_CONFIG.getToken();
+            user = API_CONFIG.getUser();
+        } else {
+            token = localStorage.getItem('authToken');
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    user = JSON.parse(userStr);
+                } catch(e) {}
+            }
+        }
+        
+        if (token && user && !window.location.pathname.includes('signup')) {
+            const roleRoutes = {
+                'student': '../Student pages/homepage-s.html',
+                'staff': '../Student pages/homepage-s.html',  
+                'patient': '../Student pages/homepage-s.html',
+                'nurse': '../Nurse Pages/homepage-n.html',
+                'doctor': '../doctor_pageV1/homepage-d.html',
+                'principal-doctor': '../Principal Doctor pages/homepage-p.html',
+                'pharmacist': '../Pharmacist pages/homepage-p.html',
+                'admin': '../Principal Doctor pages/homepage-p.html'
+            };
+            const destination = roleRoutes[user.role] || '../Student pages/homepage-s.html';
+            if (destination && !window.location.href.includes('signup.html')) {
+                window.location.href = destination;
+            }
+        }
+    });
+    
+    const addClinicStaffNotice = () => {
+        const form = document.getElementById('signupForm');
+        if (form && !document.querySelector('.clinic-staff-note')) {
+            const note = document.createElement('div');
+            note.className = 'clinic-staff-note';
+            note.style.cssText = 'background: #dbeafe; border-left: 4px solid #0606ba; padding: 10px 15px; margin-top: 15px; border-radius: 8px; font-size: 12px; color: #1e3a8a;';
+            note.innerHTML = '<strong>Note for Clinic Staff:</strong> Nurses, Doctors, and Pharmacists cannot sign up here. These accounts are created exclusively by the Principal Doctor through the Admin Portal.';
+            form.insertBefore(note, form.querySelector('button'));
+        }
+    };
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addClinicStaffNotice);
+    } else {
+        addClinicStaffNotice();
+    }
+</script>
+</body>
+</html>

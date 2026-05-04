@@ -12,7 +12,6 @@ export const getDailyReport = async (req, res, next) => {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    // Get today's appointments with proper population
     const appointments = await Appointment.find({
       date: { $gte: today, $lt: tomorrow }
     })
@@ -27,7 +26,6 @@ export const getDailyReport = async (req, res, next) => {
     .populate('doctor', 'name')
     .sort({ date: -1 });
 
-    // Get today's admissions (patients admitted today)
     const admissions = await Admission.find({
       admissionDate: { $gte: today, $lt: tomorrow },
       isActive: true
@@ -40,7 +38,6 @@ export const getDailyReport = async (req, res, next) => {
       }
     });
 
-    // Get today's discharges (patients discharged today)
     const discharges = await Admission.find({
       dischargeDate: { $gte: today, $lt: tomorrow }
     }).populate({
@@ -52,23 +49,18 @@ export const getDailyReport = async (req, res, next) => {
       }
     });
 
-    // Calculate visits (total patients seen today)
     const totalPatientsTriaged = appointments.length;
 
-    // Get patients with their current status
     const patients = await Promise.all(appointments.map(async (apt) => {
-      // Get patient ID from user model (studentID or staffID)
       let patientId = 'N/A';
       let patientName = 'Unknown';
       
       if (apt.patient && apt.patient.user) {
         const user = apt.patient.user;
         patientName = user.name || 'Unknown';
-        // Use studentID for students, staffID for staff/doctors/nurses
         patientId = user.studentID || user.staffID || apt.patient._id.toString().slice(-6);
       }
       
-      // Check if patient is CURRENTLY admitted (no discharge date)
       const activeAdmission = await Admission.findOne({ 
         patient: apt.patient?._id,
         isActive: true,
@@ -88,23 +80,18 @@ export const getDailyReport = async (req, res, next) => {
       };
     }));
 
-    // Get today's diagnoses distribution
-    const diagnoses = await Appointment.aggregate([
-      {
-        $match: {
-          date: { $gte: today, $lt: tomorrow },
-          condition: { $exists: true, $ne: null, $ne: "" }
-        }
-      },
-      {
-        $group: {
-          _id: "$condition",
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { count: -1 } },
-      { $limit: 5 }
-    ]);
+    const diagnosisCounts = {};
+    appointments.forEach(apt => {
+      if (apt.condition && typeof apt.condition === 'string') {
+        const condition = apt.condition.trim();
+        diagnosisCounts[condition] = (diagnosisCounts[condition] || 0) + 1;
+      }
+    });
+
+    const diagnoses = Object.entries(diagnosisCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
 
     res.json({
       success: true,
@@ -119,7 +106,11 @@ export const getDailyReport = async (req, res, next) => {
       }
     });
   } catch (error) {
-    next(error);
+    console.error('getDailyReport error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to generate daily report'
+    });
   }
 };
 
@@ -131,13 +122,11 @@ export const getWeeklyReport = async (req, res, next) => {
     let startDate, endDate;
     
     if (fromDate && toDate) {
-      // Use provided date range
       startDate = new Date(fromDate);
       startDate.setHours(0, 0, 0, 0);
       endDate = new Date(toDate);
       endDate.setHours(23, 59, 59, 999);
     } else {
-      // Default to last 7 days
       endDate = new Date();
       endDate.setHours(23, 59, 59, 999);
       startDate = new Date();
@@ -145,30 +134,19 @@ export const getWeeklyReport = async (req, res, next) => {
       startDate.setHours(0, 0, 0, 0);
     }
 
-    // Get daily visit counts for the date range
-    const dailyVisits = await Appointment.aggregate([
-      {
-        $match: {
-          date: { $gte: startDate, $lte: endDate }
-        }
-      },
-      {
-        $group: {
-          _id: {
-            year: { $year: "$date" },
-            month: { $month: "$date" },
-            day: { $dayOfMonth: "$date" }
-          },
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } }
-    ]);
+    const appointments = await Appointment.find({
+      date: { $gte: startDate, $lte: endDate }
+    }).select('date');
 
-    // Calculate number of days in range
+    const dailyCounts = {};
+    appointments.forEach(apt => {
+      if (apt.date) {
+        const dateKey = apt.date.toISOString().split('T')[0];
+        dailyCounts[dateKey] = (dailyCounts[dateKey] || 0) + 1;
+      }
+    });
+
     const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-    
-    // Format for chart
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const labels = [];
     const data = [];
@@ -177,13 +155,8 @@ export const getWeeklyReport = async (req, res, next) => {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
       labels.push(days[date.getDay()]);
-      
-      const visit = dailyVisits.find(v => 
-        v._id.year === date.getFullYear() &&
-        v._id.month === date.getMonth() + 1 &&
-        v._id.day === date.getDate()
-      );
-      data.push(visit ? visit.count : 0);
+      const dateKey = date.toISOString().split('T')[0];
+      data.push(dailyCounts[dateKey] || 0);
     }
 
     res.json({
@@ -192,13 +165,17 @@ export const getWeeklyReport = async (req, res, next) => {
         labels,
         datasets: [{
           data,
+          label: 'Visits',
           borderColor: '#003399',
-          tension: 0.3
+          backgroundColor: 'rgba(0, 51, 153, 0.1)',
+          tension: 0.3,
+          fill: true
         }]
       }
     });
   } catch (error) {
-    next(error);
+    console.error('getWeeklyReport error:', error);
+    res.status(500).json({ success: false, message: 'Failed to generate weekly report' });
   }
 };
 
@@ -210,13 +187,11 @@ export const getMonthlyDiagnoses = async (req, res, next) => {
     let startDate, endDate;
     
     if (fromDate && toDate) {
-      // Use provided date range
       startDate = new Date(fromDate);
       startDate.setHours(0, 0, 0, 0);
       endDate = new Date(toDate);
       endDate.setHours(23, 59, 59, 999);
     } else {
-      // Default to current month
       startDate = new Date();
       startDate.setDate(1);
       startDate.setHours(0, 0, 0, 0);
@@ -226,43 +201,31 @@ export const getMonthlyDiagnoses = async (req, res, next) => {
       endDate.setHours(23, 59, 59, 999);
     }
 
-    // Get diagnosis counts for the period
-    const diagnoses = await Appointment.aggregate([
-      {
-        $match: {
-          date: { $gte: startDate, $lte: endDate },
-          condition: { $exists: true, $ne: null, $ne: "" }
-        }
-      },
-      {
-        $group: {
-          _id: "$condition",
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { count: -1 } },
-      { $limit: 5 }
-    ]);
+    const appointments = await Appointment.find({
+      date: { $gte: startDate, $lte: endDate },
+      condition: { $exists: true, $ne: null }
+    });
 
-    // If no diagnoses found, provide default data
-    if (diagnoses.length === 0) {
-      return res.json({
-        success: true,
-        diagnoses: [
-          { name: 'No diagnoses recorded', count: 1 }
-        ]
-      });
-    }
+    const conditionCounts = {};
+    appointments.forEach(apt => {
+      if (apt.condition && typeof apt.condition === 'string') {
+        const condition = apt.condition.trim();
+        conditionCounts[condition] = (conditionCounts[condition] || 0) + 1;
+      }
+    });
+
+    const diagnoses = Object.entries(conditionCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
 
     res.json({
       success: true,
-      diagnoses: diagnoses.map(d => ({ 
-        name: d._id || 'Unknown', 
-        count: d.count 
-      }))
+      diagnoses
     });
   } catch (error) {
-    next(error);
+    console.error('getMonthlyDiagnoses error:', error);
+    res.status(500).json({ success: false, message: 'Failed to get diagnoses' });
   }
 };
 
@@ -284,7 +247,6 @@ export const getDateRangeReport = async (req, res, next) => {
     const endDate = new Date(toDate);
     endDate.setHours(23, 59, 59, 999);
 
-    // Get appointments in range with proper population
     const appointments = await Appointment.find({
       date: { $gte: startDate, $lte: endDate }
     })
@@ -299,7 +261,6 @@ export const getDateRangeReport = async (req, res, next) => {
     .populate('doctor', 'name')
     .sort({ date: -1 });
 
-    // Get admissions in range
     const admissions = await Admission.find({
       admissionDate: { $gte: startDate, $lte: endDate }
     }).populate({
@@ -311,7 +272,6 @@ export const getDateRangeReport = async (req, res, next) => {
       }
     });
 
-    // Get discharges in range
     const discharges = await Admission.find({
       dischargeDate: { $gte: startDate, $lte: endDate }
     }).populate({
@@ -323,10 +283,23 @@ export const getDateRangeReport = async (req, res, next) => {
       }
     });
 
-    // Format patients for display
+    const conditionCounts = {};
+    appointments.forEach(apt => {
+      if (apt.condition && typeof apt.condition === 'string') {
+        const condition = apt.condition.trim();
+        conditionCounts[condition] = (conditionCounts[condition] || 0) + 1;
+      }
+    });
+
+    const topComplaints = Object.entries(conditionCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
     const formattedPatients = await Promise.all(appointments.map(async (apt) => {
       let patientId = 'N/A';
       let patientName = 'Unknown';
+      let diagnosis = 'Check-up';
       
       if (apt.patient && apt.patient.user) {
         const user = apt.patient.user;
@@ -334,12 +307,16 @@ export const getDateRangeReport = async (req, res, next) => {
         patientId = user.studentID || user.staffID || apt.patient._id.toString().slice(-6);
       }
       
-      // Check if patient was admitted during this period and still active
+      if (apt.condition && typeof apt.condition === 'string') {
+        diagnosis = apt.condition;
+      } else if (apt.reason && typeof apt.reason === 'string') {
+        diagnosis = apt.reason;
+      }
+      
       const wasAdmitted = admissions.some(adm => 
         adm.patient?._id.toString() === apt.patient?._id.toString()
       );
       
-      // Check if patient was discharged during this period
       const wasDischarged = discharges.some(dis => 
         dis.patient?._id.toString() === apt.patient?._id.toString()
       );
@@ -358,14 +335,13 @@ export const getDateRangeReport = async (req, res, next) => {
       return {
         id: patientId,
         name: patientName,
-        diagnosis: apt.condition || apt.reason || 'Check-up',
+        diagnosis: diagnosis,
         date: apt.date,
         status: status,
         isAdmitted: isAdmitted
       };
     }));
 
-    // Summary statistics
     const summary = {
       totalVisits: appointments.length,
       totalAdmissions: admissions.length,
@@ -374,35 +350,21 @@ export const getDateRangeReport = async (req, res, next) => {
       endDate: endDate.toLocaleDateString()
     };
 
-    // Get diagnoses for this period
-    const diagnoses = await Appointment.aggregate([
-      {
-        $match: {
-          date: { $gte: startDate, $lte: endDate },
-          condition: { $exists: true, $ne: null, $ne: "" }
-        }
-      },
-      {
-        $group: {
-          _id: "$condition",
-          count: { $sum: 1 }
-        }
-      },
-      { $sort: { count: -1 } },
-      { $limit: 5 }
-    ]);
-
     res.json({
       success: true,
       summary,
       patients: formattedPatients,
-      diagnoses: diagnoses.map(d => ({ name: d._id, count: d.count })),
+      topComplaints,
       appointments,
       admissions,
       discharges
     });
   } catch (error) {
-    next(error);
+    console.error('getDateRangeReport error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to generate report'
+    });
   }
 };
 
@@ -426,6 +388,7 @@ export const getRecentPatients = async (req, res, next) => {
     const patients = await Promise.all(appointments.map(async (apt) => {
       let patientId = 'N/A';
       let patientName = 'Unknown';
+      let diagnosis = 'Check-up';
       
       if (apt.patient && apt.patient.user) {
         const user = apt.patient.user;
@@ -433,7 +396,12 @@ export const getRecentPatients = async (req, res, next) => {
         patientId = user.studentID || user.staffID || apt.patient._id.toString().slice(-6);
       }
       
-      // Check if patient is CURRENTLY admitted (active and no discharge date)
+      if (apt.condition && typeof apt.condition === 'string') {
+        diagnosis = apt.condition;
+      } else if (apt.reason && typeof apt.reason === 'string') {
+        diagnosis = apt.reason;
+      }
+      
       const activeAdmission = await Admission.findOne({ 
         patient: apt.patient?._id,
         isActive: true,
@@ -443,7 +411,7 @@ export const getRecentPatients = async (req, res, next) => {
       return {
         id: patientId,
         name: patientName,
-        diagnosis: apt.condition || apt.reason || 'Check-up',
+        diagnosis: diagnosis,
         date: apt.date,
         status: activeAdmission ? 'admitted' : apt.status,
         isAdmitted: activeAdmission ? 'Yes' : 'No'
@@ -455,6 +423,7 @@ export const getRecentPatients = async (req, res, next) => {
       patients
     });
   } catch (error) {
-    next(error);
+    console.error('getRecentPatients error:', error);
+    res.status(500).json({ success: false, message: 'Failed to get recent patients' });
   }
 };

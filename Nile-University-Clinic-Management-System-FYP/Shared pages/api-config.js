@@ -7,7 +7,13 @@ const API_CONFIG = {
     getToken: () => localStorage.getItem('authToken'),
     getUser: () => {
         const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : null;
+        if (!user) return null;
+        try {
+            return JSON.parse(user);
+        } catch (e) {
+            console.error('Failed to parse user from localStorage:', e);
+            return null;
+        }
     },
 
     // Core request helper
@@ -29,6 +35,19 @@ const API_CONFIG = {
 
         try {
             const response = await fetch(`${this.BASE_URL}${endpoint}`, config);
+            
+            // Handle 401 Unauthorized
+            if (response.status === 401) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
+                // Don't redirect if already on login/signup page
+                const currentPath = window.location.pathname;
+                if (!currentPath.includes('login.html') && !currentPath.includes('signup.html')) {
+                    window.location.href = '../Shared pages/login.html';
+                }
+                throw new Error('Session expired. Please login again.');
+            }
+            
             const data = await response.json();
 
             if (!response.ok) {
@@ -47,6 +66,10 @@ const API_CONFIG = {
         login: (credentials) => API_CONFIG.request('/auth/login', {
             method: 'POST',
             body: JSON.stringify(credentials)
+        }),
+        register: (userData) => API_CONFIG.request('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify(userData)
         }),
         logout: () => {
             localStorage.removeItem('authToken');
@@ -71,7 +94,6 @@ const API_CONFIG = {
             method: 'POST',
             body: JSON.stringify(data)
         })
-        
     },
     
     // Doctor Module
@@ -116,7 +138,7 @@ const API_CONFIG = {
         }
     },
     
-    // Pharmacist Module - NEW
+    // Pharmacist Module
     pharmacist: {
         getPendingPrescriptions: () => API_CONFIG.request('/pharmacist/prescriptions/pending'),
         getPrescriptionById: (prescriptionId) => API_CONFIG.request(`/pharmacist/prescription/${prescriptionId}`),
@@ -211,7 +233,7 @@ function checkAuth() {
     const token = API_CONFIG.getToken();
     const currentPage = window.location.pathname;
 
-    if (!token && !currentPage.includes('login.html')) {
+    if (!token && !currentPage.includes('login.html') && !currentPage.includes('signup.html')) {
         window.location.href = '../Shared pages/login.html';
     }
 }
