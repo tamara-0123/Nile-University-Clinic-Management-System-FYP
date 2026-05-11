@@ -9,6 +9,7 @@ import {
   getNotifications,
   updateMedicalProfile,
   submitFeedback,
+  getPrescriptionsByConsultation
 } from "../controllers/patientController.js";
 
 import { protect, authorize } from "../middleware/authMiddleware.js";
@@ -28,5 +29,6 @@ router.put('/update-medical-profile', updateMedicalProfile);
 router.get("/prescriptions", getPrescriptions);
 router.get("/notifications", getNotifications);
 router.post("/feedback", submitFeedback);
+router.get("/prescriptions/consultation/:consultationId", getPrescriptionsByConsultation);
 
 export default router; 

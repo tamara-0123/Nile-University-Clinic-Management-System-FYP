@@ -77,9 +77,18 @@
                 <strong>Clinical Notes:</strong>
                 <p id="detNotes"></p>
             </div>
+            
+            <!-- Prescriptions Section -->
+            <div class="prescriptions-section" id="prescriptionsSection" style="margin-top: 20px; display: none;">
+                <hr style="margin: 15px 0; opacity: 0.2;">
+                <h4 style="color: #0606ba; margin-bottom: 15px;">
+                    <i class="fas fa-prescription-bottle-alt"></i> Prescriptions
+                </h4>
+                <div id="prescriptionsList"></div>
+            </div>
+            
             <div style="margin-top: 25px; display: flex; gap: 10px; justify-content: flex-end;">
                 <button class="btn-outline" onclick="closeModal('historyModal')">Close</button>
-                <button class="btn-primary" onclick="alert('Downloading...')">Download PDF</button>
             </div>
         </div>
     </div>
@@ -146,6 +155,97 @@
     <div id="menuOverlay" onclick="toggleMenu()"
         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1500;">
     </div>
+
+    <style>
+        .prescriptions-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .prescription-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #0606ba;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .prescription-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .medication-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+        }
+        
+        .medication-item {
+            background: #f0f4ff;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .medication-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .med-name {
+            font-weight: 600;
+            color: #0606ba;
+            font-size: 0.95rem;
+        }
+        
+        .med-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        .med-instructions {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .prescription-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-dispensed {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .no-prescriptions {
+            text-align: center;
+            color: #999;
+            padding: 15px;
+            font-style: italic;
+        }
+    </style>
 
     <script src="../Shared pages/api-config.js"></script>
     <script>
@@ -299,14 +399,73 @@
             }
         }
 
-        function showHistoryDetail(id) {
+        async function showHistoryDetail(id) {
             const record = historyData.find(h => h._id === id);
             if (record) {
                 document.getElementById('detDoctor').innerText = record.appointment?.doctor?.name || 'N/A';
                 document.getElementById('detDate').innerText = new Date(record.createdAt).toLocaleDateString();
                 document.getElementById('detDiagnosis').innerText = record.diagnosis || 'N/A';
                 document.getElementById('detNotes').innerText = record.notes || 'No notes available.';
+                
+                // Load prescriptions for this consultation
+                await loadPrescriptions(record._id);
+                
                 document.getElementById('historyModal').style.display = 'flex';
+            }
+        }
+
+        async function loadPrescriptions(consultationId) {
+            const prescriptionsSection = document.getElementById('prescriptionsSection');
+            const prescriptionsList = document.getElementById('prescriptionsList');
+            
+            try {
+                const response = await API_CONFIG.request(`/patient/prescriptions/${consultationId}`);
+                
+                if (response.success && response.prescriptions && response.prescriptions.length > 0) {
+                    prescriptionsSection.style.display = 'block';
+                    
+                    prescriptionsList.innerHTML = response.prescriptions.map(prescription => `
+                        <div class="prescription-card">
+                            <span class="prescription-status status-${prescription.status || 'pending'}">
+                                ${prescription.status || 'Pending'}
+                            </span>
+                            ${prescription.pharmacistName ? 
+                                `<div style="font-size: 0.8rem; color: #666; margin-bottom: 8px;">
+                                    <i class="fas fa-user-check"></i> Dispensed by: ${prescription.pharmacistName}
+                                </div>` : ''}
+                            ${prescription.dispensedAt ? 
+                                `<div style="font-size: 0.8rem; color: #666; margin-bottom: 8px;">
+                                    <i class="fas fa-clock"></i> ${new Date(prescription.dispensedAt).toLocaleString()}
+                                </div>` : ''}
+                            <ul class="medication-list">
+                                ${prescription.medications.map(med => `
+                                    <li class="medication-item">
+                                        <div class="med-name">
+                                            <i class="fas fa-capsules"></i> ${med.name}
+                                        </div>
+                                        <div class="med-details">
+                                            <span><strong>Dosage:</strong> ${med.dosage || 'N/A'}</span>
+                                            <span><strong>Frequency:</strong> ${med.frequency || 'N/A'}</span>
+                                            <span><strong>Duration:</strong> ${med.duration || 'N/A'}</span>
+                                        </div>
+                                        ${med.instructions ? `
+                                            <div class="med-instructions">
+                                                <i class="fas fa-info-circle"></i> ${med.instructions}
+                                            </div>
+                                        ` : ''}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `).join('');
+                    
+                } else {
+                    prescriptionsSection.style.display = 'block';
+                    prescriptionsList.innerHTML = '<div class="no-prescriptions">No prescriptions for this consultation</div>';
+                }
+            } catch (error) {
+                console.error('Failed to load prescriptions:', error);
+                prescriptionsSection.style.display = 'none';
             }
         }
 

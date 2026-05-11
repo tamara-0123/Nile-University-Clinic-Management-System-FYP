@@ -24,7 +24,22 @@ app.use(cors());
 app.use(express.json());
 
 //helmet for security
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+
+    }
+  }
+}));
+
+//Only redirect to HTTPS in production
+// app.use((req, res, next) => {
+//   if (req.protocol === "http") {
+//     return res.redirect(`https://${req.headers.host}${req.url}`);
+//   }
+//   next();
+// });
 
 //routes
 app.use('/api/auth', authRoutes);

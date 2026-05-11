@@ -267,3 +267,29 @@ export const submitFeedback = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getPrescriptionsByConsultation = async (req, res, next) => {
+  try {
+    const { consultationId } = req.params;
+    
+    const prescriptions = await Prescription.find({ 
+      consultation: consultationId 
+    })
+    .populate('completedBy', 'name')
+    .sort({ createdAt: -1 })
+    .lean();
+    
+    const enhancedPrescriptions = prescriptions.map(prescription => ({
+      ...prescription,
+      pharmacistName: prescription.completedBy?.name || null,
+      dispensedAt: prescription.status === 'completed' ? prescription.updatedAt : null
+    }));
+    
+    res.json({ 
+      success: true, 
+      prescriptions: enhancedPrescriptions 
+    });
+  } catch (error) {
+    next(error);
+  }
+};

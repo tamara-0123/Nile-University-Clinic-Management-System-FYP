@@ -11,19 +11,19 @@ import Prescription from "../models/Prescription.js";
 export const getAppointments = async (req, res) => {
   try {
     const { fromDate, toDate, doctorId, patientId, status } = req.query;
-    
+
     let query = {};
-    
+
     if (fromDate || toDate) {
       query.date = {};
       if (fromDate) query.date.$gte = new Date(fromDate);
       if (toDate) query.date.$lte = new Date(toDate);
     }
-    
+
     if (doctorId) query.doctor = doctorId;
     if (patientId) query.patient = patientId;
     if (status) query.status = status;
-    
+
     const appointments = await Appointment.find(query)
       .populate('patient', 'user')
       .populate({
@@ -32,7 +32,7 @@ export const getAppointments = async (req, res) => {
       })
       .populate('doctor', 'name staffID role')
       .sort({ date: 1 });
-    
+
     res.json({ success: true, appointments });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -43,22 +43,22 @@ export const getAppointments = async (req, res) => {
 export const createAppointment = async (req, res) => {
   try {
     const { patientId, doctorId, date, reason, status, urgency } = req.body;
-    
+
     // Find patient
-    let patient = await Patient.findOne({ 
+    let patient = await Patient.findOne({
       $or: [
         { _id: patientId },
         { user: patientId }
       ]
     });
-    
+
     if (!patient) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Patient not found. Please register patient first.' 
+      return res.status(404).json({
+        success: false,
+        message: 'Patient not found. Please register patient first.'
       });
     }
-    
+
     const appointment = new Appointment({
       patient: patient._id,
       doctor: doctorId || null,
@@ -67,9 +67,9 @@ export const createAppointment = async (req, res) => {
       status: status || 'scheduled',
       urgency: urgency || 'routine'
     });
-    
+
     await appointment.save();
-    
+
     const populatedAppointment = await Appointment.findById(appointment._id)
       .populate('patient', 'user')
       .populate({
@@ -77,7 +77,7 @@ export const createAppointment = async (req, res) => {
         populate: { path: 'user', select: 'name studentID' }
       })
       .populate('doctor', 'name staffID');
-    
+
     res.status(201).json({ success: true, appointment: populatedAppointment });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -88,7 +88,7 @@ export const createAppointment = async (req, res) => {
 export const updateAppointment = async (req, res) => {
   try {
     const { doctorId, date, reason, status, urgency, checkInTime, completionTime } = req.body;
-    
+
     const updateData = {};
     if (doctorId) updateData.doctor = doctorId;
     if (date) updateData.date = new Date(date);
@@ -97,22 +97,22 @@ export const updateAppointment = async (req, res) => {
     if (urgency) updateData.urgency = urgency;
     if (checkInTime) updateData.checkInTime = new Date(checkInTime);
     if (completionTime) updateData.completionTime = new Date(completionTime);
-    
+
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     ).populate('patient', 'user')
-     .populate({
+      .populate({
         path: 'patient',
         populate: { path: 'user', select: 'name studentID' }
       })
-     .populate('doctor', 'name staffID');
-    
+      .populate('doctor', 'name staffID');
+
     if (!appointment) {
       return res.status(404).json({ success: false, message: 'Appointment not found' });
     }
-    
+
     res.json({ success: true, appointment });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -123,11 +123,11 @@ export const updateAppointment = async (req, res) => {
 export const deleteAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndDelete(req.params.id);
-    
+
     if (!appointment) {
       return res.status(404).json({ success: false, message: 'Appointment not found' });
     }
-    
+
     res.json({ success: true, message: 'Appointment deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -138,12 +138,12 @@ export const deleteAppointment = async (req, res) => {
 export const getAvailableDoctors = async (req, res) => {
   try {
     const { date } = req.query;
-    
+
     const doctors = await User.find({
       role: { $in: ['doctor', 'principal-doctor'] },
       isActive: true
     }).select('name staffID role');
-    
+
     res.json({ success: true, doctors });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -160,11 +160,11 @@ export const getAppointmentById = async (req, res) => {
         populate: { path: 'user', select: 'name studentID' }
       })
       .populate('doctor', 'name staffID role');
-    
+
     if (!appointment) {
       return res.status(404).json({ success: false, message: 'Appointment not found' });
     }
-    
+
     res.json({ success: true, appointment });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -367,8 +367,7 @@ export const getPatientRecords = async (req, res, next) => {
       }
 
       return {
-        id: patient?.user?.studentID || patient?._id?.toString() || 'N/A',
-        patientId: patient?._id,
+        id: patient?.user?.staffID || patient?.user?.studentID || patient?._id?.toString() || 'N/A', patientId: patient?._id,
         patientName: patient?.user?.name || 'Unknown',
         bloodGroup: patient?.user?.bloodGroup || patient?.bloodGroup || null,
         appointmentId: apt._id,

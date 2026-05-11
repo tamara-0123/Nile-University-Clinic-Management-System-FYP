@@ -17,7 +17,7 @@ export const getEncryptedClient = async () => {
   // Connect WITHOUT autoEncryption
   encryptedClient = new MongoClient(uri);
   await encryptedClient.connect();
-  console.log("✅ Encrypted client connected (manual encryption mode)");
+  console.log("Encrypted client connected");
   
   return encryptedClient;
 };
