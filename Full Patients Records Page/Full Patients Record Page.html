@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -110,4 +111,118 @@
 
   <script src="full-patients.js" defer></script>
 </body>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Full Patients Records</title>
+  <link rel="stylesheet" href="full-patients.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Clinic Logo" class="logo">
+        </a>
+        <div class="links">
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Staff Management</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Schedule</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+          <button class="profile">Profile</button>
+          <button class="logout">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <header class="fp-header">
+    <div class="container">
+      <h1>Full Patients Records</h1>
+      <div class="actions">
+        <input id="search" type="search" placeholder="Search by name, id, or diagnosis" aria-label="Search patients">
+        <select id="statusFilter" aria-label="Filter by status">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="discharged">Discharged</option>
+        </select>
+        <label class="sr-only">Admitted from</label>
+        <input id="fromDate" type="date" aria-label="Admitted from date">
+        <label class="sr-only">Admitted to</label>
+        <input id="toDate" type="date" aria-label="Admitted to date">
+        <button id="exportCsv" class="btn">Export CSV</button>
+        <button id="printBtn" class="btn alt">Print</button>
+        <button id="addPatient" class="btn">Add Patient</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="table-wrap">
+      <table class="patients-table" aria-describedby="patientsDesc">
+        <caption id="patientsDesc">Complete list of patients</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Diagnosis</th>
+            <th scope="col">Admitted</th>
+            <th scope="col">Discharged</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="patientsBody">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- View/Edit modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <h2 id="modalTitle">View Patient</h2>
+      <form id="patientForm">
+        <label>ID <input name="id" readonly></label>
+        <label>Name <input name="name" required></label>
+        <label>Age <input name="age" type="number" min="0"></label>
+        <label>Sex
+          <select name="sex">
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
+        </label>
+        <label>Diagnosis <input name="diagnosis"></label>
+        <label>Admitted <input name="admitted" type="date"></label>
+        <label>Discharged <input name="discharged" type="date"></label>
+        <label>Status
+          <select name="status">
+            <option value="active">Active</option>
+            <option value="discharged">Discharged</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn">Save</button>
+          <button type="button" id="closeModal" class="btn alt">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="full-patients.js" defer></script>
+</body>
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)
 </html>

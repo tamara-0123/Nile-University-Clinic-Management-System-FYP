@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root{--bg:#f6f6f8;--card:#fff;--accent:#3b6ea5;--muted:#6b6b6b;--radius:10px;--max-width:1100px;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--bg);color:#222}
@@ -35,3 +36,42 @@ html,body{height:100%;margin:0;background:var(--bg);color:#222}
   .header-inner{flex-direction:column;align-items:flex-start}
   .header-actions{width:100%;justify-content:space-between}
 }
+=======
+:root{--bg:#f6f6f8;--card:#fff;--accent:#3b6ea5;--muted:#6b6b6b;--radius:10px;--max-width:1100px;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:#222}
+.container{max-width:var(--max-width);margin:0 auto;padding:1rem}
+.header{background:linear-gradient(90deg, rgba(59,110,165,0.06), transparent);border-bottom:1px solid rgba(0,0,0,0.05)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.header h1{font-size:1.1rem;margin:0;color:var(--accent)}
+.header-actions{display:flex;gap:.5rem;align-items:center}
+.btn{background:var(--accent);color:#fff;padding:.45rem .7rem;border-radius:6px;border:0;cursor:pointer}
+.btn:focus{outline:3px solid rgba(59,110,165,0.2)}
+.main-grid{display:grid;grid-template-columns:1fr;gap:1rem;padding:1rem 0}
+.summary-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem}
+.card{background:var(--card);padding:1rem;border-radius:var(--radius);box-shadow:0 6px 18px rgba(13,12,12,0.04)}
+.card h3{margin:0;font-size:.9rem;color:var(--muted)}
+.stat{font-size:1.6rem;font-weight:700;margin:0.35rem 0;color:var(--accent)}
+.charts{display:grid;grid-template-columns:1fr 340px;gap:1rem}
+.chart-card{background:var(--card);padding:1rem;border-radius:var(--radius);box-shadow:0 6px 18px rgba(13,12,12,0.04)}
+.chart-card h3{margin:0 0 .5rem}
+/* Let Chart.js control canvas height via aspect ratio; prevent CSS stretching */
+.chart-card canvas{width:100%;height:auto;display:block;max-height:220px}
+.table-section{grid-column:1 / -1}
+.table-actions{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+.data-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:8px;overflow:hidden}
+.data-table th,.data-table td{padding:.6rem;border-bottom:1px solid rgba(0,0,0,0.04);text-align:left}
+.data-table thead{background:linear-gradient(90deg,#fafafa,#fff)}
+.data-table tbody tr:hover{background:rgba(0,0,0,0.02)}
+.footer{padding:1rem 0;border-top:1px solid rgba(0,0,0,0.04);text-align:center;color:var(--muted)}
+.sr-only{position:absolute;left:-9999px}
+@media (max-width:900px){
+  .charts{grid-template-columns:1fr}
+  /* Allow Chart.js to use aspect ratio; limit max-height on small screens */
+  .chart-card canvas{max-height:160px}
+}
+@media (max-width:560px){
+  .header-inner{flex-direction:column;align-items:flex-start}
+  .header-actions{width:100%;justify-content:space-between}
+}
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)

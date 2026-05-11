@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -114,3 +115,121 @@
   </footer>
 </body>
 </html>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reports Overview — Clinic</title>
+  <link rel="stylesheet" href="reports.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="reports.js" defer></script>
+</head>
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Clinic Logo" class="logo">
+        </a>
+        <div class="links">
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Staff Management</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Schedule</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+          <button class="profile">Profile</button>
+          <button class="logout">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <div class="hero-left">
+        <h1>Reports Overview</h1>
+        <p class="muted">Daily and monthly clinic summaries — quick view and export</p>
+      </div>
+      <div class="hero-actions">
+        <label class="sr-only">From date</label>
+        <input id="fromDate" type="date" aria-label="From date">
+        <label class="sr-only">To date</label>
+        <input id="toDate" type="date" aria-label="To date">
+        <select id="reportScope" aria-label="Report scope">
+          <option value="daily">Daily</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <button id="generate" class="btn">Generate</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="cards">
+      <div class="card">
+        <p class="card-title">Visits</p>
+        <p class="card-number" id="visits">—</p>
+        <p class="card-content">Today</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Admissions</p>
+        <p class="card-number" id="admissions">—</p>
+        <p class="card-content">Today</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Discharges</p>
+        <p class="card-number" id="discharges">—</p>
+        <p class="card-content">Today</p>
+      </div>
+    </section>
+
+    <section class="visuals">
+      <div class="chart-card">
+        <h3>Visits (last 7 days)</h3>
+        <canvas id="visitsChart" aria-label="Visits line chart" role="img"></canvas>
+      </div>
+      <div class="chart-card small">
+        <h3>Top Departments (monthly)</h3>
+        <canvas id="deptChart" aria-label="Departments pie chart" role="img"></canvas>
+      </div>
+    </section>
+
+    <section class="reports">
+      <div class="reports-header">
+        <h2>Generated Reports</h2>
+        <div class="reports-actions">
+          <button id="exportCsv" class="btn alt">Export CSV</button>
+          <button id="downloadPdf" class="btn">Download PDF</button>
+        </div>
+      </div>
+
+      <table class="reports-table" aria-describedby="reportsDesc">
+        <caption id="reportsDesc">List of produced reports</caption>
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Type</th>
+            <th scope="col">Scope</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reportsBody">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <p>Nile University Clinic Management System &copy; <span id="year"></span></p>
+  </footer>
+</body>
+</html>
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)

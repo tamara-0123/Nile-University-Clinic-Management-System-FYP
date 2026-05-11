@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,3 +205,211 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nile University Clinic — Doctor Dashboard</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="doctor.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar" role="banner">
+    <div class="inner">
+      <div class="logo">
+        <img src="image.png" alt="Nile U logo">
+       <!--
+        <nav class="navlinks" aria-label="Main">
+          <a href="#" class="">Home</a>
+          <a href="#" class="">Appointments</a>
+          <a href="#" class="">Prescriptions</a>
+          <a href="#" class="">Medical History</a>
+        </nav>
+      -->
+      </div>
+
+      <div class="nav-actions">
+      <a href="doctor-profile.html" class="btn btn-outline" title="Profile" target="_blank"> Profile</a>
+      <button class="btn btn-danger" title="Logout" id="logoutBtn" onclick="logout()"> Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page -->
+  <div class="container" role="main">
+    <div class="hero fade-in">
+      <div>
+        <div class="title">Doctor Dashboard — Dr. Umar</div>
+        <div class="meta">Today • 12 Nov 2025 • 11 appointments</div>
+      </div>
+      <div>
+        <button class="btn btn-primary" id="newSlotBtn">
+        <i class="fa-regular fa-calendar-plus"></i> &nbsp; New slot</button>
+      </div>
+      <div class="modal-overlay" id="slotModal">
+      <div class="modal">
+        <h3>Create Availability Slot</h3>
+
+        <label>Date</label>
+        <input type="date" id="slotDate">
+
+        <label>Start Time</label>
+        <input type="time" id="startTime">
+
+        <label>End Time</label>
+        <input type="time" id="endTime">
+
+        <div class="modal-actions">
+      <button class="btn btn-outline" id="cancelSlot">Cancel</button>
+      <button class="btn btn-primary" id="saveSlot">Save Slot</button>
+    </div>
+  </div>
+</div>
+
+    </div>
+
+    <div class="main">
+      <!-- Left: schedule -->
+      <aside class="left panel fade-in" aria-labelledby="schedule">
+        <div class="header">
+          <h3 id="schedule">Today's Appointments</h3>
+          <div style="color:var(--muted);font-size:0.9rem" id="countLabel">12</div>
+        </div>
+
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="Search patient name or ID" aria-label="Search appointments">
+        </div>
+
+        <div class="filters" role="tablist" aria-label="Filters">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="waiting">Waiting</button>
+          <button class="chip" data-filter="checked_in">Checked-in</button>
+          <button class="chip" data-filter="in_consult">In consult</button>
+        </div>
+
+        <div class="appt-list" id="appointmentList" tabindex="0" aria-live="polite">
+          <!-- Appointment items injected by JS -->
+        </div>
+      </aside>
+
+      <!-- Right: workspace -->
+      <section class="workspace" aria-label="Patient workspace">
+        <div class="patient-header panel fade-in" id="patientHeader">
+          <div class="patient-meta">
+            <h2 id="pName">Select an appointment</h2>
+            <div class="sub" id="pSub">Patient • ID</div>
+            <div class="patient-tags" id="pTags"></div>
+          </div>
+          <div class="patient-actions" id="patientActions">
+            <button class="btn btn-outline" id="btnStart">Start</button>
+            <button class="btn btn-primary" id="btnFinalize">Finalize & Complete</button>
+          </div>
+        </div>
+
+        <div class="grid-small fade-in">
+          <div class="card vitals" id="vitalsCard" aria-live="polite">
+            <h4>Latest Vitals</h4>
+            <p id="vitalsContent">No vitals recorded</p>
+            <div style="margin-top:0.6rem">
+              <button class="btn-small" id="addVitalsBtn">Edit Vitals</button>
+            </div>
+          </div>
+
+          <div class="card last-visit">
+            <h4>Last Visit</h4>
+            <p id="lastVisit">No previous visit</p>
+          </div>
+        </div>
+
+        <div class="card fade-in">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="notes">Consultation Notes</button>
+            <button class="tab" data-tab="prescriptions">Prescriptions</button>
+            <button class="tab" data-tab="history">History</button>
+          </div>
+
+          <div class="tab-panels">
+            <!-- Notes -->
+            <div class="tab-panel" id="notesPanel" style="display:block">
+              <label for="consultNotes" style="font-weight:600;margin-bottom:0.4rem;display:block">Consultation Notes</label>
+              <textarea id="consultNotes" placeholder="Write consultation notes..."></textarea>
+              <div class="editor-actions">
+                <button class="btn-outline" id="saveDraft">Save Draft</button>
+                <button class="btn-primary" id="saveFinalize">Finalize & Complete</button>
+              </div>
+            </div>
+
+            <!-- Prescriptions -->
+            <div class="tab-panel" id="prescriptionsPanel" style="display:none">
+              <label style="font-weight:600;display:block;margin-bottom:0.5rem">Add prescription</label>
+              <form id="prescForm" onsubmit="return false;">
+                <div id="rxList" class="rx-list">
+                  <!-- dynamic rows -->
+                </div>
+
+                <div style="display:flex;gap:0.6rem;margin-top:0.6rem">
+                  <button class="btn btn-outline" id="addRx">+ Add medication</button>
+                  <button class="btn btn-primary" id="saveRx">Save prescription</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- History -->
+            <div class="tab-panel" id="historyPanel" style="display:none">
+              <label style="font-weight:600;display:block;margin-bottom:0.6rem">Patient History</label>
+              <div id="historyList">
+                <!-- history items -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+  <div class="modal-overlay" id="vitalsModal">
+  <div class="modal">
+    <h3>Add Patient Vitals</h3>
+
+    <label>Blood Pressure</label>
+    <input type="text" id="bp" placeholder="e.g. 120/80">
+
+    <label>Temperature (°C)</label>
+    <input type="number" id="temp" step="0.1">
+
+    <label>Pulse (bpm)</label>
+    <input type="number" id="pulse">
+
+    <label>Weight (kg)</label>
+    <input type="number" id="weight">
+
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="cancelVitals">Cancel</button>
+      <button class="btn btn-primary" id="saveVitals">Save Vitals</button>
+    </div>
+  </div>
+</div>
+
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+  <footer>
+    Nile University Clinic Management System • © 2025 Nile University of Nigeria
+  </footer>
+
+  
+  <script src="doctor.js"></script>
+
+</body>
+</html>
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)

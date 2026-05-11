@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -95,3 +96,102 @@
 	<script src="user-management.js" defer></script>
 </body>
 </html>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Staff Management — Clinic</title>
+	<link rel="stylesheet" href="user-management.css">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+	<div class="top">
+		<div class="navbar">
+			<nav class="nav">
+				<a>
+					<img src="image.png" alt="Clinic Logo" class="logo">
+				</a>
+				<div class="links">
+					<ul class="nav-links">
+						<li><a href="#">Home</a></li>
+						<li><a href="#" class="active">Staff Management</a></li>
+						<li><a href="#">Reports</a></li>
+						<li><a href="#">Schedule</a></li>
+					</ul>
+				</div>
+				<div class="nav-buttons">
+					<button class="profile">Profile</button>
+					<button class="logout">Logout</button>
+				</div>
+			</nav>
+		</div>
+	</div>
+
+	<header class="um-header">
+		<div class="container">
+			<h1>Staff Management</h1>
+			<div class="controls">
+				<input id="search" type="search" placeholder="Search staff by name or ID" aria-label="Search staff">
+				<button id="addBtn" class="btn">Add Staff</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="table-wrap" aria-label="Staff list">
+			<table class="staff-table" aria-describedby="staffDesc">
+				<caption id="staffDesc">Active staff and their roles</caption>
+				<thead>
+					<tr>
+						<th scope="col"><input id="selectAll" type="checkbox" aria-label="Select all staff"></th>
+						<th scope="col">ID</th>
+						<th scope="col">Name</th>
+						<th scope="col">Role</th>
+						<th scope="col">Email</th>
+						<th scope="col">Status</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody id="staffBody">
+					<!-- populated by JS -->
+				</tbody>
+			</table>
+		</section>
+
+		<aside class="panel">
+			<h2>Bulk Actions</h2>
+			<button id="deactivateSelected" class="btn warn">Deactivate selected</button>
+			<p class="muted">Select rows using the checkboxes in the first column.</p>
+		</aside>
+
+		<!-- Add/Edit modal -->
+		<div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<div class="modal-content">
+				<h3 id="modalTitle">Add Staff</h3>
+				<form id="staffForm">
+					<label>Staff ID <input name="id" required></label>
+					<label>Name <input name="name" required></label>
+					<label>Role
+						<select name="role" id="roleSelect" required>
+							<option value="Doctor">Doctor</option>
+							<option value="Nurse">Nurse</option>
+						</select>
+					</label>
+					<label>Email <input name="email" type="email"></label>
+					<div class="form-actions">
+						<button type="submit" class="btn">Save</button>
+						<button type="button" id="cancelBtn" class="btn alt">Cancel</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</main>
+
+	<script src="user-management.js" defer></script>
+</body>
+</html>
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -110,3 +111,117 @@
   <script src="schedule.js" defer></script>
 </body>
 </html>
+=======
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Schedule Management — Principal Doctor</title>
+  <link rel="stylesheet" href="schedule.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="top">
+    <div class="navbar">
+      <nav class="nav">
+        <a>
+          <img src="image.png" alt="Clinic Logo" class="logo">
+        </a>
+        <div class="links">
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Staff Management</a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Schedule</a></li>
+          </ul>
+        </div>
+        <div class="nav-buttons">
+          <button class="profile">Profile</button>
+          <button class="logout">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container">
+      <h1>Schedule Management</h1>
+      <div class="controls">
+        <label class="sr-only">Select view</label>
+        <select id="viewToggle" aria-label="Toggle view">
+          <option value="week">Week</option>
+          <option value="day">Day</option>
+        </select>
+        <label class="sr-only">Date</label>
+        <input id="datePicker" type="date" aria-label="Select date">
+        <button id="addAppt" class="btn">Add Appointment</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main">
+    <section class="calendar" aria-label="Calendar">
+      <div class="toolbar">
+        <button id="prev" class="btn alt">Prev</button>
+        <button id="next" class="btn alt">Next</button>
+        <div class="muted">Showing <span id="rangeLabel">this week</span></div>
+      </div>
+      <div id="calendarGrid" class="grid" aria-hidden="false">
+        <!-- generated cells -->
+      </div>
+    </section>
+
+    <aside class="side" aria-label="Appointments list">
+      <h3>Appointments</h3>
+      <div class="muted">Tap an appointment to view or edit</div>
+      <ul id="appointmentsList" class="app-list">
+        <!-- populated by JS -->
+      </ul>
+      <hr>
+      <h4>Filters</h4>
+      <div class="muted">Role</div>
+      <select id="roleFilter" aria-label="Filter by role">
+        <option value="all">All</option>
+        <option value="Doctor">Doctor</option>
+        <option value="Nurse">Nurse</option>
+      </select>
+    </aside>
+  </main>
+
+  <!-- modal -->
+  <div id="modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add Appointment</h3>
+      <form id="apptForm">
+        <div class="form-row">
+          <label>Patient ID <input name="patientId" required></label>
+          <label>Patient Name <input name="patientName" required></label>
+        </div>
+        <div class="form-row">
+          <label>Role
+            <select name="role">
+              <option>Doctor</option>
+              <option>Nurse</option>
+            </select>
+          </label>
+          <label>Type <input name="type" placeholder="Consultation"></label>
+        </div>
+        <div class="form-row">
+          <label>Date <input name="date" type="date" required></label>
+          <label>Time <input name="time" type="time" required></label>
+        </div>
+        <label>Notes <input name="notes"></label>
+        <div class="form-actions">
+          <button type="submit" class="btn">Save</button>
+          <button type="button" id="cancelBtn" class="btn alt">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="schedule.js" defer></script>
+</body>
+</html>
+>>>>>>> 1f6c2de (Added Figma UI/UX designs)
